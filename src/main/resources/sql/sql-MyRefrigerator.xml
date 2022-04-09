@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dlhdlh.mapper.MyRefrigeratorMapper">
+	
+	<!-- input 데이터리스트의 이름리스트 -->
+	<select id="GetNameList" resultType="com.dlhdlh.dto.MyRefrigeratorDataListDto">
+		<![CDATA[ 
+			SELECT item_name 
+			FROM Re001T
+			GROUP BY item_name;
+		]]>
+	</select>
+	
+	<!--장바구니 아이템 추가 --> 
+	<insert id="InsertWishList" parameterType="com.dlhdlh.dto.MyRefrigeratorDataListDto">
+		<![CDATA[ 
+			INSERT INTO Re001T (item_name, insert_dt, amt, type)
+			VALUES ( #{itemName}, now() , #{amt}, #{type} )
+		]]>
+	</insert>
+	
+	<!-- 마지막 구매정보 가져오기-->
+	<select id="GetLastData" parameterType="com.dlhdlh.dto.MyRefrigeratorDataListDto" resultType="com.dlhdlh.dto.MyRefrigeratorDataListDto">
+		<![CDATA[
+			SELECT amt, type
+			FROM Re001T
+			WHERE item_name = #{itemName} 
+            ORDER BY insert_dt DESC
+            LIMIT 1	
+		]]>
+	</select>
+	
+	<!-- 장바구니 아이템 리스트 -->
+	<select id="GetWishItemList" resultType="com.dlhdlh.dto.MyRefrigeratorDataListDto">
+		<![CDATA[ 
+			SELECT * 
+			FROM Re001T
+			WHERE purchased_yn = 'N'
+			ORDER BY insert_dt desc
+		]]>
+	</select>
+	
+	<!-- 장바구니 삭제-->
+	<delete id="DeleteWishList" parameterType="int">
+		<![CDATA[ 
+			DELETE FROM Re001T
+			WHERE idx= #{idx}
+		]]>
+	</delete>
+	
+	<!-- 구매한 장바구니 리스트 업데이트-->
+	<update id="UpdatePurChase" parameterType="com.dlhdlh.dto.MyRefrigeratorDataListDto">
+		<![CDATA[ 
+			UPDATE Re001T
+			SET item_name = #{itemName}, amt = #{amt}, type = #{type}, purchased_yn = 'Y',
+				purchased_dt = now() 
+			WHERE idx = #{idx}
+		]]>
+	</update>
+	
+	<!-- 냉장고 리스트-->
+	<select id="RefrigeratorList" resultType="com.dlhdlh.dto.MyRefrigeratorDataListDto">
+		<![CDATA[ 
+			SELECT idx, item_name, substring(purchased_dt, 1, 10) as purchased_dt,
+				timestampdiff(day, purchased_dt, now()) as after_day, type
+			FROM Re001T
+			WHERE finish_yn = 'N' and purchased_yn = 'Y' and type is not null
+			ORDER BY after_day desc
+		]]>
+	</select>
+	
+	<!-- 냉장고 type별 리스트-->
+	<select id="RefrigeratorTypeList" parameterType="String" resultType="com.dlhdlh.dto.MyRefrigeratorDataListDto">
+		<![CDATA[ 
+			SELECT idx, item_name, substring(purchased_dt, 1, 10) as purchased_dt,
+				timestampdiff(day, purchased_dt, now()) as after_day, type
+			FROM Re001T
+			WHERE finish_yn = 'N' and purchased_yn = 'Y' and type like concat('%',#{type}, '%')
+			ORDER BY after_day desc
+		]]>
+	</select>
+	
+	<!-- 구매 취소-->
+	<select id="UpdateRefrigeratorList" parameterType="int">
+		<![CDATA[ 
+			UPDATE Re001T
+			SET purchased_yn = 'N', purchased_dt = null
+			WHERE idx = #{idx}
+		]]>
+	</select>
+	
+	<!-- 재료 소진-->
+	<select id="DeleteRefrigeratorList" parameterType="int">
+		<![CDATA[ 
+			UPDATE Re001T
+			SET finish_yn = 'Y'
+			WHERE idx = #{idx}
+		]]>
+	</select>
+	
+	<!-- 타입 리스트 가져오기-->
+	<select id="GetTypeList" resultType="com.dlhdlh.dto.MyRefrigeratorDataListDto">
+		<![CDATA[ 
+			SELECT type 
+			FROM Re001T
+			GROUP BY type;
+		]]>
+	</select>
+	
+	<!-- 구매내역 리스트-->
+	<select id="PurchaseList" resultType="com.dlhdlh.dto.MyRefrigeratorDataListDto">
+		<![CDATA[ 
+			SELECT idx, item_name, amt, substr(purchased_dt, 1, 10) as purchased_dt, type
+			FROM Re001T r
+			WHERE purchased_yn = 'Y'
+			ORDER BY r.purchased_dt desc
+		]]>
+	</select>
+	
+	<!-- 구매내역 itemName별 리스트-->
+	<select id="PurchaseItemNameList" parameterType="String" resultType="com.dlhdlh.dto.MyRefrigeratorDataListDto">
+		<![CDATA[ 
+			SELECT idx, item_name, amt, substr(purchased_dt, 1, 10) as purchased_dt, type
+			FROM Re001T r
+			WHERE purchased_yn = 'Y' AND item_name like CONCAT('%',#{itemName},'%')
+			ORDER BY r.purchased_dt desc
+		]]>
+	</select>
+	
+	<!-- 구매내역 삭제-->
+	<select id="DeletePurchaseList" parameterType="int">
+		<![CDATA[ 
+			DELETE FROM Re001T
+			WHERE idx = #{idx}
+		]]>
+	</select>
+	
+	<!-- 구매내역 item 업데이트-->
+	<update id="UpdatePurChaseList" parameterType="com.dlhdlh.dto.MyRefrigeratorDataListDto">
+		<![CDATA[ 
+			UPDATE Re001T
+			SET item_name = #{itemName}, amt = #{amt}, type = #{type} 
+			WHERE idx = #{idx}
+		]]>
+	</update>
+</mapper>
