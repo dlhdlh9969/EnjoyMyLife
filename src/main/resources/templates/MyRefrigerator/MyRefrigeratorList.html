@@ -54,7 +54,7 @@
                     <div class="RefrigeratorTableBody row my-3" th:if="${#lists.size(RefrigeratorList)} > 0" th:each="list :${RefrigeratorList}">
                         <!-- idx 히든처리 -->
                         <div class="col-4 col-md-3" th:text="${list.itemName}" list="itemList" id="itemName" name="itemName" autocomplete="off"></div>
-                        <a class="ParamLink px-1 col-4 col-md-2" th:href="@{/refrigerator(type=${list.type})}" th:text="${list.type}" th:if="14 >= ${list.afterDay}"></a>
+                        <div class="col-4 col-md-2" th:text="${list.type}" list="itemList" autocomplete="off"></div>
                         <div class="px-1 col-4 col-md-2" th:text="|+${list.afterDay}일|" th:if="${list.afterDay} > 14" th:classappend="text-danger"></div>
                         <div class="px-1 col-4 col-md-2" th:text="|+${list.afterDay}일|" th:if="14 >= ${list.afterDay}"></div>
                         <div class="px-1 col-4 col-md-3" th:text="${list.purchasedDt}"></div>
