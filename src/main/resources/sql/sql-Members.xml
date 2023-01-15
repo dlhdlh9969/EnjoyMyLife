@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dlhdlh.mapper.MembersMapper">
+
+	<!-- 로그인 체크 -->
+	<select id="loginCheck" parameterType="com.dlhdlh.mapper.MembersDto" resultType="int">
+		<![CDATA[ 
+			SELECT count(user_id) 
+			FROM Members 
+			WHERE user_id = #{userId} and user_pw = #{userPw};
+		]]>
+	</select>
+
+	<!-- 멤버 정보 조회-->
+	<select id="selectMemberInfo" parameterType="String" resultType="com.dlhdlh.mapper.MembersDto">
+		<![CDATA[ 
+			SELECT ms.user_id, ms.user_name , ms.auth_grade, dt.auth_name
+			FROM Members ms
+			LEFT OUTER JOIN Auth_Grade_Master dt
+			ON ms.auth_grade = dt.auth_grade;
+			WHERE user_id = #{userId};
+		]]>
+	</select>
+
+</mapper>

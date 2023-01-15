@@ -16,7 +16,7 @@ public class WebConfig implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		
-		registry.addInterceptor(loginInterceptor).addPathPatterns("/");
+		registry.addInterceptor(loginInterceptor).addPathPatterns("/re/**"); //냉장고 경로
 	}
 	
 	
