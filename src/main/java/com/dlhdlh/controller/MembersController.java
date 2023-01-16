@@ -35,7 +35,7 @@ public class MembersController {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		int resultCnt = membersService.loginCheck(loginRequest);
 
-		//map.put("resultCnt", resultCnt);
+		map.put("resultCnt", resultCnt);
 		
 		if(resultCnt > 0)
 		{
@@ -47,8 +47,10 @@ public class MembersController {
 			session.setAttribute("authName", memberDto.getAuthName());
 			session.setMaxInactiveInterval(600);
 			
-			//tring PrevPage = (String)session.getAttribute("PrevPage");
+			//String PrevPage = (String)session.getAttribute("PrevPage");
 			//map.put("PrevPage", PrevPage);
+			
+			
 			
 			return map;
 			
