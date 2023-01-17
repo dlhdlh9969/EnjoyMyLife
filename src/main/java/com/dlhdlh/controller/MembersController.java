@@ -29,7 +29,7 @@ public class MembersController {
 	
 	// 로그인 submit 프로세스
 	@ResponseBody 
-	@RequestMapping(value = "members/LoginProcessAjax", method = RequestMethod.POST)
+	@RequestMapping(value = "members/loginAjax", method = RequestMethod.POST)
 	public Object LoginProcessAjax(MembersDto loginRequest, HttpServletRequest request) throws Exception
 	{
 		HashMap<String, Object> map = new HashMap<String, Object>();
@@ -47,10 +47,10 @@ public class MembersController {
 			session.setAttribute("authName", memberDto.getAuthName());
 			session.setMaxInactiveInterval(600);
 			
-			//String PrevPage = (String)session.getAttribute("PrevPage");
-			//map.put("PrevPage", PrevPage);
-			
-			
+//			String prevPage = request.getHeader("prevPage");
+//			if(prevPage != null) {
+//				map.put("prevPage", prevPage);
+//			}
 			
 			return map;
 			
@@ -59,4 +59,13 @@ public class MembersController {
 			return map;
 		}
 	}
+	
+	@RequestMapping(value="members/logout") // 로그아웃
+	public String logout(HttpServletRequest request)throws Exception{
+		HttpSession session = request.getSession();
+		String referer = request.getHeader("Referer");
+		session.invalidate();
+		return "redirect:" + referer;
+	}
+
 }

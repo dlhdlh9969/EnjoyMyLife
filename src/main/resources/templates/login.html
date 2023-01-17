@@ -21,13 +21,13 @@
             var datas = {userId: userId, userPw: userPw};
 
             $.ajax({
-				url: "/members/LoginProcessAjax",
+				url: "/members/loginAjax",
 				type: "post",
 				data: datas,
 				success: function(data) {
 					if(data.resultCnt > 0)
 					{
-						location.href=data.PrevPage;
+						location.href="/";  //인덱스로 이동
 					}else{
 						$("#result").text("ID와 비밀번호를 다시 확인해주세요.");
 					}
@@ -42,10 +42,13 @@
 </script>
 
 </head>
-<body class="p-2 h-100">
+<body class="h-100">
+    <div>
+        <header th:include="header :: header"></header>
+    </div>
     <div class="container col-md-4 mx-auto my-auto">
         <div>
-            <b>D-World 로그인</b>
+            <b>로그인</b>
             <form class="border border-1 border-dark rounded p-2">
                 <div class="form-floating my-2">
                     <input type="text" id="userId" name="userId" class="form-control">
