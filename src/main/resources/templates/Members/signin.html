@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>D-world회원가입</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link rel="stylesheet" href="/css/basic.css">
+<script>
+    $(document).ready(function(){
+        $("#btn-cancel").on("click", function(){
+            history.back();
+        })
+        $("#btn-submit").on("click", function() {
+            var userId = $("#userId").val();
+            var userPw = $("#userPw").val();
+            var userName = $("#userName").val();
+
+            if(!userId){
+                alert("Id를 입력해주세요.");
+            }else if(!userPw){
+                alert("비밀번호를 입력해주세요.");
+            }else if(!userName){
+                alert("이름을 입력해주세요.");
+            }else{
+                var datas = {userId: userId, userPw: userPw, userName: userName};
+
+                $.ajax({
+                    url: "/member/signInAjax",
+                    type: "post",
+                    data: datas,
+                    success: function(data) {
+                        if(data.resultCnt > 0)
+                        {
+                            $("#result").text("이미 존재하는 ID입니다. 다시 입력해 주세요.");
+
+                        }else{
+                            location.href="/";
+                        }
+                    },
+                    error: function() {
+                        alert("ajax 통신 오류 발생");
+                    }
+                });
+            }
+        });
+    });
+</script>
+</head>
+<body>
+    <div>
+        <header th:include="header :: header"></header>
+    </div>
+    <div class="container my-2">
+        <div class="border border-1 border-dark rounded p-2 my-2">
+            <div class="row">
+                <div class="col-sm-6 mx-auto p-2">
+                    <form>
+                        <div class="text-center">
+                            <h3>회원 가입</h3>
+                        </div>
+                        <div class="form-floating my-2">
+                            <input type="text" id="userId" name="userId" class="form-control">
+                            <label>ID</label>
+                            <p id="result" class="text-danger"></p>
+                        </div>
+                        <div class="form-floating my-2">
+                            <input type="text" id="userPw" name="userPw" class="form-control">
+                            <label>비밀번호</label>
+                        </div>
+                        <div class="form-floating my-2">
+                            <input type="text" id="userName" name="userName" class="form-control">
+                            <label>이름</label>
+                        </div>
+                        <div class="text-end">
+                            <button type="button" id="btn-submit" class="btn btn-outline-success">가입</button>
+                            <button type="button" id="btn-cancel" class="btn btn-outline-dark">취소</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

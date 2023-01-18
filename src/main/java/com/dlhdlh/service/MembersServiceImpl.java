@@ -24,4 +24,16 @@ public class MembersServiceImpl implements MembersService {
 		return membersMapper.selectMemberInfo(userId);
 	}
 	
+	//회원가입
+	@Override
+	public void insertMember(MembersDto memberInfo) throws Exception {
+		membersMapper.insertMember(memberInfo);
+	}
+
+	//회원가입 ID 체크
+	@Override
+	public int userIdCheck(MembersDto memberInfo) throws Exception {
+		return membersMapper.userIdCheck(memberInfo);
+	}
+	
 }

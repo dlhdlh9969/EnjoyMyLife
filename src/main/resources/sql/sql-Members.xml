@@ -5,20 +5,36 @@
 	<!-- 로그인 체크 -->
 	<select id="loginCheck" parameterType="com.dlhdlh.dto.MembersDto" resultType="int">
 		<![CDATA[ 
-			select count(user_id) 
-			from Members 
-			where user_id = #{userId} and user_pw = #{userPw};
+			SELECT count(user_id) 
+			FROM Members 
+			WHERE user_id = #{userId} and user_pw = #{userPw}
 		]]>
 	</select>
 
 	<!-- 멤버 정보 조회-->
 	<select id="selectMemberInfo" parameterType="String" resultType="com.dlhdlh.dto.MembersDto">
 		<![CDATA[ 
-			select ms.user_id, ms.user_name , ms.auth_grade, dt.auth_name 
-			from Members ms 
-			left outer join Auth_Grade_Master dt 
-			on ms.auth_grade = dt.auth_grade
-			where user_id = #{userId};
+			SELECT ms.user_id, ms.user_name , ms.auth_grade, dt.auth_name 
+			FROM Members ms 
+			LEFT OUTER JOIN Auth_Grade_Master dt 
+			ON ms.auth_grade = dt.auth_grade
+			WHERE user_id = #{userId};
+		]]>
+	</select>
+	
+	<insert id="insertMember" parameterType="com.dlhdlh.dto.MembersDto">
+		<![CDATA[ 
+			INSERT INTO Members (user_id, user_pw, user_name, signin_dt)
+			VALUES ( #{userId}, #{userPw}, #{userName}, now());
+		]]>
+	</insert>
+	
+	<!-- 로그인 체크 -->
+	<select id="userIdCheck" parameterType="com.dlhdlh.dto.MembersDto" resultType="int">
+		<![CDATA[ 
+			SELECT count(user_id) 
+			FROM Members 
+			WHERE user_id = #{userId}
 		]]>
 	</select>
 

@@ -10,4 +10,9 @@ public interface MembersService {
 	//접속자 정보
 	MembersDto selectMemberDto(String userId) throws Exception;
 
+	//회원가입 프로세스
+	void insertMember(MembersDto memberInfo) throws Exception;
+
+	int userIdCheck(MembersDto memberInfo) throws Exception;
+
 }

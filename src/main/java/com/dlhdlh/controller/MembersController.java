@@ -22,9 +22,15 @@ public class MembersController {
 	
 	
 	// 로그인 페이지
-	@RequestMapping("/login")
+	@RequestMapping("/members/login")
 	public String LoginPage() {
-		return "login";
+		return "Members/login";
+	}
+	
+	// 회원가입 페이지
+	@RequestMapping("/members/signin")
+	public String SignInPage() {
+		return "Members/signin";
 	}
 	
 	// 로그인 submit 프로세스
@@ -68,4 +74,27 @@ public class MembersController {
 		return "redirect:" + referer;
 	}
 
+	@ResponseBody // 회원가입 submit 프로세스
+	@RequestMapping(value = "member/signInAjax", method = RequestMethod.POST)
+	public Object signInProcess(MembersDto memberInfo, HttpServletRequest request) throws Exception
+	{
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		int resultCnt = membersService.userIdCheck(memberInfo);
+		
+		if(resultCnt > 0)
+		{
+			map.put("resultCnt", resultCnt);
+			return map;
+	 
+		}
+		else {
+			membersService.insertMember(memberInfo);
+			HttpSession session = request.getSession();
+			String PrevPage = (String)session.getAttribute("PrevPage");
+			map.put("PrevPage", PrevPage);
+			
+			return map;
+		}
+	}
+	
 }
