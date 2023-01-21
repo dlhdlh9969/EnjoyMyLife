@@ -14,7 +14,7 @@
 	<!-- 멤버 정보 조회-->
 	<select id="selectMemberInfo" parameterType="String" resultType="com.dlhdlh.dto.MembersDto">
 		<![CDATA[ 
-			SELECT ms.user_id, ms.user_name , ms.auth_grade, dt.auth_name 
+			SELECT user_id, user_name 
 			FROM Members
 			WHERE user_id = #{userId};
 		]]>

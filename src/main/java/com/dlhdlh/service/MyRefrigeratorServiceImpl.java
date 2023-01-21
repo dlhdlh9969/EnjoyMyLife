@@ -16,8 +16,8 @@ public class MyRefrigeratorServiceImpl implements MyRefrigeratorService {
 
 	//이름 리스트 가져오기
 	@Override
-	public List<MyRefrigeratorDataListDto> GetNameList() throws Exception {
-		return myRefrigeratorMapper.GetNameList();
+	public List<MyRefrigeratorDataListDto> GetNameList(String requestId) throws Exception {
+		return myRefrigeratorMapper.GetNameList(requestId);
 	}
 
 	//  장바구니 추가
@@ -28,14 +28,14 @@ public class MyRefrigeratorServiceImpl implements MyRefrigeratorService {
 
 	//이름으로 마지막 데이터 가져오기
 	@Override
-	public MyRefrigeratorDataListDto GetLastData(String itemName) throws Exception {
-		return myRefrigeratorMapper.GetLastData(itemName);
+	public MyRefrigeratorDataListDto GetLastData(MyRefrigeratorDataListDto paramDto) throws Exception {
+		return myRefrigeratorMapper.GetLastData(paramDto);
 	}
 
 	// 장바구니 리스트 가져오기
 	@Override
-	public List<MyRefrigeratorDataListDto> GetWishItemList() throws Exception {
-		return myRefrigeratorMapper.GetWishItemList();
+	public List<MyRefrigeratorDataListDto> GetWishItemList(String requestId) throws Exception {
+		return myRefrigeratorMapper.GetWishItemList(requestId);
 	}
 
 	// 장바구지 리스트에서 삭제
@@ -51,14 +51,10 @@ public class MyRefrigeratorServiceImpl implements MyRefrigeratorService {
 	}
 
 	// 냉장고 리스트
+
 	@Override
-	public List<MyRefrigeratorDataListDto> RefrigeratorList() throws Exception {
-		return myRefrigeratorMapper.RefrigeratorList();
-	}
-	
-	@Override
-	public List<MyRefrigeratorDataListDto> RefrigeratorTypeList(String type) throws Exception {
-		return myRefrigeratorMapper.RefrigeratorTypeList(type);
+	public List<MyRefrigeratorDataListDto> RefrigeratorList(MyRefrigeratorDataListDto paramDto) throws Exception {
+		return myRefrigeratorMapper.RefrigeratorList(paramDto);
 	}
 
 
@@ -73,18 +69,13 @@ public class MyRefrigeratorServiceImpl implements MyRefrigeratorService {
 	}
 
 	@Override
-	public List<MyRefrigeratorDataListDto> GetTypeList() throws Exception {
-		return myRefrigeratorMapper.GetTypeList();
+	public List<MyRefrigeratorDataListDto> GetTypeList(String requestId) throws Exception {
+		return myRefrigeratorMapper.GetTypeList(requestId);
 	}
 
 	@Override
-	public List<MyRefrigeratorDataListDto> PurchaseList() throws Exception {
-		return myRefrigeratorMapper.PurchaseList();
-	}
-
-	@Override
-	public List<MyRefrigeratorDataListDto> PurchaseItemNameList(String itemName) throws Exception {
-		return myRefrigeratorMapper.PurchaseItemNameList(itemName);
+	public List<MyRefrigeratorDataListDto> PurchaseList(MyRefrigeratorDataListDto paramDto) throws Exception {
+		return myRefrigeratorMapper.PurchaseList(paramDto);
 	}
 
 	@Override

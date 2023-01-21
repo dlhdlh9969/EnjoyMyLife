@@ -2,6 +2,9 @@ package com.dlhdlh.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,12 +22,14 @@ public class MyRefrigeratorController {
 	
 	// 장바구니 리스트
 	@RequestMapping("re/myWishList")
-	public ModelAndView MyWishList() throws Exception {
+	public ModelAndView MyWishList(HttpServletRequest request) throws Exception {
 		ModelAndView mv = new ModelAndView("MyRefrigerator/MyWishList");
+		HttpSession session = request.getSession();
+		String requestId = (String) session.getAttribute("userId");
 		
-		List<MyRefrigeratorDataListDto> nameList = myRefrigeratorService.GetNameList();
-		List<MyRefrigeratorDataListDto> itemList = myRefrigeratorService.GetWishItemList();
-		List<MyRefrigeratorDataListDto> typeList = myRefrigeratorService.GetTypeList();
+		List<MyRefrigeratorDataListDto> nameList = myRefrigeratorService.GetNameList(requestId);
+		List<MyRefrigeratorDataListDto> itemList = myRefrigeratorService.GetWishItemList(requestId);
+		List<MyRefrigeratorDataListDto> typeList = myRefrigeratorService.GetTypeList(requestId);
 		mv.addObject("pageName", "MyWishList");
 		mv.addObject("NameList", nameList);
 		mv.addObject("TypeList", typeList);
@@ -34,12 +39,17 @@ public class MyRefrigeratorController {
 	
 	// 장바구니 추가
 	@RequestMapping("re/insertWishList")
-	public String InsertWishList(@RequestParam(required = false, defaultValue = "") String itemName) throws Exception {
+	public String InsertWishList(@RequestParam(required = false, defaultValue = "") String itemName, HttpServletRequest request) throws Exception {
 		MyRefrigeratorDataListDto paramDto = new MyRefrigeratorDataListDto();
 		MyRefrigeratorDataListDto lastDataDto = new MyRefrigeratorDataListDto();
+		HttpSession session = request.getSession();
+		
+		paramDto.setUserId((String) session.getAttribute("userId"));
+		paramDto.setItemName(itemName);
+		
 		if (!itemName.equals("")) {
 			try {
-				lastDataDto = myRefrigeratorService.GetLastData(itemName);
+				lastDataDto = myRefrigeratorService.GetLastData(paramDto);
 				paramDto.setAmt(lastDataDto.getAmt());
 				paramDto.setType(lastDataDto.getType());
 			} catch(Exception e) {
@@ -72,18 +82,19 @@ public class MyRefrigeratorController {
 	
 	// 냉장고리스트
 	@RequestMapping("re/refrigerator")
-	public ModelAndView MyRefrigeratorList(@RequestParam(required = false, defaultValue = "") String type) throws Exception  {
+	public ModelAndView MyRefrigeratorList(@RequestParam(required = false, defaultValue = "") String type, HttpServletRequest request) throws Exception  {
 		ModelAndView mv = new ModelAndView("MyRefrigerator/MyRefrigeratorList");
+		HttpSession session = request.getSession();
+		String requestId = (String) session.getAttribute("userId");
+		MyRefrigeratorDataListDto paramDto = new MyRefrigeratorDataListDto();
+		paramDto.setType(type);
+		paramDto.setUserId(requestId);
 		
 		List<MyRefrigeratorDataListDto> refrigeratorList;
 		
-		if(type.equals("")) {
-			refrigeratorList = myRefrigeratorService.RefrigeratorList();
-		}else {
-			refrigeratorList = myRefrigeratorService.RefrigeratorTypeList(type);
-		}
+		refrigeratorList = myRefrigeratorService.RefrigeratorList(paramDto);
 		
-		List<MyRefrigeratorDataListDto> typeList = myRefrigeratorService.GetTypeList();
+		List<MyRefrigeratorDataListDto> typeList = myRefrigeratorService.GetTypeList(requestId);
 		mv.addObject("TypeList", typeList);
 		mv.addObject("RefrigeratorList", refrigeratorList);
 		mv.addObject("pageName", "MyRefrigeratorList");
@@ -106,19 +117,21 @@ public class MyRefrigeratorController {
 	
 	// 구매내역 리스트
 	@RequestMapping("re/purchaselist")
-	public ModelAndView MyPurchaseList(@RequestParam(required = false, defaultValue = "") String itemName) throws Exception  {
+	public ModelAndView MyPurchaseList(@RequestParam(required = false, defaultValue = "") String itemName, HttpServletRequest request) throws Exception  {
 		ModelAndView mv = new ModelAndView("MyRefrigerator/MyPurchaselistList");
+		HttpSession session = request.getSession();
+		String requestId = (String) session.getAttribute("userId");
+		MyRefrigeratorDataListDto paramDto = new MyRefrigeratorDataListDto();
+		paramDto.setItemName(itemName);
+		paramDto.setUserId(requestId);
 		
 		List<MyRefrigeratorDataListDto> purchaseList;
 		
-		if(itemName.equals("")) {
-			purchaseList = myRefrigeratorService.PurchaseList();
-		}else {
-			purchaseList = myRefrigeratorService.PurchaseItemNameList(itemName);
-		}
-		List<MyRefrigeratorDataListDto> nameList = myRefrigeratorService.GetNameList();
+		purchaseList = myRefrigeratorService.PurchaseList(paramDto);
+			
+		List<MyRefrigeratorDataListDto> nameList = myRefrigeratorService.GetNameList(requestId);
 		
-		List<MyRefrigeratorDataListDto> typeList = myRefrigeratorService.GetTypeList();
+		List<MyRefrigeratorDataListDto> typeList = myRefrigeratorService.GetTypeList(requestId);
 		mv.addObject("TypeList", typeList);
 		mv.addObject("NameList", nameList);
 		mv.addObject("PurchaseList", purchaseList);

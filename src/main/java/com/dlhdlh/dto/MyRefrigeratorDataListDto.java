@@ -13,4 +13,5 @@ public class MyRefrigeratorDataListDto {
 	String purchasedYn;
 	String type;
 	String afterDay;
+	String userId;
 }
