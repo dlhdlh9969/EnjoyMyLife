@@ -15,9 +15,7 @@
 	<select id="selectMemberInfo" parameterType="String" resultType="com.dlhdlh.dto.MembersDto">
 		<![CDATA[ 
 			SELECT ms.user_id, ms.user_name , ms.auth_grade, dt.auth_name 
-			FROM Members ms 
-			LEFT OUTER JOIN Auth_Grade_Master dt 
-			ON ms.auth_grade = dt.auth_grade
+			FROM Members
 			WHERE user_id = #{userId};
 		]]>
 	</select>

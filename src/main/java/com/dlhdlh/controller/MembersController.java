@@ -49,8 +49,6 @@ public class MembersController {
 			HttpSession session = request.getSession();
 			session.setAttribute("userId", memberDto.getUserId());
 			session.setAttribute("userName", memberDto.getUserName());
-			session.setAttribute("authGrade", memberDto.getAuthGrade());
-			session.setAttribute("authName", memberDto.getAuthName());
 			session.setMaxInactiveInterval(600);
 			
 //			String prevPage = request.getHeader("prevPage");
