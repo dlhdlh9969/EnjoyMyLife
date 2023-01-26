@@ -1,0 +1,70 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap');
+
+:root{
+    --LightFontColor : rgb(223, 223, 223);
+    --HeaderFocusLinkColor : rgb(71, 70, 70);
+    --HeaderFocusBgColor : rgb(223, 82, 58);
+    --typeLinkFontColor : rgb(46, 45, 45);
+}
+
+a {
+    text-decoration: none;
+}
+
+.headerbgcolor {
+    background: rgb(56, 56, 56);
+}
+.headerTitle{
+    color: tomato;
+    font-size: 32px;
+    font-family: 'Oswald', sans-serif;
+}
+
+.navMenu a:visited{
+    color: var(--LightFontColor);
+}
+.navMenu a:link{
+    color: var(--LightFontColor);
+}
+
+.ParamLink:link{
+    color: var(--typeLinkFontColor);
+}
+
+.ParamLink:visited{
+    color: var(--typeLinkFontColor);
+}
+
+main {
+    margin-top: 130px;
+    padding: 15px;
+}
+
+@media screen and (max-width : 768px) {
+    main {
+        margin-top: 195px;
+    }
+
+    .navMenu {
+        margin-bottom: 0;
+    }
+}
+
+.navFocus{
+	background-color: var(--HeaderFocusBgColor);
+	border-radius: 5px;
+    font-weight: bold;
+    color: var(--HeaderFocusLinkColor);
+}
+
+.bi{
+    font-size: 26px;
+    color: rgb(37, 37, 37);
+}
+
+.btnRemove {
+    border: none;
+    background: none;
+    padding: 0;
+}

@@ -29,10 +29,10 @@ public interface MyRefrigeratorService {
 
 	List<MyRefrigeratorDataListDto> GetTypeList(String requestId) throws Exception;
 
-	List<MyRefrigeratorDataListDto> PurchaseList(MyRefrigeratorDataListDto paramDto) throws Exception;
-
 	void DeletePurchaseList(int idx) throws Exception;
 
 	void UpdatePurChaseList(MyRefrigeratorDataListDto paramDto) throws Exception;
+
+	List<MyRefrigeratorDataListDto> PurchaseList(MyRefrigeratorDataListDto paramDto) throws Exception;
 
 }
