@@ -3,9 +3,9 @@
 
 :root{
     --LightFontColor : rgb(223, 223, 223);
-    --HeaderFocusLinkColor : rgb(71, 70, 70);
+    --HeaderFocusLinkColor : rgb(32, 32, 32);
     --HeaderFocusBgColor : rgb(223, 82, 58);
-    --typeLinkFontColor : rgb(46, 45, 45);
+    --typeLinkFontColor : rgb(32, 32, 32);
 }
 
 a {
@@ -21,10 +21,10 @@ a {
     font-family: 'Oswald', sans-serif;
 }
 
-.navMenu a:visited{
+.navMenu li a:visited{
     color: var(--LightFontColor);
 }
-.navMenu a:link{
+.navMenu li a:link{
     color: var(--LightFontColor);
 }
 

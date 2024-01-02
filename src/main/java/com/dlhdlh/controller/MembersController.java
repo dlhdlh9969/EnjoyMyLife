@@ -49,7 +49,7 @@ public class MembersController {
 			HttpSession session = request.getSession();
 			session.setAttribute("userId", memberDto.getUserId());
 			session.setAttribute("userName", memberDto.getUserName());
-			session.setMaxInactiveInterval(600);
+			session.setMaxInactiveInterval(1800);
 			
 //			String prevPage = request.getHeader("prevPage");
 //			if(prevPage != null) {
@@ -67,9 +67,8 @@ public class MembersController {
 	@RequestMapping(value="members/logout") // 로그아웃
 	public String logout(HttpServletRequest request)throws Exception{
 		HttpSession session = request.getSession();
-		String referer = request.getHeader("Referer");
 		session.invalidate();
-		return "redirect:" + referer;
+		return "redirect:/";
 	}
 
 	@ResponseBody // 회원가입 submit 프로세스

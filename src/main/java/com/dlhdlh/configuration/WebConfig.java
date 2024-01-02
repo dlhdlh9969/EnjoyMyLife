@@ -16,8 +16,7 @@ public class WebConfig implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		
-		registry.addInterceptor(loginInterceptor).addPathPatterns("/re/**"); //냉장고 경로 인터셉트
-		registry.addInterceptor(loginInterceptor).addPathPatterns("/carmanage/**"); //자동차 관리 경로 인터셉트
+		registry.addInterceptor(loginInterceptor).addPathPatterns("/dworld/**"); //전체 경로 인터셉트
 	}
 	
 	

@@ -21,7 +21,7 @@ public class MyRefrigeratorController {
 	MyRefrigeratorService myRefrigeratorService;
 	
 	// 장바구니 리스트
-	@RequestMapping("re/myWishList")
+	@RequestMapping("/dworld/re/myWishList")
 	public ModelAndView MyWishList(HttpServletRequest request) throws Exception {
 		ModelAndView mv = new ModelAndView("MyRefrigerator/MyWishList");
 		HttpSession session = request.getSession();

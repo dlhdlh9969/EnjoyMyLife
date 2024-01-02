@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dlhdlh.mapper.CustomerMapper">
+	<!-- 업체 리스트 --> 
+	<select id="GetCustList" resultType="com.dlhdlh.dto.CustomerDto">
+		<![CDATA[ 
+			SELECT cust_cd, cust_nm, cust_busnum, cust_num, cust_addr, cust_email, cust_ceonm, cust_ceonum, cust_remark
+			FROM Customer
+			WHERE cust_nm like concat('%', #{searchCustN}, '%') and deleted_yn = "N"
+			Order By cust_cd desc
+		]]>
+	</select>
+	
+	<update id="CustomerUpdate" parameterType="com.dlhdlh.dto.CustomerDto">
+		<![CDATA[ 
+			UPDATE Customer
+			SET cust_nm = #{custNm} 
+				,cust_busnum = #{custBusnum} 
+				,cust_num = #{custNum} 
+				,cust_ceonm = #{custCeonm} 
+				,cust_ceonum = #{custCeonum} 
+				,cust_addr = #{custAddr} 
+				,cust_email = #{custEmail} 
+				,cust_remark = #{custRemark} 
+				,update_user = #{updateUser} 
+				,update_dt = now() 
+			WHERE cust_cd = #{custCd}
+		]]>
+	</update>
+	<delete id="CustomerDelete" parameterType="com.dlhdlh.dto.CustomerDto">
+		<![CDATA[ 
+			UPDATE Customer 
+			SET deleted_yn = "Y" 
+				,delete_dt = now() 
+				,delete_user = #{deleteUser}
+			WHERE cust_cd = #{custCd}
+		]]>
+	</delete>
+	<insert id="CustomerInsert" parameterType="com.dlhdlh.dto.CustomerDto">
+		<![CDATA[ 
+			INSERT INTO Customer(cust_nm,cust_busnum,cust_num,cust_ceonm,cust_ceonum,cust_addr,cust_email,cust_remark,insert_user, insert_dt) 
+			VALUES (#{custNm},#{custBusnum},#{custNum},#{custCeonm},#{custCeonum},#{custAddr},#{custEmail},#{custRemark},#{insertUser},now())
+		]]>
+	</insert>
+</mapper>
+
