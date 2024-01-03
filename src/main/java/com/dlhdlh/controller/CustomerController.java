@@ -23,7 +23,7 @@ public class CustomerController {
 	
 	//업체관리 메인페이지 및 검색 기능
 	@RequestMapping(value="/dworld/customer")
-	public ModelAndView CustomerList(@RequestParam(required=false, defaultValue = "1") int pageNum, @RequestParam(required=false, defaultValue = "0")int selectCustCd, HttpServletRequest servletRequest, CustomerDto customerDto) throws Exception {
+	public ModelAndView CustomerList(@RequestParam(required=false, defaultValue = "1") int pageNum, @RequestParam(required=false, defaultValue = "0")int selectRowNum, HttpServletRequest servletRequest, CustomerDto customerDto) throws Exception {
 		ModelAndView mv = new ModelAndView("Customer/MainPage");		
 		
 		int maxPaging = 10;//페이징 최대 갯수
@@ -39,11 +39,11 @@ public class CustomerController {
 		CustomerDto selectCustInfo = new CustomerDto();
 		
 		if(custList.getSize() != 0) {	
-			if(selectCustCd != 0){
+			if(selectRowNum != 0){
 				int i = 0;
 				selectCustInfo = custList.getList().get(i);
 				
-				for(i = 0; selectCustCd < custList.getList().get(i).getCustCd(); i++) {
+				for(i = 0; selectRowNum < custList.getList().get(i).getRowNum(); i++) {
 					selectCustInfo = custList.getList().get(i+1);
 				};
 			}else{
@@ -80,7 +80,7 @@ public class CustomerController {
 	
 	//업체 관리 등록
 	@ResponseBody
-	@RequestMapping(value="/dworld/customer/control", method = RequestMethod.GET)
+	@RequestMapping(value="/dworld/customer/control", method = RequestMethod.POST)
 	void CustomerInsert(CustomerDto customerDto, HttpServletRequest servletRequest) throws Exception{
 		HttpSession session = servletRequest.getSession();
 		String userId = (String) session.getAttribute("userId");

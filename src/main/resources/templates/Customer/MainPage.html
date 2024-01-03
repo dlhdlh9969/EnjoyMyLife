@@ -19,6 +19,7 @@
                 $("#btn-insertOK").hide();
                 $("#btn-cancel").hide();
                 
+                //취소 버튼
                 $("#btn-cancel").on("click", function(){
                     location.reload();
                 });
@@ -174,7 +175,7 @@
 			        }else{
                         $.ajax({
                             url: "/dworld/customer/control",
-                            type: "get",
+                            type: "post",
                             data: datas,
                             success: function(data) {
                                 alert("등록 되었습니다.");
@@ -219,12 +220,14 @@
 
                     <table class="table table-hover table-hover">
                         <colgroup>
-                            <col width="40%" />
+                            <col width="5%" />
+                            <col width="35%" />
                             <col width="30%" />
                             <col width="30%" />
                         </colgroup>
                         <thead>
                             <tr>
+                                <th>Num</th>
                                 <th>업체명</th>
                                 <th>전화번호</th>
                                 <th>대표자명</th>
@@ -233,9 +236,10 @@
                         <tbody>
                             
                             <tr th:each="list : ${CustList.getList()}" class="text-wrap">
-                                <td><a th:href="@{/dworld/customer(pageNum=${CustList.PageNum}, selectCustCd=${list.custCd},searchCustNm=${SearchCustNm})}" th:text='${list.custNm}'></a></td>
-                                <td><a th:href="@{/dworld/customer(pageNum=${CustList.PageNum}, selectCustCd=${list.custCd},searchCustNm=${SearchCustNm})}" th:text='${list.custNum}'></a></td>
-                                <td><a th:href="@{/dworld/customer(pageNum=${CustList.PageNum}, selectCustCd=${list.custCd},searchCustNm=${SearchCustNm})}" th:text='${list.custCeonm}'></a></td>
+                                <td><a th:text='${list.rowNum}'></a></td>
+                                <td><a th:href="@{/dworld/customer(pageNum=${CustList.PageNum}, selectRowNum=${list.rowNum},searchCustNm=${SearchCustNm})}" th:text='${list.custNm}'></a></td>
+                                <td><a th:href="@{/dworld/customer(pageNum=${CustList.PageNum}, selectRowNum=${list.rowNum},searchCustNm=${SearchCustNm})}" th:text='${list.custNum}'></a></td>
+                                <td><a th:href="@{/dworld/customer(pageNum=${CustList.PageNum}, selectRowNum=${list.rowNum},searchCustNm=${SearchCustNm})}" th:text='${list.custCeonm}'></a></td>
                             </tr>
                             
                             <tr th:unless="${#lists.size(CustList.getList())} > 0">

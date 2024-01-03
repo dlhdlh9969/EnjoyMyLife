@@ -1,5 +1,7 @@
 package com.dlhdlh.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -8,19 +10,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.dlhdlh.dto.CustomerDto;
 import com.dlhdlh.dto.WorkLogDto;
 import com.dlhdlh.service.WorkLogService;
 import com.github.pagehelper.PageInfo;
 
+@RestController
 @Controller
 public class WorkLogController {
 	
-	private static final String String = null;
 	@Autowired
 	WorkLogService worklogService;
-	
+
 	@RequestMapping(value="/dworld/worklog")
 	public ModelAndView WorkLogList(@RequestParam(required=false, defaultValue = "1") int pageNum, HttpServletRequest servletRequest, WorkLogDto worklogDto) throws Exception {
 		ModelAndView mv = new ModelAndView("WorkLog/Mainpage");
@@ -28,12 +32,13 @@ public class WorkLogController {
 		String userId = (String) session.getAttribute("userId");
 		int maxPaging = 10;//페이징 최대 갯수
 		int maxRow = 5; //페이지당 최대 로우 갯수
+		
 		worklogDto.setUserId(userId);
 		
 		//완료 여부 컨트롤
 		if(worklogDto.getComplYn() == null) {
-			worklogDto.setComplYn("");
-			mv.addObject("ResponseComplYn","A");
+			worklogDto.setComplYn("N");
+			mv.addObject("ResponseComplYn","N");
 		}else if(worklogDto.getComplYn().equals("A")) {
 			worklogDto.setComplYn("");
 			mv.addObject("ResponseComplYn","A");
@@ -67,9 +72,6 @@ public class WorkLogController {
 			mv.addObject("order2","asc");
 		}
 		
-		
-		System.out.println("custnm : "+worklogDto.getCustNm());
-		System.out.println("title : "+worklogDto.getTitle());
 		//업체명 검색 컨트롤
 		if(worklogDto.getCustNm() == null) {
 			worklogDto.setCustNm("");
@@ -85,6 +87,13 @@ public class WorkLogController {
 		}else {
 			mv.addObject("SearchTitle", worklogDto.getTitle());
 		}
+		
+		//order3 컨트롤
+		if(worklogDto.getOrder2().equals("desc")) {
+			worklogDto.setOrder3("asc");
+		}else {
+			worklogDto.setOrder3("desc");
+		}
 			
 		PageInfo<WorkLogDto> workLogList = new PageInfo<>(worklogService.GetWorkLogList(pageNum, maxRow, worklogDto), maxPaging);
 		
@@ -92,12 +101,42 @@ public class WorkLogController {
 		return mv;	
 	}
 	
-	@ResponseBody
-	@RequestMapping(value = "/dworld/worklog/write")
-	public ModelAndView WorkLogWrite(HttpServletRequest servletRequest) throws Exception{
-		ModelAndView mv = new ModelAndView("WorkLog/WritePage");
+	//디테일 페이지 컨트롤
+	@RequestMapping(value = "/dworld/worklog/detail")
+	public ModelAndView WorkLogWrite(HttpServletRequest servletRequest, WorkLogDto worklogDto) throws Exception{
+		ModelAndView mv = new ModelAndView("WorkLog/DetailPage");
 		
+		String mode = "insert";
+		if(worklogDto.getCustCd() != 0) {
+			mode = "detail";
+		}
+		
+		mv.addObject("MODE", mode);
 		return mv;
 	}
+	
+	// 업체검색 모달 컨트롤
+	@ResponseBody
+	@RequestMapping(value="/dworld/worklog/searchCust")
+	public List<CustomerDto> CustList(@RequestParam(required=false, defaultValue = "") String searchCustNm) throws Exception{
+		return worklogService.GetCustList(searchCustNm);
+	}
+	
+//	//업무일지 등록
+//	@RequestMapping(value="/dworld/worklog/control", method = RequestMethod.POST)
+//	public String InsertWorkLog(HttpServletRequest servletRequest, WorkLogDto worklogDto) throws Exception {
+//		HttpSession session = servletRequest.getSession();
+//		String userId = (String) session.getAttribute("userId");
+//		worklogDto.setUserId(userId);
+//		
+//		System.out.println("ComplDt:"+worklogDto.getComplDt());
+//		if(worklogDto.getComplDt() == null) {
+//			worklogDto.setComplYn("N"); 
+//		}
+//		
+//		worklogService.InsertWorkLog(worklogDto);
+//		return "redirect:/dworld/worklog";
+//	}
+
 
 }

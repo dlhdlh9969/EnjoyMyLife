@@ -22,5 +22,6 @@ public class CustomerDto {
 	String deleteUser;
 	String deletedYn;
 	String searchCustNm;
+	int rowNum;
 	
 }

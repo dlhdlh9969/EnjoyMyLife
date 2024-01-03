@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>D-world/업무일지</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <link rel="stylesheet" href="/css/basic.css">
+    <link rel="stylesheet" href="/css/WorkLog.css">
+
+    <script>
+        $(document).ready(function(){
+            $("#btn-editOK").hide();
+
+            //취소 버튼
+            $("#btn-cancel").on("click", function(){
+                window.history.back()
+            });
+
+            //업체명 검색 모달 컨트롤
+            var searchCustNm = $("#searchCustNm").val();
+            var datas = {searchCustNm};
+            
+            $("#searchCustNm").on("keyup",function(key){
+                if(key.keyCode==13){
+                    searchCustNm = $("#searchCustNm").val();
+                    datas = {searchCustNm};
+                    custListAjax();
+                };
+            });
+            
+            custListAjax();
+            function custListAjax(){
+                $.ajax({
+                    url: "/dworld/worklog/searchCust",
+                    type: "get",
+                    data: datas,
+                    success: function(data){
+                        var listArea =$("#custListTable");
+                        var listStr = "";
+                        listArea.empty();
+                    
+                        $.each(data, function(index, item){
+                            listStr += "<tr>";
+                            listStr += "<td><button class='btn btn-outline-primary' onclick='SetCust("+item.rowNum+")'>선택</button></td>";
+                            listStr += "<td><div id='selectCustNm"+item.rowNum+"'>"+item.custNm+"</div></td>";
+                            listStr += "<td><div id='selectCustCd"+item.rowNum+"'>"+item.custCd+"</div></td></tr>";
+                        });
+                        listArea.append(listStr);
+
+                    },
+                    error: function() {
+                        alert("ajax 통신 오류 발생");
+                    }
+                });
+            };
+
+            //업무일지 등록
+            $("#btn-insert").on("click", function() {
+                var custCd = $("#cust-cd").val();
+                var receiptDt = $("#receipt-dt").val();
+                var dueDt = $("#due-dt").val();
+                var complDt = $("#compl-dt").val();
+                var title = $("#title").val();
+                var content = $("#content").val();
+                var datas = {custCd, receiptDt, dueDt, complDt, title, content};
+
+                if(!title){
+                    alert("제목을 써주세요.");
+                }else if(!content){
+                    alert("내용을 써주세요.");
+                }else{
+                    $.ajax({
+                        url: "/dworld/worklog/control",
+                        type: "post",
+                        data: datas,
+                        success: function(data) {
+                            alert("등록 되었습니다.");
+                            location.href="/dworld/customer";
+                        },
+                        error: function() {
+                            alert("ajax 통신 오류 발생");
+                        }
+                    });
+                }
+            });
+
+        });
+
+        //업체 선택 버튼 클릭 이벤트
+        function SetCust(rowNum){
+            console.log("rownum:"+rowNum);
+            $('#selectCustModal').modal('hide');
+
+            var selectCustNm = $("#selectCustNm"+rowNum).text();
+            var selectCustCd = $("#selectCustCd"+rowNum).text();
+
+            $("#cust-nm").val(selectCustNm);
+            $("#cust-cd").val(selectCustCd);
+        };
+        
+        //업체 선택 취소
+        function SelectCancel(){
+            $("#cust-nm").val("");
+            $("#cust-cd").val("");
+        };
+        
+    </script>
+</head>
+<body>
+    <div>
+        <header th:include="header :: header"></header>
+    </div>
+    <div class="container border border-1 border-dark rounded p-3">
+        <h3 th:if="${MODE} == 'insert'" class="text-center">업무 일지 등록</h3>
+        <h3 th:if="${MODE} == 'detail'" class="text-center">업무 일지 상세</h3>
+        <div class="d-flex justify-content-end p-2">
+            <button th:if="${MODE} == 'insert'" type="button" class="btn btn-outline-primary me-2" id="btn-insert" name="btn-insert">등록</button>
+            <button th:if="${MODE} == 'detail'" type="button" class="btn btn-outline-secondary me-2" id="btn-edit" name="btn-edit">수정</button>
+            <button type="button" class="btn btn-outline-secondary me-2" id="btn-editOK" name="btn-editOK">수정완료</button>
+            <button th:if="${MODE} == 'detail'" type="button" class="btn btn-outline-danger me-2" id="btn-delete" name="btn-delete">삭제</button>
+            <button th:if="${MODE} == 'insert'" type="button" class="btn btn-outline-danger" id="btn-cancel" name="btn-cancel">취소</button>
+        </div>
+        <div class="row">
+            <input type="hidden" id="method" name="_method"> <!-- restful을 위한 메소드 영역 -->
+            <div class="col-lg-4 form-floating mb-2 d-flex">
+                <input type="text" class="form-control" id="cust-nm" name="cust-nm" disabled>
+                <label for="cust-nm" class="ms-2">업체명</label>
+            </div>
+            <div class="col-lg-4 form-floating">
+                <input type="text" class="form-control" id="cust-cd" name="cust-cd" disabled>
+                <label for="cust-cd" class="ms-2">업체코드</label>
+            </div>
+            <div class="col-lg-4 d-flex align-items-center">
+                <button type="button" class="btn btn-primary text-nowrap me-2" data-bs-toggle="modal" data-bs-target="#selectCustModal">업체 선택</button>
+                <button type="button" class="btn btn-warning text-nowrap" onclick="SelectCancel()">선택 취소</button>
+                <!-- 업체 선택 modal -->
+                <div class="modal fade" id="selectCustModal" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="staticBackdropLabel">업체 선택 팝업</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <input class="form-control my-2" type="text" id="searchCustNm" name="searchCustNm" placeholder="업체명 검색">
+                                <div style="max-height: 400px; overflow:auto" id="custListDiv" name="custListDiv">
+                                    <table>
+                                        <colgroup>
+                                            <col width="20%" />
+                                            <col width="75%" />
+                                            <col width="5%" />
+                                        </colgroup>
+                                        <tbody id="custListTable" name="custListTable">
+
+                                        </tbody>
+                                    </table>
+                                    <!-- <button class="btn form-control text-start" th:if="${#lists.size(custList)} > 0" th:each="list : ${custList}" th:text="${list.custNm}"></button>
+                                    <p th:unless="${#lists.size(custList)} > 0">검색되는 업체가 없습니다.</p> -->
+                                </div>
+                            </div>
+                            <!-- <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <div class="row">
+            <div class="col-lg-4 form-floating mb-2">
+                <input type="datetime-local" class="form-control" id="receipt-dt" name="receipt-dt">
+                <label for="receipt-dt" class="ms-2">접수일</label>
+            </div>
+            <div class="col-lg-4 form-floating mb-2">
+                <input type="datetime-local" class="form-control" id="due-dt" name="due-dt">
+                <label for="due-dt" class="ms-2">마감예정일</label>
+            </div>
+            <div class="col-lg-4 form-floating mb-2">
+                <input type="datetime-local" class="form-control" id="compl-dt" name="compl-dt">
+                <label for="compl-dt" class="ms-2">완료일</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-floating mb-2">
+                <input type="text" class="form-control" id="title" name="title">
+                <label for="title" class="ms-2">제목</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-floating">
+                <textarea type="text" class="form-control" style="height: 500px;" id="content" name="content"></textarea>
+                <label for="content" class="ms-2">내용</label>
+            <div>
+        </div>
+    </div>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <mapper namespace="com.dlhdlh.mapper.WorkLogMapper">
 	<select id="GetWorkLogList" parameterType="com.dlhdlh.dto.WorkLogDto" resultType="com.dlhdlh.dto.WorkLogDto">
 		<![CDATA[ 
-			SELECT w.idx, w.title, w.content, w.insert_dt, w.insert_user, w.cust_cd, c.cust_nm, DATE_FORMAT(w.receipt_dt, '%Y-%m-%d %h:%m') as receipt_dt, DATE_FORMAT(w.due_dt, '%Y-%m-%d %h:%m') as due_dt, DATE_FORMAT(w.compl_dt, '%Y-%m-%d %h:%m') as compl_dt  
+			SELECT row_number() OVER (ORDER BY ${order1} ${order3}) as row_num, w.idx, w.title, w.content, w.insert_dt, w.insert_user, w.cust_cd, c.cust_nm, DATE_FORMAT(w.receipt_dt, '%Y-%m-%d %h:%m') as receipt_dt, DATE_FORMAT(w.due_dt, '%Y-%m-%d %h:%m') as due_dt, DATE_FORMAT(w.compl_dt, '%Y-%m-%d %h:%m') as compl_dt  
 			FROM WorkLog w 
 			LEFT OUTER JOIN Customer c 
 			ON w.cust_cd = c.cust_cd 
@@ -11,4 +11,21 @@
 			ORDER BY ${order1} ${order2}
 		]]>
 	</select>
+	<!-- 업체 선택을 위한 모탈에 들어가는 데이터-->
+	<select id="GetCustList" parameterType="String" resultType="com.dlhdlh.dto.WorkLogDto">
+		<![CDATA[ 
+			SELECT row_number() OVER (ORDER BY cust_nm) as row_num,cust_cd, cust_nm
+			FROM Customer
+			WHERE cust_nm like concat('%', #{searchCustNm}, '%') AND deleted_yn ='N'
+			ORDER BY cust_nm desc
+		]]>
+	</select>
+	
+	<!-- 업무일지 등록 
+	<insert id="InsertWorkLog" parameterMap="com.dlhdlh.dto.WorkLogDto">
+		<![CDATA[ 
+			INSERT INTO WorkLog (title, content, insert_dt, insert_user, cust_cd, receipt_dt, due_dt, compl_dt, compl_yn) 
+			VALUES(#{title}, #{content}, now(), #{userId}, #{custCd}, #{receiptDt}, #{dueDt}, #{complDt}, #{complYn}) 
+		]]>
+	</insert>-->
 </mapper >

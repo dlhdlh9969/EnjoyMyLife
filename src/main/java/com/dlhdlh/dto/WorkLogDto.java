@@ -6,6 +6,7 @@ import lombok.Data;
 public class WorkLogDto {
 	int idx;
 	String title;
+	String content;
 	String insertDt;
 	String insertUser;
 	String updateDt;
@@ -22,5 +23,7 @@ public class WorkLogDto {
 	String complYn;
 	String order1;
 	String order2;
+	String order3;
+	int rowNum;
 	
 }
