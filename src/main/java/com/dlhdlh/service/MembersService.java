@@ -5,14 +5,14 @@ import com.dlhdlh.dto.MembersDto;
 public interface MembersService {
 
 	//로그인 체크
-	int loginCheck(MembersDto loginRequest) throws Exception;
+	int LoginCheck(MembersDto membersDto) throws Exception;
 	
 	//접속자 정보
-	MembersDto selectMemberDto(String userId) throws Exception;
+	MembersDto SelectMemberDto(String userId) throws Exception;
 
 	//회원가입 프로세스
-	void insertMember(MembersDto memberInfo) throws Exception;
+	void InsertMember(MembersDto membersDto) throws Exception;
 
-	int userIdCheck(MembersDto memberInfo) throws Exception;
+	int UserIdCheck(MembersDto membersDto) throws Exception;
 
 }

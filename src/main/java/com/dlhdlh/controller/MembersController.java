@@ -18,7 +18,7 @@ import com.dlhdlh.service.MembersService;
 public class MembersController {
 	
 	@Autowired
-	private MembersService membersService;
+	MembersService membersService;
 	
 	
 	// 로그인 페이지
@@ -36,62 +36,52 @@ public class MembersController {
 	// 로그인 submit 프로세스
 	@ResponseBody 
 	@RequestMapping(value = "members/loginAjax", method = RequestMethod.POST)
-	public Object LoginProcessAjax(MembersDto loginRequest, HttpServletRequest request) throws Exception
-	{
+	public Object LoginProcessAjax(MembersDto membersDto, HttpServletRequest request) throws Exception{
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		int resultCnt = membersService.loginCheck(loginRequest);
+		int resultCnt = membersService.LoginCheck(membersDto);
 
 		map.put("resultCnt", resultCnt);
 		
-		if(resultCnt > 0)
-		{
-			MembersDto memberDto = membersService.selectMemberDto(loginRequest.getUserId());
+		if(resultCnt > 0){
+			MembersDto getMemberDto = membersService.SelectMemberDto(membersDto.getUserId());
 			HttpSession session = request.getSession();
-			session.setAttribute("userId", memberDto.getUserId());
-			session.setAttribute("userName", memberDto.getUserName());
-			session.setMaxInactiveInterval(1800);
-			
-//			String prevPage = request.getHeader("prevPage");
-//			if(prevPage != null) {
-//				map.put("prevPage", prevPage);
-//			}
-			
+			session.setAttribute("userId", getMemberDto.getUserId());
+			session.setAttribute("userName", getMemberDto.getUserName());
+			session.setMaxInactiveInterval(1800); //초 단위 10분 600초	
 			return map;
-			
 		}
 		else {
 			return map;
 		}
 	}
 	
-	@RequestMapping(value="members/logout") // 로그아웃
+	// 로그아웃
+	@RequestMapping(value="members/logout") 
 	public String logout(HttpServletRequest request)throws Exception{
 		HttpSession session = request.getSession();
 		session.invalidate();
 		return "redirect:/";
 	}
 
-	@ResponseBody // 회원가입 submit 프로세스
+	// 회원가입 submit 프로세스
+	@ResponseBody 
 	@RequestMapping(value = "member/signInAjax", method = RequestMethod.POST)
-	public Object signInProcess(MembersDto memberInfo, HttpServletRequest request) throws Exception
-	{
+	public Object signInProcess(MembersDto membersDto, HttpServletRequest request) throws Exception{
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		int resultCnt = membersService.userIdCheck(memberInfo);
+		int resultCnt = membersService.UserIdCheck(membersDto);
 		
 		if(resultCnt > 0)
 		{
 			map.put("resultCnt", resultCnt);
 			return map;
-	 
 		}
-		else {
-			membersService.insertMember(memberInfo);
+		else{
+			membersService.InsertMember(membersDto);
 			HttpSession session = request.getSession();
 			String PrevPage = (String)session.getAttribute("PrevPage");
 			map.put("PrevPage", PrevPage);
 			
 			return map;
 		}
-	}
-	
+	}	
 }

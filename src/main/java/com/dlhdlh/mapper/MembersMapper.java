@@ -7,12 +7,12 @@ import com.dlhdlh.dto.MembersDto;
 @Mapper
 public interface MembersMapper {
 
-	public int loginCheck(MembersDto loginRequest) throws Exception;
+	public int LoginCheck(MembersDto membersDto) throws Exception;
 
-	public MembersDto selectMemberInfo(String userId) throws Exception;
+	public MembersDto SelectMemberInfo(String userId) throws Exception;
 
-	public void insertMember(MembersDto memberInfo) throws Exception;
+	public void InsertMember(MembersDto membersDto) throws Exception;
 
-	public int userIdCheck(MembersDto memberInfo) throws Exception;
+	public int UserIdCheck(MembersDto membersDto) throws Exception;
 	
 }

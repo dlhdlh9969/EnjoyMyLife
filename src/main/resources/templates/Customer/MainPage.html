@@ -209,9 +209,18 @@
                     <div class="text-center my-2">
                         <h1 class="webfont1">Customer List</h1>
                     </div>
-                    <div class="mb-2 d-flex justify-content-center">
-                        <button type="button" class="btn btn-outline-primary me-2 text-nowrap" onclick="searchCust()">Search</button>
-                        <input type="text" class="form-control searchcust-inputbox" id="searchCustNm" name="searchCustNm" th:value="${SearchCustNm}" onkeyup="if(window.event.keyCode==13){searchCust()}" placeholder="업체명 검색">
+                    <div class="d-flex mb-2">
+                        <div class="d-flex">
+                            <button type="button" class="btn btn-outline-primary me-2 text-nowrap" onclick="searchCust()">Search</button>
+                            <input type="text" class="form-control" style="width: 400px;" id="searchCustNm" name="searchCustNm" th:value="${SearchCustNm}" onkeyup="if(window.event.keyCode==13){searchCust()}" placeholder="업체명 검색">
+                        </div>
+                        <div>
+                            <select class="form-select form-select-sm" style="width: 200px;" aria-label="Small select example">
+                                <option value="5">5줄 보기</option>
+                                <option value="10">10줄 보기</option>
+                                <option value="15">15줄 보기</option>
+                            </select>
+                        </div>
                     </div>
 
                     <table class="table table-hover table-hover">

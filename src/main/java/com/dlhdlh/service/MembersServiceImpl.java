@@ -14,26 +14,26 @@ public class MembersServiceImpl implements MembersService {
 	
 	//로그인 체크
 	@Override
-	public int loginCheck(MembersDto loginRequest) throws Exception {
-		return membersMapper.loginCheck(loginRequest);
+	public int LoginCheck(MembersDto membersDto) throws Exception {
+		return membersMapper.LoginCheck(membersDto);
 	}
 
 	//접속자 정보
 	@Override
-	public MembersDto selectMemberDto(String userId) throws Exception {
-		return membersMapper.selectMemberInfo(userId);
+	public MembersDto SelectMemberDto(String userId) throws Exception {
+		return membersMapper.SelectMemberInfo(userId);
 	}
 	
 	//회원가입
 	@Override
-	public void insertMember(MembersDto memberInfo) throws Exception {
-		membersMapper.insertMember(memberInfo);
+	public void InsertMember(MembersDto membersDto) throws Exception {
+		membersMapper.InsertMember(membersDto);
 	}
 
 	//회원가입 ID 체크
 	@Override
-	public int userIdCheck(MembersDto memberInfo) throws Exception {
-		return membersMapper.userIdCheck(memberInfo);
+	public int UserIdCheck(MembersDto membersDto) throws Exception {
+		return membersMapper.UserIdCheck(membersDto);
 	}
 	
 }
