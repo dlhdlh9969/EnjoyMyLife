@@ -14,4 +14,10 @@ public interface WorkLogService {
 
 	void InsertWorkLog(WorkLogDto worklogDto) throws Exception;
 
+	WorkLogDto GetWorkLogDetail(WorkLogDto worklogDto) throws Exception;
+
+	void DeleteWorkLog(int idx) throws Exception;
+
+	void UpdateWorkLog(WorkLogDto worklogDto) throws Exception;
+
 }

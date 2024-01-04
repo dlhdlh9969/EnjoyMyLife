@@ -65,7 +65,7 @@
                     $("#btn-delete").hide();
                     $("#btn-cancel").show();
                     
-                    $("#detail-head").text("업체 정보 수정 중");
+                    $("#detail-head").text("Editing");
                 
                     document.getElementById("input-custNm").readOnly = false;
                     document.getElementById("input-custBusnum").readOnly = false;
@@ -197,25 +197,21 @@
         </script>
 
     </head>
-    <body class="pt-1">
-        <style type="text/css">
-            html, body {height: 100%;}
-        </style>
-
+    <body>
         <div>
             <header th:include="header :: header"></header>
         </div>
 
-        <div class="container pt-2">
+        <div class="container border border-1 border-dark rounded px-3 py-2">
             <form id="input-form">
                 <!-- 마스터 -->
-                <div class="border border-1 border-dark rounded px-3 py-2">
+                <div>
                     <div class="text-center my-2">
-                        <h5>업체 관리 마스터 영역</h5>
+                        <h1 class="webfont1">Customer List</h1>
                     </div>
                     <div class="mb-2 d-flex justify-content-center">
-                        <button type="button" class="btn btn-outline-primary me-2 text-nowrap" onclick="searchCust()">검색</button>
-                        <input type="text" class="form-control searchcust-inputbox" id="searchCustNm" name="searchCustNm" th:value="${SearchCustNm}" onkeyup="if(window.event.keyCode==13){searchCust()}" placeholder="업체명 Search">
+                        <button type="button" class="btn btn-outline-primary me-2 text-nowrap" onclick="searchCust()">Search</button>
+                        <input type="text" class="form-control searchcust-inputbox" id="searchCustNm" name="searchCustNm" th:value="${SearchCustNm}" onkeyup="if(window.event.keyCode==13){searchCust()}" placeholder="업체명 검색">
                     </div>
 
                     <table class="table table-hover table-hover">
@@ -236,10 +232,10 @@
                         <tbody>
                             
                             <tr th:each="list : ${CustList.getList()}" class="text-wrap">
-                                <td><a th:text='${list.rowNum}'></a></td>
+                                <td th:text='${list.rowNum}'></td>
                                 <td><a th:href="@{/dworld/customer(pageNum=${CustList.PageNum}, selectRowNum=${list.rowNum},searchCustNm=${SearchCustNm})}" th:text='${list.custNm}'></a></td>
-                                <td><a th:href="@{/dworld/customer(pageNum=${CustList.PageNum}, selectRowNum=${list.rowNum},searchCustNm=${SearchCustNm})}" th:text='${list.custNum}'></a></td>
-                                <td><a th:href="@{/dworld/customer(pageNum=${CustList.PageNum}, selectRowNum=${list.rowNum},searchCustNm=${SearchCustNm})}" th:text='${list.custCeonm}'></a></td>
+                                <td th:text='${list.custNum}'></td>
+                                <td th:text='${list.custCeonm}'></td>
                             </tr>
                             
                             <tr th:unless="${#lists.size(CustList.getList())} > 0">
@@ -264,7 +260,7 @@
                 <!-- 디테일 -->
                 <div class="border border-1 border-dark rounded mt-1 px-3 py-2">
                     <div class="text-center">
-                        <h5 id="detail-head">업체 관리 디테일 영역</h5>
+                        <h1 id="detail-head" class="webfont1">Detail Area</h1>
                     </div>
                     <div class="text-end">
                         <button class="btn btn-outline-success" type="button" id="btn-insert" name="btn-insert">등록</button>

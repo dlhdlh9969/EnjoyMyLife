@@ -33,4 +33,19 @@ public class WorkLogServiceImpl implements WorkLogService {
 		worklogMapper.InsertWorkLog(worklogDto);
 	}
 
+	@Override
+	public WorkLogDto GetWorkLogDetail(WorkLogDto worklogDto) throws Exception {
+		return worklogMapper.GetWorkLogDetail(worklogDto);
+	}
+
+	@Override
+	public void DeleteWorkLog(int idx) throws Exception {
+		worklogMapper.DeleteWorkLog(idx);
+	}
+
+	@Override
+	public void UpdateWorkLog(WorkLogDto worklogDto) throws Exception {
+		worklogMapper.UpdateWorkLog(worklogDto);
+	}
+
 }

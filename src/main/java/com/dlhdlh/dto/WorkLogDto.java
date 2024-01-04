@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class WorkLogDto {
-	int idx;
+	
 	String title;
 	String content;
 	String insertDt;
@@ -25,5 +25,6 @@ public class WorkLogDto {
 	String order2;
 	String order3;
 	int rowNum;
-	
+	int idx;
+
 }

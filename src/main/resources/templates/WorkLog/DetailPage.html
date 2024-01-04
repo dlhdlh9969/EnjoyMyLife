@@ -11,14 +11,21 @@
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <link rel="stylesheet" href="/css/basic.css">
     <link rel="stylesheet" href="/css/WorkLog.css">
+    <!-- datetime 포멧 변경에 도움이 되는 라이브러리 Moment.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
     <script>
         $(document).ready(function(){
-            $("#btn-editOK").hide();
 
-            //취소 버튼
-            $("#btn-cancel").on("click", function(){
-                window.history.back()
+            //업체 선택하지 않은 데이터 리턴시 대응
+            if($("#cust-cd").val()==0){
+                $("#cust-cd").val("");
+            };
+
+            //뒤로 버튼
+            $("#btn-tolist").on("click", function(){
+                location.href="/dworld/worklog";
+                // window.history.back()
             });
 
             //업체명 검색 모달 컨트롤
@@ -62,12 +69,21 @@
             //업무일지 등록
             $("#btn-insert").on("click", function() {
                 var custCd = $("#cust-cd").val();
+                if(custCd == ""){
+                    custCd = 0;
+                };
                 var receiptDt = $("#receipt-dt").val();
                 var dueDt = $("#due-dt").val();
                 var complDt = $("#compl-dt").val();
+                var complYn;
+                if(complDt == ""){
+                    complYn = "N";
+                }else{
+                    complYn = "Y";
+                }
                 var title = $("#title").val();
                 var content = $("#content").val();
-                var datas = {custCd, receiptDt, dueDt, complDt, title, content};
+                var datas = {custCd, receiptDt, dueDt, complDt, complYn, title, content};
 
                 if(!title){
                     alert("제목을 써주세요.");
@@ -80,7 +96,7 @@
                         data: datas,
                         success: function(data) {
                             alert("등록 되었습니다.");
-                            location.href="/dworld/customer";
+                            location.href="/dworld/worklog";
                         },
                         error: function() {
                             alert("ajax 통신 오류 발생");
@@ -108,6 +124,65 @@
             $("#cust-nm").val("");
             $("#cust-cd").val("");
         };
+
+        //삭제 버튼 이벤트
+        function DeleteWorkLog(idx){
+            var datas = {idx};
+            if(confirm("삭제 하시겠습니까?")){
+                $.ajax({
+                    url: "/dworld/worklog/control",
+                    type: "delete",
+                    data: datas,
+                    success: function(data) {
+                        alert("삭제 되었습니다.");
+                        location.href="/dworld/worklog";
+                    },
+                    error: function() {
+                        alert("ajax 통신 오류 발생");
+                    }
+                });
+            }
+        };
+
+        //수정버튼 클릭 이벤트
+        function UpdateWorkLog(idx) {
+            if(confirm("수정 하시겠습니까?")){
+                var custCd = $("#cust-cd").val();
+                if(custCd == ""){
+                    custCd = 0;
+                };
+                var receiptDt = $("#receipt-dt").val();
+                var dueDt = $("#due-dt").val();
+                var complDt = $("#compl-dt").val();
+                var complYn;
+                if(complDt == ""){
+                    complYn = "N";
+                }else{
+                    complYn = "Y";
+                }
+                var title = $("#title").val();
+                var content = $("#content").val();
+                var datas = {custCd, receiptDt, dueDt, complDt, complYn, title, content, idx};
+
+                if(!title){
+                    alert("제목을 써주세요.");
+                }else if(!content){
+                    alert("내용을 써주세요.");
+                }else{
+                    $.ajax({
+                        url: "/dworld/worklog/control",
+                        type: "put",
+                        data: datas,
+                        success: function(data) {
+                            alert("수정 되었습니다.");
+                        },
+                        error: function() {
+                            alert("ajax 통신 오류 발생");
+                        }
+                    });
+                }
+            }
+        };
         
     </script>
 </head>
@@ -116,23 +191,23 @@
         <header th:include="header :: header"></header>
     </div>
     <div class="container border border-1 border-dark rounded p-3">
-        <h3 th:if="${MODE} == 'insert'" class="text-center">업무 일지 등록</h3>
-        <h3 th:if="${MODE} == 'detail'" class="text-center">업무 일지 상세</h3>
+        <h1 th:if="${MODE} == 'new'" class="text-center webfont1">New WorkLog Write</h1>
+        <h1 th:if="${MODE} == 'detail'" class="text-center webfont1">WorkLog Detail</h1>
         <div class="d-flex justify-content-end p-2">
-            <button th:if="${MODE} == 'insert'" type="button" class="btn btn-outline-primary me-2" id="btn-insert" name="btn-insert">등록</button>
-            <button th:if="${MODE} == 'detail'" type="button" class="btn btn-outline-secondary me-2" id="btn-edit" name="btn-edit">수정</button>
-            <button type="button" class="btn btn-outline-secondary me-2" id="btn-editOK" name="btn-editOK">수정완료</button>
-            <button th:if="${MODE} == 'detail'" type="button" class="btn btn-outline-danger me-2" id="btn-delete" name="btn-delete">삭제</button>
-            <button th:if="${MODE} == 'insert'" type="button" class="btn btn-outline-danger" id="btn-cancel" name="btn-cancel">취소</button>
+            <button th:if="${MODE} == 'new'" type="button" class="btn btn-outline-primary me-2" id="btn-insert" name="btn-insert">Insert</button>
+            <button th:if="${MODE} == 'detail'" type="button" class="btn btn-outline-secondary me-2" id="btn-edit" name="btn-edit" th:onclick="|UpdateWorkLog(${WorkLogDetail.idx})|">Edit</button>
+            <button th:if="${MODE} == 'detail'" type="button" class="btn btn-outline-danger me-2" id="btn-delete" name="btn-delete" th:onclick="|DeleteWorkLog(${WorkLogDetail.idx})|">Delete</button>
+            <button type="button" class="btn btn-outline-success" id="btn-tolist" name="btn-tolist">Back</button> 
         </div>
         <div class="row">
-            <input type="hidden" id="method" name="_method"> <!-- restful을 위한 메소드 영역 -->
             <div class="col-lg-4 form-floating mb-2 d-flex">
-                <input type="text" class="form-control" id="cust-nm" name="cust-nm" disabled>
+                <input th:if="${MODE} == 'new'" type="text" class="form-control" id="cust-nm" name="cust-nm" disabled>
+                <input th:if="${MODE} == 'detail'" type="text" class="form-control" id="cust-nm" name="cust-nm" th:value="${WorkLogDetail.custNm}" disabled>
                 <label for="cust-nm" class="ms-2">업체명</label>
             </div>
             <div class="col-lg-4 form-floating">
-                <input type="text" class="form-control" id="cust-cd" name="cust-cd" disabled>
+                <input th:if="${MODE} == 'new'" type="text" class="form-control" id="cust-cd" name="cust-cd" disabled>
+                <input th:if="${MODE} == 'detail'" type="text" class="form-control" id="cust-cd" name="cust-cd" th:value="${WorkLogDetail.custCd}" disabled>
                 <label for="cust-cd" class="ms-2">업체코드</label>
             </div>
             <div class="col-lg-4 d-flex align-items-center">
@@ -174,27 +249,32 @@
         </div>
         <div class="row">
             <div class="col-lg-4 form-floating mb-2">
-                <input type="datetime-local" class="form-control" id="receipt-dt" name="receipt-dt">
+                <input th:if="${MODE} == 'new'" type="datetime-local" class="form-control" id="receipt-dt" name="receipt-dt">
+                <input th:if="${MODE} == 'detail'" type="datetime-local" class="form-control" id="receipt-dt" name="receipt-dt" th:value="${WorkLogDetail.receiptDt}">
                 <label for="receipt-dt" class="ms-2">접수일</label>
             </div>
             <div class="col-lg-4 form-floating mb-2">
-                <input type="datetime-local" class="form-control" id="due-dt" name="due-dt">
+                <input th:if="${MODE} == 'new'" type="datetime-local" class="form-control" id="due-dt" name="due-dt">
+                <input th:if="${MODE} == 'detail'" type="datetime-local" class="form-control" id="due-dt" name="due-dt" th:value="${WorkLogDetail.dueDt}">
                 <label for="due-dt" class="ms-2">마감예정일</label>
             </div>
             <div class="col-lg-4 form-floating mb-2">
-                <input type="datetime-local" class="form-control" id="compl-dt" name="compl-dt">
+                <input th:if="${MODE} == 'new'" type="datetime-local" class="form-control" id="compl-dt" name="compl-dt">
+                <input th:if="${MODE} == 'detail'" type="datetime-local" class="form-control" id="compl-dt" name="compl-dt" th:value="${WorkLogDetail.complDt}">
                 <label for="compl-dt" class="ms-2">완료일</label>
             </div>
         </div>
         <div class="row">
             <div class="form-floating mb-2">
-                <input type="text" class="form-control" id="title" name="title">
+                <input th:if="${MODE} == 'new'" type="text" class="form-control" id="title" name="title">
+                <input th:if="${MODE} == 'detail'" type="text" class="form-control" id="title" name="title" th:value="${WorkLogDetail.title}">
                 <label for="title" class="ms-2">제목</label>
             </div>
         </div>
         <div class="row">
             <div class="form-floating">
-                <textarea type="text" class="form-control" style="height: 500px;" id="content" name="content"></textarea>
+                <textarea th:if="${MODE} == 'new'" type="text" class="form-control" style="height: 500px;" id="content" name="content"></textarea>
+                <textarea th:if="${MODE} == 'detail'" type="text" class="form-control" style="height: 500px;" id="content" name="content" th:text="${WorkLogDetail.content}"></textarea>
                 <label for="content" class="ms-2">내용</label>
             <div>
         </div>
