@@ -93,9 +93,9 @@
                 var content = $("#content").val();
                 var datas = {custCd, receiptDt, dueDt, complDt, complYn, title, content};
 
-                if(!title){
+                if(!title.trim()){
                     alert("제목을 써주세요.");
-                }else if(!content){
+                }else if(!content.trim()){
                     alert("내용을 써주세요.");
                 }else{
                     $.ajax({
@@ -154,7 +154,7 @@
 
         //수정버튼 클릭 이벤트
         function UpdateWorkLog(idx) {
-            if(confirm("수정 하시겠습니까?")){
+            if(confirm("수정한 내용을 저장 하시겠습니까?")){
                 var custCd = $("#cust-cd").val();
                 if(custCd == ""){
                     custCd = 0;
@@ -172,9 +172,9 @@
                 var content = $("#content").val();
                 var datas = {custCd, receiptDt, dueDt, complDt, complYn, title, content, idx};
 
-                if(!title){
+                if(!title.trim()){
                     alert("제목을 써주세요.");
-                }else if(!content){
+                }else if(!content.trim()){
                     alert("내용을 써주세요.");
                 }else{
                     $.ajax({
@@ -208,7 +208,7 @@
                 <button type="button" class="btn btn-outline-primary w-100" id="btn-insert" name="btn-insert">Insert</button>
             </div>
             <div th:if="${MODE} == 'detail'" class="col my-1 ">
-                <button type="button" class="btn btn-outline-secondary w-100" id="btn-edit" name="btn-edit" th:onclick="|UpdateWorkLog(${WorkLogDetail.idx})|">Edit</button>
+                <button type="button" class="btn btn-outline-secondary w-100" id="btn-edit" name="btn-edit" th:onclick="|UpdateWorkLog(${WorkLogDetail.idx})|">Save</button>
             </div>
             <div th:if="${MODE} == 'detail'" class="col my-1 ">
                 <button type="button" class="btn btn-outline-danger w-100" id="btn-delete" name="btn-delete" th:onclick="|DeleteWorkLog(${WorkLogDetail.idx})|">Delete</button>

@@ -46,7 +46,7 @@
                         , custRemark: valcustRemark
                     };
 
-                    if(!valcustNm){
+                    if(!valcustNm.trim()){
 				        alert("업체명이 비어선 안됩니다.");
 			        }else{
                         $.ajax({
@@ -178,7 +178,7 @@
                     var datas = {custNm: valcustNm, custBusnum: valcustBusnum, custNum: valcustNum, custCeonm: valcustCeonm, custCeonum: valcustCeonum
                         , custAddr: valcustAddr, custEmail: valcustEmail, custRemark: valcustRemark};
 
-                    if(!valcustNm){
+                    if(!valcustNm.trim()){
 				        alert("업체명이 비어선 안됩니다.");
 			        }else{
                         $.ajax({
@@ -261,7 +261,7 @@
                             </tr>
                             
                             <tr th:unless="${#lists.size(CustList.getList())} > 0">
-                                <td colspan="4" class="text-center"><h3>Empty</h3></td>
+                                <td colspan="4" class="text-center"><h3>검색 결과가 없습니다.</h3></td>
                             </tr>
                         </tbody>
                     </table>

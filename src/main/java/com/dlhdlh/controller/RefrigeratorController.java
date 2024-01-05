@@ -42,7 +42,7 @@ public class RefrigeratorController {
 			HttpServletRequest request) throws Exception {
 		
 		RefrigeratorDataListDto paramDto = new RefrigeratorDataListDto();
-		RefrigeratorDataListDto lastDataDto = new RefrigeratorDataListDto();
+		RefrigeratorDataListDto recentData = new RefrigeratorDataListDto();
 		HttpSession session = request.getSession();
 		
 		paramDto.setUserId((String) session.getAttribute("userId"));
@@ -50,9 +50,9 @@ public class RefrigeratorController {
 		
 		if (!itemName.equals("")) {
 			try {
-				lastDataDto = refrigeratorService.GetLastData(paramDto);
-				paramDto.setAmt(lastDataDto.getAmt());
-				paramDto.setType(lastDataDto.getType());
+				recentData = refrigeratorService.GetLastData(paramDto);
+				paramDto.setAmt(recentData.getAmt());
+				paramDto.setType(recentData.getType());
 			} catch(Exception e) {
 				paramDto.setAmt(0);
 				paramDto.setType("");

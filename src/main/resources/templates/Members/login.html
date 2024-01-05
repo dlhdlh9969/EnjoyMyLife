@@ -46,15 +46,13 @@
 </script>
 
 </head>
-<body class="h-100">
-    <div>
-        <header th:include="header :: header"></header>
-    </div>
-    <div class="container col-md-4 mx-auto my-auto">
-        <div>
-            <form class="border border-1 border-dark rounded p-2">
-            	<div class="text-center">
-                            <h3>로그인</h3>
+<body class="bg-dark ">
+    <div class="container">
+        <h1 class="webfont1 text-danger pt-3">D-world</h1>
+        <div class="col-8 col-md-4 mx-auto mt-5">
+            <form class="p-2">
+                <div class="text-center">
+                            <h2 class="webfont1 text-light">Login Page</h2>
                         </div>
                 <div class="form-floating my-2">
                     <input type="text" id="userId" name="userId" class="form-control">
@@ -72,7 +70,7 @@
                     <div>
                         <div class="text-end">
                             <button class="btn btn-outline-success" type="button" id="btn-submit">로그인</button>
-                            <button class="btn btn-outline-dark" type="button" id="btn-cancel">취소</button>
+                            <button class="btn btn-outline-primary" type="button" id="btn-cancel">취소</button>
                         </div>
                     </div>
                 </div>
