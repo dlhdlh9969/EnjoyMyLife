@@ -5,7 +5,7 @@
 	<!-- 업무일지 리스트-->
 	<select id="GetWorkLogList" parameterType="com.dlhdlh.dto.WorkLogDto" resultType="com.dlhdlh.dto.WorkLogDto">
 		<![CDATA[ 
-			SELECT row_number() OVER (ORDER BY ${order1} ${order3}) as row_num, w.idx, w.title, w.content, w.insert_dt, w.insert_user, w.cust_cd, c.cust_nm, DATE_FORMAT(w.receipt_dt, '%Y-%m-%d') as receipt_dt, DATE_FORMAT(w.due_dt, '%Y-%m-%d') as due_dt, DATE_FORMAT(w.compl_dt, '%Y-%m-%d') as compl_dt  
+			SELECT row_number() OVER (ORDER BY ${order1} ${order3}) as row_num, w.idx, w.title, w.content, w.insert_dt, w.insert_user, w.cust_cd, c.cust_nm, DATE_FORMAT(w.receipt_dt, '%Y-%m-%d') as receipt_dt, DATE_FORMAT(w.due_dt, '%Y-%m-%d') as due_dt, DATE_FORMAT(w.compl_dt, '%Y-%m-%d') as compl_dt , compl_yn 
 			FROM WorkLog w 
 			LEFT OUTER JOIN Customer c 
 			ON w.cust_cd = c.cust_cd 
@@ -60,6 +60,24 @@
 			SET update_dt = now(), update_user = #{userId}, cust_cd = #{custCd}, 
 				receipt_dt = #{receiptDt} , due_dt = #{dueDt}, compl_dt = #{complDt}, compl_yn = #{complYn}, title= #{title}, content = #{content}   
 			WHERE idx = ${idx}
+		]]>
+	</update>
+	
+	<!-- GetPersetWorkLog 정보 수집-->
+	<select id="GetPersetWorkLog" parameterType="String" resultType="com.dlhdlh.dto.PersetWorkLogDto">
+		<![CDATA[
+			SELECT *
+			FROM PersetWorkLog
+			WHERE user_id = #{userId}
+		]]>
+	</select>
+	
+	<!-- GetPersetWorkLog 수정-->
+	<update id="UpdatePersetWorkLog" parameterType="com.dlhdlh.dto.PersetWorkLogDto">
+		<![CDATA[
+			UPDATE PersetWorkLog
+			SET maxrow = #{maxrow}
+			WHERE user_id = #{userId}
 		]]>
 	</update>
 	

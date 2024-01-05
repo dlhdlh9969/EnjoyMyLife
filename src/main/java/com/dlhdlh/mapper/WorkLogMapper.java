@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.dlhdlh.dto.CustomerDto;
+import com.dlhdlh.dto.PersetWorkLogDto;
 import com.dlhdlh.dto.WorkLogDto;
 import com.github.pagehelper.Page;
 
@@ -22,4 +23,8 @@ public interface WorkLogMapper {
 	void DeleteWorkLog(int idx) throws Exception;
 
 	void UpdateWorkLog(WorkLogDto worklogDto) throws Exception;
+
+	void UpdatePersetWorkLog(PersetWorkLogDto persetWorkLogDto) throws Exception;
+
+	PersetWorkLogDto GetPersetWorkLog(String userId) throws Exception;
 }

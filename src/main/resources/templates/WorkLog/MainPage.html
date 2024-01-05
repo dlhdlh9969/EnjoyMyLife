@@ -14,13 +14,6 @@
         <link rel="stylesheet" href="/css/basic.css">
         <link rel="stylesheet" href="/css/WorkLog.css">
 
-        <style>
-            .custom-tooltip {
-              max-width: 400px; /* 원하는 최대 폭으로 설정 */
-
-            }
-        </style>
-
         <script>
             $(document).ready(function() {
                 $('[data-toggle="tooltip"]').tooltip({
@@ -36,6 +29,11 @@
                 $("#order2").on("change", function(){
                     searchWorkLog();
                 });
+
+                //maxrow 5줄씩 보기 컨트롤
+                $("#maxrow").change(function(){
+                    searchWorkLog();
+                });
             });
             
             //검색 버튼
@@ -45,8 +43,9 @@
                 var order2 = document.getElementById('order2').value;
                 var searchCustNm = document.getElementById('searchCustNm').value;
                 var searchTitle = document.getElementById('searchTitle').value;
+                var maxrow = $("#maxrow").val();
 
-                window.location.href = "/dworld/worklog?complYn=" + encodeURIComponent(complYn) + "&order1=" + encodeURIComponent(order1) + "&order2=" + encodeURIComponent(order2) + "&custNm=" + encodeURIComponent(searchCustNm)+ "&title=" + encodeURIComponent(searchTitle);
+                window.location.href = "/dworld/worklog?complYn=" + encodeURIComponent(complYn) + "&order1=" + encodeURIComponent(order1) + "&order2=" + encodeURIComponent(order2) + "&custNm=" + encodeURIComponent(searchCustNm)+ "&title=" + encodeURIComponent(searchTitle) + "&maxrow=" + encodeURIComponent(maxrow);
             }
         </script>
 
@@ -55,84 +54,87 @@
         <div>
             <header th:include="header :: header"></header>
         </div>
-        <div class="container border border-1 border-dark rounded px-3 py-2">
+        <div class="container">
             <div class="text-center">
                 <H1 class="webfont1">WorkLog List</H1>
             </div>
             <!-- 검색 영역 -->
-            <div class="d-flex justify-content-between py-2">
-                <div class="d-flex align-items-center text-nowrap">
-                    <button type="button" class="btn btn-outline-primary text-nowrap me-2" onclick="searchWorkLog()">Search</button>
-                    <label for="searchCustNm" class="me-1">업체명</label>
-                    <input type="text" class="form-control me-2" id="searchCustNm" name="searchCustNm" th:value="${SearchCustNm}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}"/>
-                    <label for="searchtitle" class="me-1">제목</label>
-                    <input type="text" class="form-control" id="searchTitle" name="searchTitle" th:value="${SearchTitle}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}"/>
-                    
+            <div class="row px-2 py-2">
+                <div class="col-12 row">
+                    <div class="col-12 col-lg-2 text-end p-1">
+                        <button type="button" class="col-12 col-lg btn btn-outline-primary" onclick="searchWorkLog()">Search</button>
+                    </div>
+                    <div class="col-12 col-lg-5 p-1">
+                        <input type="text" class="form-control" id="searchCustNm" name="searchCustNm" placeholder="업체명 검색" th:value="${SearchCustNm}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}"/>
+                    </div>
+                    <div class="col-12 col-lg-5 p-1">
+                        <input type="text" class="form-control" id="searchTitle" name="searchTitle" placeholder="제목 검색" th:value="${SearchTitle}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}"/>
+                    </div>
                 </div>
-                <div class="d-flex justify-content-end align-items-center">
-                    <label class="me-2">정렬</label>
-                    <select class="form-select me-2" style="width: 150px;" id="compl-yn" name="compl-yn">   
-                        <option value="N" th:if="${ResponseComplYn} == 'N'" selected>미완료</option>
-                        <option value="N" th:unless="${ResponseComplYn} == 'N'">미완료</option>
-                        <option value="Y" th:if="${ResponseComplYn} == 'Y'" selected>완료</option>
-                        <option value="Y" th:unless="${ResponseComplYn} == 'Y'">완료</option>
-                        <option value="A" th:if="${ResponseComplYn} == 'A'" selected>완료여부 전체</option>
-                        <option value="A" th:unless="${ResponseComplYn} == 'A'">완료여부 전체</option>
-                    </select>
-                    <select class="form-select me-2" style="width: 150px;" id="order1" name="order2">
-                        <option value="idx" th:if="${order1} == 'idx'" selected>작성 순번</option>
-                        <option value="idx" th:unless="${order1} == 'idx'">작성 순번</option>
-                        <option value="cust_nm" th:if="${order1} == 'cust_nm'" selected>업체명</option>
-                        <option value="cust_nm" th:unless="${order1} == 'cust_nm'">업체명</option>
-                        <option value="receipt_dt" th:if="${order1} == 'receipt_dt'" selected>접수일</option>
-                        <option value="receipt_dt" th:unless="${order1} == 'receipt_dt'">접수일</option>
-                        <option value="due_dt" th:if="${order1} == 'due_dt'" selected>완료 예정일</option>
-                        <option value="due_dt" th:unless="${order1} == 'due_dt'">완료 예정일</option>
-                    </select>
-                    <select class="form-select me-2" style="width: 150px;" id="order2" name="order2">
-                        <option value="desc" th:if="${order2} == 'desc'" selected>내림차순</option>
-                        <option value="desc" th:unless="${order2} == 'desc'">내림차순</option>
-                        <option value="asc" th:if="${order2} == 'asc'" selected>오름차순</option>
-                        <option value="asc" th:unless="${order2} == 'asc'">오름차순</option>
-                    </select>
-                    <a href="/dworld/worklog/detail"><button type="button" class="btn btn-outline-primary">N E W</button></a>
+                <div class="col-12 row">
+                    <div class="col-6 col-lg p-1">
+                        <select class="form-select" id="compl-yn" name="compl-yn">   
+                            <option value="N" th:attr="selected=${ResponseComplYn == 'N'}? 'selected'">미완료</option>
+                            <option value="Y" th:attr="selected=${ResponseComplYn == 'Y'}? 'selected'">완료</option>
+                            <option value="A" th:attr="selected=${ResponseComplYn == 'A'}? 'selected'">완료여부 전체</option>
+                        </select>
+                    </div>
+                    <div class="col-6 col-lg p-1">
+                        <select class="form-select" id="order1" name="order2">
+                            <option value="idx" th:attr="selected=${order1 == 'idx'}? 'selected'">작성 순번</option>
+                            <option value="cust_nm" th:attr="selected=${order1 == 'cust_nm'}? 'selected'">업체명</option>
+                            <option value="receipt_dt" th:attr="selected=${order1 == 'receipt_dt'}? 'selected'">접수일</option>
+                            <option value="due_dt" th:attr="selected=${order1 == 'due_dt'}? 'selected'">완료 예정일</option>
+                        </select>
+                    </div>
+                    <div class="col-6 col-lg p-1">
+                        <select class="form-select" id="order2" name="order2">
+                            <option value="desc" th:attr="selected=${order2 == 'desc'}? 'selected'">내림차순</option>
+                            <option value="asc" th:attr="selected=${order2 == 'asc'}? 'selected'">오름차순</option>
+                        </select>
+                    </div>
+                    <div class="col-6 col-lg p-1">
+                        <select class="form-select" id="maxrow" name="maxrow">
+                            <option value="5" th:attr="selected=${PersetWorkLog.maxrow == 5} ? 'selected'">5줄씩 보기</option>
+                            <option value="10" th:attr="selected=${PersetWorkLog.maxrow == 10} ? 'selected'">10줄씩 보기</option>
+                            <option value="15" th:attr="selected=${PersetWorkLog.maxrow == 15} ? 'selected'">15줄씩 보기</option>
+                            <option value="20" th:attr="selected=${PersetWorkLog.maxrow == 20} ? 'selected'">20줄씩 보기</option>
+                            <option value="25" th:attr="selected=${PersetWorkLog.maxrow == 25} ? 'selected'">25줄씩 보기</option>
+                            <option value="30" th:attr="selected=${PersetWorkLog.maxrow == 30} ? 'selected'">30줄씩 보기</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-lg-2 p-1">
+                        <a href="/dworld/worklog/detail"><button type="button" class="col-12 btn btn-outline-primary">NEW</button></a>
+                    </div>
                 </div>
             </div>
 
             <!-- 테이블 영역 -->
-            <table class="table table-hover table-hover">
-                <colgroup>
-                    <col width="5%" />
-                    <col width="15%" />
-                    <col width="50%" />
-                    <col width="10%" />
-                    <col width="10%" />
-                    <col width="10%" />
-                </colgroup>
-                <thead>
-                    <tr>
-                        <th class="text-center">Num</th>
-                        <th>업체명</th>
-                        <th>제목</th>
-                        <th class="text-center">접수일</th>
-                        <th class="text-center">완료예정일</th>
-                        <th class="text-center">완료일</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="list : ${WorkLogList.getList()}" class="text-wrap">
-                        <td class="text-center"><a th:text='${list.rowNum}'></a></td>
-                        <td><a th:text='${list.custNm}'></a></td>
-                        <td><a th:text='${list.title}' th:href="@{/dworld/worklog/detail(idx=${list.idx})}" data-toggle="tooltip" data-placement="bottom" th:attr="title=${list.content}"></a></td>
-                        <td class="text-center"><a th:text='${list.receiptDt}'></a></td>
-                        <td class="text-center"><a th:text='${list.dueDt}'></a></td>
-                        <td class="text-center"><a th:text='${list.complDt}'></a></td>
-                    </tr>
-                    <tr th:unless="${#lists.size(WorkLogList.getList())} > 0">
-                        <td colspan="6" class="text-center">내용이 없습니다.</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="ps-2 pe-4">
+                <table class="table table-striped">
+                    <thead>
+                        <tr class="bg-dark text-light row">
+                            <th class="col-2 col-lg-1">Num</th>
+                            <th class="col-7 col-lg-4">업체명</th>
+                            <th class="text-center col-3 col-lg-2">접수일</th>
+                            <th class="col-9 col-lg-5">제목</th>
+                            <th class="text-center col-3 col-lg-1">완료</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="list : ${WorkLogList.getList()}" class="text-wrap row">
+                            <td class="col-2 col-lg-1 text-break"><a th:text='${list.rowNum}'></a></td>
+                            <td class="col-7 col-lg-3 text-break text-truncate"><a th:text='${list.custNm}'></a></td>
+                            <td class="text-center col-3 col-lg-2 text-break"><a th:text='${list.receiptDt}'></a></td>
+                            <td class="col-9 col-lg-5 text-break text-truncate"><a th:text='${list.title}' th:href="@{/dworld/worklog/detail(idx=${list.idx})}" data-toggle="tooltip" data-placement="bottom" th:attr="title=${list.content}"></a></td>
+                            <td class="text-center col-3 col-lg-1"><a th:text='${list.complYn}'></a></td>
+                        </tr>
+                        <tr th:unless="${#lists.size(WorkLogList.getList())} > 0">
+                            <td colspan="6" class="text-center">내용이 없습니다.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             <ul class="pagination justify-content-center">
                 <li class="page-item" th:classappend="${WorkLogList.getPrePage() == 0} ? 'disabled'">
                 <a class="page-link" th:href="@{/dworld/worklog(pageNum=${WorkLogList.getPrePage()}, title=${SearchTitle}, custNm=${SearchCustNm}, complYn=${ResponseComplYn}, order1=${order1}, order2=${order2})}">Prev</a>

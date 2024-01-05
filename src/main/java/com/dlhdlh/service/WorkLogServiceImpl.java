@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dlhdlh.dto.CustomerDto;
+import com.dlhdlh.dto.PersetWorkLogDto;
 import com.dlhdlh.dto.WorkLogDto;
 import com.dlhdlh.mapper.WorkLogMapper;
 import com.github.pagehelper.Page;
@@ -46,6 +47,16 @@ public class WorkLogServiceImpl implements WorkLogService {
 	@Override
 	public void UpdateWorkLog(WorkLogDto worklogDto) throws Exception {
 		worklogMapper.UpdateWorkLog(worklogDto);
+	}
+
+	@Override
+	public void UpdatePersetWorkLog(PersetWorkLogDto persetWorkLogDto) throws Exception {
+		worklogMapper.UpdatePersetWorkLog(persetWorkLogDto);
+	}
+
+	@Override
+	public PersetWorkLogDto GetPersetWorkLog(String userId) throws Exception {
+		return worklogMapper.GetPersetWorkLog(userId);
 	}
 
 }

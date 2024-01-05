@@ -11,26 +11,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.dlhdlh.dto.MyRefrigeratorDataListDto;
-import com.dlhdlh.service.MyRefrigeratorService;
+import com.dlhdlh.dto.RefrigeratorDataListDto;
+import com.dlhdlh.service.RefrigeratorService;
 
 @Controller
-public class MyRefrigeratorController {
+public class RefrigeratorController {
 
 	@Autowired
-	MyRefrigeratorService myRefrigeratorService;
+	RefrigeratorService refrigeratorService;
 	
 	// 장바구니 리스트
 	@RequestMapping("/dworld/re/myWishList")
-	public ModelAndView MyWishList(HttpServletRequest request) throws Exception {
+	public ModelAndView MyWishList(HttpServletRequest servletRequest) throws Exception {
 		ModelAndView mv = new ModelAndView("MyRefrigerator/MyWishList");
-		HttpSession session = request.getSession();
-		String requestId = (String) session.getAttribute("userId");
+		String userId = (String) servletRequest.getSession().getAttribute("userId");
 		
-		List<MyRefrigeratorDataListDto> nameList = myRefrigeratorService.GetNameList(requestId);
-		List<MyRefrigeratorDataListDto> itemList = myRefrigeratorService.GetWishItemList(requestId);
-		List<MyRefrigeratorDataListDto> typeList = myRefrigeratorService.GetTypeList(requestId);
-		mv.addObject("pageName", "MyWishList");
+		List<RefrigeratorDataListDto> nameList = refrigeratorService.GetNameList(userId);
+		List<RefrigeratorDataListDto> itemList = refrigeratorService.GetWishItemList(userId);
+		List<RefrigeratorDataListDto> typeList = refrigeratorService.GetTypeList(userId);
+		mv.addObject("PageName", "MyWishList");
 		mv.addObject("NameList", nameList);
 		mv.addObject("TypeList", typeList);
 		mv.addObject("ItemList", itemList);
@@ -38,10 +37,12 @@ public class MyRefrigeratorController {
 	}
 	
 	// 장바구니 추가
-	@RequestMapping("re/insertWishList")
-	public String InsertWishList(@RequestParam(required = false, defaultValue = "") String itemName, HttpServletRequest request) throws Exception {
-		MyRefrigeratorDataListDto paramDto = new MyRefrigeratorDataListDto();
-		MyRefrigeratorDataListDto lastDataDto = new MyRefrigeratorDataListDto();
+	@RequestMapping("/dworld/re/insertWishList")
+	public String InsertWishList(@RequestParam(required = false, defaultValue = "") String itemName, 
+			HttpServletRequest request) throws Exception {
+		
+		RefrigeratorDataListDto paramDto = new RefrigeratorDataListDto();
+		RefrigeratorDataListDto lastDataDto = new RefrigeratorDataListDto();
 		HttpSession session = request.getSession();
 		
 		paramDto.setUserId((String) session.getAttribute("userId"));
@@ -49,7 +50,7 @@ public class MyRefrigeratorController {
 		
 		if (!itemName.equals("")) {
 			try {
-				lastDataDto = myRefrigeratorService.GetLastData(paramDto);
+				lastDataDto = refrigeratorService.GetLastData(paramDto);
 				paramDto.setAmt(lastDataDto.getAmt());
 				paramDto.setType(lastDataDto.getType());
 			} catch(Exception e) {
@@ -57,44 +58,44 @@ public class MyRefrigeratorController {
 				paramDto.setType("");
 			}
 			paramDto.setItemName(itemName);
-			myRefrigeratorService.InsertWishList(paramDto);
+			refrigeratorService.InsertWishList(paramDto);
 		}
-		return "redirect:/re/myWishList";
+		return "redirect:/dworld/re/myWishList";
 	}
 	
 	//장바구니 삭제
-	@RequestMapping("re/deleteWishList")
+	@RequestMapping("/dworld/re/deleteWishList")
 	public String DeleteWishList(@RequestParam int idx) throws Exception{
-		myRefrigeratorService.DeleteWishList(idx);
+		refrigeratorService.DeleteWishList(idx);
 		return "redirect:/re/myWishList";
 	}
 	
 	//구매 업데이트
-	@RequestMapping("re/updatePurchase")
-	public String UpdatePurchase(MyRefrigeratorDataListDto paramDto, @RequestParam String amtFormat)  throws Exception{
+	@RequestMapping("/dworld/re/updatePurchase")
+	public String UpdatePurchase(RefrigeratorDataListDto paramDto, @RequestParam String amtFormat)  throws Exception{
 		
 		amtFormat = amtFormat.replace(",", "");
 		int amt = Integer.parseInt(amtFormat);
 		paramDto.setAmt(amt);
-		myRefrigeratorService.UpdatePurChase(paramDto);
+		refrigeratorService.UpdatePurChase(paramDto);
 		return "redirect:/re/myWishList";
 	}
 	
 	// 냉장고리스트
-	@RequestMapping("re/refrigerator")
+	@RequestMapping("/dworld/re/refrigerator")
 	public ModelAndView MyRefrigeratorList(@RequestParam(required = false, defaultValue = "") String type, HttpServletRequest request) throws Exception  {
 		ModelAndView mv = new ModelAndView("MyRefrigerator/MyRefrigeratorList");
 		HttpSession session = request.getSession();
 		String requestId = (String) session.getAttribute("userId");
-		MyRefrigeratorDataListDto paramDto = new MyRefrigeratorDataListDto();
+		RefrigeratorDataListDto paramDto = new RefrigeratorDataListDto();
 		paramDto.setType(type);
 		paramDto.setUserId(requestId);
 		
-		List<MyRefrigeratorDataListDto> refrigeratorList;
+		List<RefrigeratorDataListDto> refrigeratorList;
 		
-		refrigeratorList = myRefrigeratorService.RefrigeratorList(paramDto);
+		refrigeratorList = refrigeratorService.RefrigeratorList(paramDto);
 		
-		List<MyRefrigeratorDataListDto> typeList = myRefrigeratorService.GetTypeList(requestId);
+		List<RefrigeratorDataListDto> typeList = refrigeratorService.GetTypeList(requestId);
 		mv.addObject("TypeList", typeList);
 		mv.addObject("RefrigeratorList", refrigeratorList);
 		mv.addObject("pageName", "MyRefrigeratorList");
@@ -102,36 +103,36 @@ public class MyRefrigeratorController {
 	}
 	
 	// 구매취소
-	@RequestMapping("re/updateRefrigeratorList")
+	@RequestMapping("/dworld/re/updateRefrigeratorList")
 	public String UpdateRefrigeratorList(@RequestParam int idx) throws Exception{
-		myRefrigeratorService.UpdateRefrigeratorList(idx);
+		refrigeratorService.UpdateRefrigeratorList(idx);
 		return "redirect:/re/refrigerator";
 	}
 	
 	// 재료 소진
-	@RequestMapping("re/deleteRefrigeratorList")
+	@RequestMapping("/dworld/re/deleteRefrigeratorList")
 	public String DeleteRefrigeratorList(@RequestParam int idx) throws Exception{
-		myRefrigeratorService.DeleteRefrigeratorList(idx);
+		refrigeratorService.DeleteRefrigeratorList(idx);
 		return "redirect:/re/refrigerator";
 	}
 	
 	// 구매내역 리스트
-	@RequestMapping("re/purchaselist")
+	@RequestMapping("/dworld/re/purchaselist")
 	public ModelAndView MyPurchaseList(@RequestParam(required = false, defaultValue = "") String itemName, HttpServletRequest request) throws Exception  {
 		ModelAndView mv = new ModelAndView("MyRefrigerator/MyPurchaselistList");
 		HttpSession session = request.getSession();
 		String requestId = (String) session.getAttribute("userId");
-		MyRefrigeratorDataListDto paramDto = new MyRefrigeratorDataListDto();
+		RefrigeratorDataListDto paramDto = new RefrigeratorDataListDto();
 		paramDto.setItemName(itemName);
 		paramDto.setUserId(requestId);
 		
-		List<MyRefrigeratorDataListDto> purchaseList;
+		List<RefrigeratorDataListDto> purchaseList;
 		
-		purchaseList = myRefrigeratorService.PurchaseList(paramDto);
+		purchaseList = refrigeratorService.PurchaseList(paramDto);
 			
-		List<MyRefrigeratorDataListDto> nameList = myRefrigeratorService.GetNameList(requestId);
+		List<RefrigeratorDataListDto> nameList = refrigeratorService.GetNameList(requestId);
 		
-		List<MyRefrigeratorDataListDto> typeList = myRefrigeratorService.GetTypeList(requestId);
+		List<RefrigeratorDataListDto> typeList = refrigeratorService.GetTypeList(requestId);
 		mv.addObject("TypeList", typeList);
 		mv.addObject("NameList", nameList);
 		mv.addObject("PurchaseList", purchaseList);
@@ -140,20 +141,20 @@ public class MyRefrigeratorController {
 	}
 	
 	// 구매내역 삭제
-	@RequestMapping("re/deletePurchaseList")
+	@RequestMapping("/dworld/re/deletePurchaseList")
 	public String DeletePurchaseList(@RequestParam int idx) throws Exception{
-		myRefrigeratorService.DeletePurchaseList(idx);
+		refrigeratorService.DeletePurchaseList(idx);
 		return "redirect:/re/purchaselist";
 	}
 	
 	//구매 업데이트
-	@RequestMapping("re/updatePurchaseList")
-	public String UpdatePurchaseList(MyRefrigeratorDataListDto paramDto, @RequestParam String amtFormat)  throws Exception{
+	@RequestMapping("/dworld/re/updatePurchaseList")
+	public String UpdatePurchaseList(RefrigeratorDataListDto paramDto, @RequestParam String amtFormat)  throws Exception{
 			
 		amtFormat = amtFormat.replace(",", "");
 		int amt = Integer.parseInt(amtFormat);
 		paramDto.setAmt(amt);
-		myRefrigeratorService.UpdatePurChaseList(paramDto);
+		refrigeratorService.UpdatePurChaseList(paramDto);
 		return "redirect:/re/purchaselist";
 	}
 }

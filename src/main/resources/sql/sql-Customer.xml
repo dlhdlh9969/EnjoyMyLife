@@ -44,5 +44,23 @@
 			VALUES (#{custNm},#{custBusnum},#{custNum},#{custCeonm},#{custCeonum},#{custAddr},#{custEmail},#{custRemark},#{insertUser},now())
 		]]>
 	</insert>
+	
+	<!-- GetPersetCust 정보 수집-->
+	<select id="GetPersetCust" parameterType="String" resultType="com.dlhdlh.dto.PersetCustDto">
+		<![CDATA[
+			SELECT *
+			FROM PersetCust
+			WHERE user_id = #{userId}
+		]]>
+	</select>
+	
+	<!-- GetPersetCust 수정-->
+	<update id="UpdatePersetCust" parameterType="com.dlhdlh.dto.PersetCustDto">
+		<![CDATA[
+			UPDATE PersetCust
+			SET maxrow = #{maxrow}
+			WHERE user_id = #{userId}
+		]]>
+	</update>
 </mapper>
 

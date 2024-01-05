@@ -23,7 +23,7 @@
             };
 
             //뒤로 버튼
-            $("#btn-tolist").on("click", function(){
+            $("#btn-back").on("click", function(){
                 location.href="/dworld/worklog";
                 // window.history.back()
             });
@@ -50,14 +50,22 @@
                         var listArea =$("#custListTable");
                         var listStr = "";
                         listArea.empty();
-                    
-                        $.each(data, function(index, item){
-                            listStr += "<tr>";
-                            listStr += "<td><button class='btn btn-outline-primary' onclick='SetCust("+item.rowNum+")'>선택</button></td>";
-                            listStr += "<td><div id='selectCustNm"+item.rowNum+"'>"+item.custNm+"</div></td>";
-                            listStr += "<td><div id='selectCustCd"+item.rowNum+"'>"+item.custCd+"</div></td></tr>";
-                        });
-                        listArea.append(listStr);
+                        
+                        if (data && data.length > 0) {
+                            $.each(data, function(index, item){
+                                listStr += "<tr>";
+                                listStr += "<td><button class='btn border-0 w-100 text-start' onclick='SetCust("+item.rowNum+")'><div id='selectCustNm"+item.rowNum+"'>"+item.custNm+"</div></button></td>"
+                                listStr += "<td><div id='selectCustCd"+item.rowNum+"'>"+item.custCd+"</div></td></tr>";
+                                // listStr += "<td><button class='btn btn-outline-primary' onclick='SetCust("+item.rowNum+")'>선택</button></td>";
+                                // listStr += "<td><div id='selectCustNm"+item.rowNum+"'>"+item.custNm+"</div></td>";
+                                // listStr += "<td><div id='selectCustCd"+item.rowNum+"'>"+item.custCd+"</div></td></tr>";
+
+                            });
+                            listArea.append(listStr);
+                        } else {
+                            listStr += "<tr><td colspan='2' class='text-center'>데이터가 없습니다.</td></tr>";
+                            listArea.append(listStr);
+                        }
 
                     },
                     error: function() {
@@ -190,29 +198,37 @@
     <div>
         <header th:include="header :: header"></header>
     </div>
-    <div class="container border border-1 border-dark rounded p-3">
-        <h1 th:if="${MODE} == 'new'" class="text-center webfont1">New WorkLog Write</h1>
-        <h1 th:if="${MODE} == 'detail'" class="text-center webfont1">WorkLog Detail</h1>
-        <div class="d-flex justify-content-end p-2">
-            <button th:if="${MODE} == 'new'" type="button" class="btn btn-outline-primary me-2" id="btn-insert" name="btn-insert">Insert</button>
-            <button th:if="${MODE} == 'detail'" type="button" class="btn btn-outline-secondary me-2" id="btn-edit" name="btn-edit" th:onclick="|UpdateWorkLog(${WorkLogDetail.idx})|">Edit</button>
-            <button th:if="${MODE} == 'detail'" type="button" class="btn btn-outline-danger me-2" id="btn-delete" name="btn-delete" th:onclick="|DeleteWorkLog(${WorkLogDetail.idx})|">Delete</button>
-            <button type="button" class="btn btn-outline-success" id="btn-tolist" name="btn-tolist">Back</button> 
+    <div class="container">
+        <div>
+            <h1 th:if="${MODE} == 'new'" class="text-center webfont1">New WorkLog Write</h1>
+            <h1 th:if="${MODE} == 'detail'" class="text-center webfont1">WorkLog Detail</h1>
         </div>
         <div class="row">
-            <div class="col-lg-4 form-floating mb-2 d-flex">
-                <input th:if="${MODE} == 'new'" type="text" class="form-control" id="cust-nm" name="cust-nm" disabled>
-                <input th:if="${MODE} == 'detail'" type="text" class="form-control" id="cust-nm" name="cust-nm" th:value="${WorkLogDetail.custNm}" disabled>
-                <label for="cust-nm" class="ms-2">업체명</label>
+            <div th:if="${MODE} == 'new'" class="col my-1 ">
+                <button type="button" class="btn btn-outline-primary w-100" id="btn-insert" name="btn-insert">Insert</button>
             </div>
-            <div class="col-lg-4 form-floating">
-                <input th:if="${MODE} == 'new'" type="text" class="form-control" id="cust-cd" name="cust-cd" disabled>
-                <input th:if="${MODE} == 'detail'" type="text" class="form-control" id="cust-cd" name="cust-cd" th:value="${WorkLogDetail.custCd}" disabled>
-                <label for="cust-cd" class="ms-2">업체코드</label>
+            <div th:if="${MODE} == 'detail'" class="col my-1 ">
+                <button type="button" class="btn btn-outline-secondary w-100" id="btn-edit" name="btn-edit" th:onclick="|UpdateWorkLog(${WorkLogDetail.idx})|">Edit</button>
             </div>
-            <div class="col-lg-4 d-flex align-items-center">
-                <button type="button" class="btn btn-primary text-nowrap me-2" data-bs-toggle="modal" data-bs-target="#selectCustModal">업체 선택</button>
-                <button type="button" class="btn btn-warning text-nowrap" onclick="SelectCancel()">선택 취소</button>
+            <div th:if="${MODE} == 'detail'" class="col my-1 ">
+                <button type="button" class="btn btn-outline-danger w-100" id="btn-delete" name="btn-delete" th:onclick="|DeleteWorkLog(${WorkLogDetail.idx})|">Delete</button>
+            </div>
+            <div class="col my-1 ">
+                <button type="button" class="btn btn-outline-success w-100" id="btn-back" name="btn-back">Back</button> 
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-lg-4 form-floating my-1">
+                <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.custNm}" type="text" class="form-control" id="cust-nm" name="cust-nm" disabled>
+                <label for="cust-nm">업체명</label>
+            </div>
+            <div class="col-12 col-lg-4 form-floating my-1">
+                <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.custCd}" type="text" class="form-control" id="cust-cd" name="cust-cd" disabled>                
+                <label for="cust-cd">업체코드</label>
+            </div>
+            <div class="col-12 col-lg-4 my-1 d-flex">
+                    <button type="button" class="btn btn-primary text-nowrap w-50 me-1" data-bs-toggle="modal" data-bs-target="#selectCustModal">업체 선택</button>
+                    <button type="button" class="btn btn-warning text-nowrap w-50 ms-1" onclick="SelectCancel()">선택 취소</button>
                 <!-- 업체 선택 modal -->
                 <div class="modal fade" id="selectCustModal" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog">
@@ -224,18 +240,19 @@
                             <div class="modal-body">
                                 <input class="form-control my-2" type="text" id="searchCustNm" name="searchCustNm" placeholder="업체명 검색">
                                 <div style="max-height: 400px; overflow:auto" id="custListDiv" name="custListDiv">
-                                    <table>
+                                    <table class="table table-hover">
                                         <colgroup>
-                                            <col width="20%" />
                                             <col width="75%" />
-                                            <col width="5%" />
+                                            <col width="25%" />
                                         </colgroup>
+                                        <thead class="bg-dark text-light">
+                                            <th>업체명</th>
+                                            <th>업체코드</th>
+                                        </thead>
                                         <tbody id="custListTable" name="custListTable">
 
                                         </tbody>
                                     </table>
-                                    <!-- <button class="btn form-control text-start" th:if="${#lists.size(custList)} > 0" th:each="list : ${custList}" th:text="${list.custNm}"></button>
-                                    <p th:unless="${#lists.size(custList)} > 0">검색되는 업체가 없습니다.</p> -->
                                 </div>
                             </div>
                             <!-- <div class="modal-footer">
@@ -247,35 +264,31 @@
             </div>
             
         </div>
-        <div class="row">
-            <div class="col-lg-4 form-floating mb-2">
-                <input th:if="${MODE} == 'new'" type="datetime-local" class="form-control" id="receipt-dt" name="receipt-dt">
-                <input th:if="${MODE} == 'detail'" type="datetime-local" class="form-control" id="receipt-dt" name="receipt-dt" th:value="${WorkLogDetail.receiptDt}">
-                <label for="receipt-dt" class="ms-2">접수일</label>
+        <div class="row my-1">
+            <div class="col-lg-4 form-floating my-1">
+                <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.receiptDt}" type="datetime-local" class="form-control" id="receipt-dt" name="receipt-dt">
+                <label for="receipt-dt" class="mx-1">접수일</label>
             </div>
-            <div class="col-lg-4 form-floating mb-2">
-                <input th:if="${MODE} == 'new'" type="datetime-local" class="form-control" id="due-dt" name="due-dt">
-                <input th:if="${MODE} == 'detail'" type="datetime-local" class="form-control" id="due-dt" name="due-dt" th:value="${WorkLogDetail.dueDt}">
-                <label for="due-dt" class="ms-2">마감예정일</label>
+            <div class="col-lg-4 form-floating my-1">
+                <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.dueDt}" type="datetime-local" class="form-control" id="due-dt" name="due-dt">
+                <label for="due-dt" class="mx-1">마감예정일</label>
             </div>
-            <div class="col-lg-4 form-floating mb-2">
-                <input th:if="${MODE} == 'new'" type="datetime-local" class="form-control" id="compl-dt" name="compl-dt">
-                <input th:if="${MODE} == 'detail'" type="datetime-local" class="form-control" id="compl-dt" name="compl-dt" th:value="${WorkLogDetail.complDt}">
-                <label for="compl-dt" class="ms-2">완료일</label>
+            <div class="col-lg-4 form-floating my-1">
+                <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.complDt}" type="datetime-local" class="form-control" id="compl-dt" name="compl-dt">
+                <label for="compl-dt" class="mx-1">완료일</label>
             </div>
         </div>
-        <div class="row">
-            <div class="form-floating mb-2">
-                <input th:if="${MODE} == 'new'" type="text" class="form-control" id="title" name="title">
-                <input th:if="${MODE} == 'detail'" type="text" class="form-control" id="title" name="title" th:value="${WorkLogDetail.title}">
-                <label for="title" class="ms-2">제목</label>
+        <div class="row my-2">
+            <div class="form-floating">
+                <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.title}" type="text" class="form-control" id="title" name="title">
+                <label for="title" class="mx-1">제목</label>
             </div>
         </div>
-        <div class="row">
+        <div class="row my-2">
             <div class="form-floating">
                 <textarea th:if="${MODE} == 'new'" type="text" class="form-control" style="height: 500px;" id="content" name="content"></textarea>
                 <textarea th:if="${MODE} == 'detail'" type="text" class="form-control" style="height: 500px;" id="content" name="content" th:text="${WorkLogDetail.content}"></textarea>
-                <label for="content" class="ms-2">내용</label>
+                <label for="content" class="mx-1">내용</label>
             <div>
         </div>
     </div>

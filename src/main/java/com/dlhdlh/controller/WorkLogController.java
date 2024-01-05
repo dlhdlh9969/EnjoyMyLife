@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.dlhdlh.dto.CustomerDto;
+import com.dlhdlh.dto.PersetWorkLogDto;
 import com.dlhdlh.dto.WorkLogDto;
 import com.dlhdlh.service.WorkLogService;
 import com.github.pagehelper.PageInfo;
@@ -27,12 +28,22 @@ public class WorkLogController {
 	WorkLogService worklogService;
 
 	@RequestMapping(value="/dworld/worklog")
-	public ModelAndView WorkLogList(@RequestParam(required=false, defaultValue = "1") int pageNum, HttpServletRequest servletRequest, WorkLogDto worklogDto) throws Exception {
+	public ModelAndView WorkLogList(@RequestParam(required=false, defaultValue = "1") int pageNum
+			, HttpServletRequest servletRequest
+			, WorkLogDto worklogDto
+			, PersetWorkLogDto persetWorkLogDto) throws Exception {
 		ModelAndView mv = new ModelAndView("WorkLog/Mainpage");
-		HttpSession session = servletRequest.getSession();
-		String userId = (String) session.getAttribute("userId");
+		String userId = (String) servletRequest.getSession().getAttribute("userId");
+		persetWorkLogDto.setUserId(userId);
+		
+		if(persetWorkLogDto.getMaxrow() != 0) {
+			worklogService.UpdatePersetWorkLog(persetWorkLogDto);
+		}
+		
+		PersetWorkLogDto persetWorkLog = worklogService.GetPersetWorkLog(userId);
+		
 		int maxPaging = 10;//페이징 최대 갯수
-		int maxRow = 10; //페이지당 최대 로우 갯수
+		int maxRow = persetWorkLog.getMaxrow(); //페이지당 최대 로우 갯수
 		
 		worklogDto.setUserId(userId);
 		
@@ -98,6 +109,7 @@ public class WorkLogController {
 		
 		PageInfo<WorkLogDto> workLogList = new PageInfo<>(worklogService.GetWorkLogList(pageNum, maxRow, worklogDto), maxPaging);
 		
+		mv.addObject("PersetWorkLog", persetWorkLog);
 		mv.addObject("WorkLogList", workLogList);
 		return mv;	
 	}
@@ -106,17 +118,9 @@ public class WorkLogController {
 	@RequestMapping(value = "/dworld/worklog/detail")
 	public ModelAndView WorkLogWrite(HttpServletRequest servletRequest, WorkLogDto worklogDto) throws Exception{
 		ModelAndView mv = new ModelAndView("WorkLog/DetailPage");
-		ModelAndView error = new ModelAndView("error");
-		HttpSession session = servletRequest.getSession();
-		String userId = (String) session.getAttribute("userId");
+		String userId = (String) servletRequest.getSession().getAttribute("userId");
 		worklogDto.setUserId(userId);
 		WorkLogDto worklogDetail= worklogService.GetWorkLogDetail(worklogDto);
-//		try {
-//			 
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			return error;
-//		} 
 		
 		//신규 등록과 기존 디테일과 구분
 		if(worklogDto.getIdx() == 0) {

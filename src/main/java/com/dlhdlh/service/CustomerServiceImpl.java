@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dlhdlh.dto.CustomerDto;
+import com.dlhdlh.dto.PersetCustDto;
 import com.dlhdlh.mapper.CustomerMapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -33,6 +34,16 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public void CustomerInsert(CustomerDto customerDto) throws Exception {
 		customerMapper.CustomerInsert(customerDto);
+	}
+
+	@Override
+	public PersetCustDto GetPersetCust(String userId) throws Exception {
+		return customerMapper.GetPersetCust(userId);
+	}
+
+	@Override
+	public void UpdatePersetCust(PersetCustDto persetCustDto) throws Exception {
+		customerMapper.UpdatePersetCust(persetCustDto);
 	}
 
 }

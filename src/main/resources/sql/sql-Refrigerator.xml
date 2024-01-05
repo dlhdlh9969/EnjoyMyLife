@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.dlhdlh.mapper.MyRefrigeratorMapper">
+<mapper namespace="com.dlhdlh.mapper.RefrigeratorMapper">
 	
 	<!-- input 데이터리스트의 이름리스트 -->
-	<select id="GetNameList" parameterType="String" resultType="com.dlhdlh.dto.MyRefrigeratorDataListDto">
+	<select id="GetNameList" parameterType="String" resultType="com.dlhdlh.dto.RefrigeratorDataListDto">
 		<![CDATA[ 
 			SELECT item_name 
 			FROM Refrigerator
@@ -13,7 +13,7 @@
 	</select>
 	
 	<!--장바구니 아이템 추가 --> 
-	<insert id="InsertWishList" parameterType="com.dlhdlh.dto.MyRefrigeratorDataListDto">
+	<insert id="InsertWishList" parameterType="com.dlhdlh.dto.RefrigeratorDataListDto">
 		<![CDATA[ 
 			INSERT INTO Refrigerator (item_name, insert_dt, amt, type, user_id)
 			VALUES ( #{itemName}, now() , #{amt}, #{type}, #{userId} )
@@ -21,7 +21,7 @@
 	</insert>
 	
 	<!-- 마지막 구매정보 가져오기-->
-	<select id="GetLastData" parameterType="com.dlhdlh.dto.MyRefrigeratorDataListDto" resultType="com.dlhdlh.dto.MyRefrigeratorDataListDto">
+	<select id="GetLastData" parameterType="com.dlhdlh.dto.RefrigeratorDataListDto" resultType="com.dlhdlh.dto.RefrigeratorDataListDto">
 		<![CDATA[
 			SELECT amt, type, item_name
 			FROM Refrigerator
@@ -32,7 +32,7 @@
 	</select>
 	
 	<!-- 장바구니 아이템 리스트 -->
-	<select id="GetWishItemList" resultType="com.dlhdlh.dto.MyRefrigeratorDataListDto">
+	<select id="GetWishItemList" resultType="com.dlhdlh.dto.RefrigeratorDataListDto">
 		<![CDATA[ 
 			SELECT * 
 			FROM Refrigerator
@@ -50,7 +50,7 @@
 	</delete>
 	
 	<!-- 구매한 장바구니 리스트 업데이트-->
-	<update id="UpdatePurChase" parameterType="com.dlhdlh.dto.MyRefrigeratorDataListDto">
+	<update id="UpdatePurChase" parameterType="com.dlhdlh.dto.RefrigeratorDataListDto">
 		<![CDATA[ 
 			UPDATE Refrigerator
 			SET item_name = #{itemName}, amt = #{amt}, type = #{type}, purchased_yn = 'Y',
@@ -61,7 +61,7 @@
 	
 	
 	<!-- 냉장고  리스트-->
-	<select id="RefrigeratorList" parameterType="String" resultType="com.dlhdlh.dto.MyRefrigeratorDataListDto">
+	<select id="RefrigeratorList" parameterType="String" resultType="com.dlhdlh.dto.RefrigeratorDataListDto">
 		<![CDATA[ 
 			SELECT idx, item_name, substring(purchased_dt, 1, 10) as purchased_dt,
 				timestampdiff(day, purchased_dt, now()) as after_day, type
@@ -90,7 +90,7 @@
 	</select>
 	
 	<!-- 타입 리스트 가져오기-->
-	<select id="GetTypeList" parameterType="String" resultType="com.dlhdlh.dto.MyRefrigeratorDataListDto">
+	<select id="GetTypeList" parameterType="String" resultType="com.dlhdlh.dto.RefrigeratorDataListDto">
 		<![CDATA[ 
 			SELECT type 
 			FROM Refrigerator
@@ -100,7 +100,7 @@
 	</select>
 	
 	<!-- 구매내역 리스트-->
-	<select id="PurchaseList" parameterType="String" resultType="com.dlhdlh.dto.MyRefrigeratorDataListDto">
+	<select id="PurchaseList" parameterType="String" resultType="com.dlhdlh.dto.RefrigeratorDataListDto">
 		<![CDATA[ 
 			SELECT idx, item_name, amt, substr(purchased_dt, 1, 10) as purchased_dt, type
 			FROM Refrigerator
@@ -118,7 +118,7 @@
 	</select>
 	
 	<!-- 구매내역 item 업데이트-->
-	<update id="UpdatePurChaseList" parameterType="com.dlhdlh.dto.MyRefrigeratorDataListDto">
+	<update id="UpdatePurChaseList" parameterType="com.dlhdlh.dto.RefrigeratorDataListDto">
 		<![CDATA[ 
 			UPDATE Refrigerator
 			SET item_name = #{itemName}, amt = #{amt}, type = #{type} 

@@ -1,1 +1,5 @@
 @charset "UTF-8";
+
+.custom-tooltip {
+    max-width: 800px; /* 원하는 최대 폭으로 설정 */
+  }

@@ -14,5 +14,9 @@ public interface MembersMapper {
 	public void InsertMember(MembersDto membersDto) throws Exception;
 
 	public int UserIdCheck(MembersDto membersDto) throws Exception;
+
+	public void InsertPersetCust(MembersDto membersDto) throws Exception;
+
+	public void InsertPersetWorkLog(MembersDto membersDto) throws Exception;
 	
 }

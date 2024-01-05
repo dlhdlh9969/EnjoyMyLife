@@ -44,7 +44,7 @@ function delCheck(){
 }
 
 function upCheck(){
-    return confirm("구입했어?")
+    return confirm("샀어?")
 }
 
 
@@ -61,7 +61,7 @@ function upCheck(){
         <!-- 바디 -->
         <main>
             <!-- 리스트 추가 기능 -->
-            <form action="/re/insertWishList" method="post" class="text-center d-flex flex-row">
+            <form action="/dworld/re/insertWishList" method="post" class="text-center d-flex flex-row">
                 <input type="text" list="item-Lists" id="itemName" name="itemName" class="form-control" autocomplete="off" placeholder="장바구니 기록 Do it!">
                 <datalist id="item-Lists">
                     <option th:if="${#lists.size(NameList)} > 0" th:each="nameList : ${NameList}" th:value="${nameList.itemName}"></option>

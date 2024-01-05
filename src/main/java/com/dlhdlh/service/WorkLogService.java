@@ -3,6 +3,7 @@ package com.dlhdlh.service;
 import java.util.List;
 
 import com.dlhdlh.dto.CustomerDto;
+import com.dlhdlh.dto.PersetWorkLogDto;
 import com.dlhdlh.dto.WorkLogDto;
 import com.github.pagehelper.Page;
 
@@ -19,5 +20,9 @@ public interface WorkLogService {
 	void DeleteWorkLog(int idx) throws Exception;
 
 	void UpdateWorkLog(WorkLogDto worklogDto) throws Exception;
+
+	void UpdatePersetWorkLog(PersetWorkLogDto persetWorkLogDto) throws Exception;
+
+	PersetWorkLogDto GetPersetWorkLog(String userId) throws Exception;
 
 }

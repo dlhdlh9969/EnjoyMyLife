@@ -1,6 +1,7 @@
 package com.dlhdlh.service;
 
 import com.dlhdlh.dto.CustomerDto;
+import com.dlhdlh.dto.PersetCustDto;
 import com.github.pagehelper.Page;
 
 public interface CustomerService {
@@ -12,4 +13,8 @@ public interface CustomerService {
 	void CustomerDelete(CustomerDto customerDto) throws Exception;
 
 	void CustomerInsert(CustomerDto customerDto) throws Exception;
+
+	PersetCustDto GetPersetCust(String userId) throws Exception;
+
+	void UpdatePersetCust(PersetCustDto persetCustDto)throws Exception;
 }

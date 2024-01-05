@@ -28,6 +28,8 @@ public class MembersServiceImpl implements MembersService {
 	@Override
 	public void InsertMember(MembersDto membersDto) throws Exception {
 		membersMapper.InsertMember(membersDto);
+		membersMapper.InsertPersetCust(membersDto);
+		membersMapper.InsertPersetWorkLog(membersDto);
 	}
 
 	//회원가입 ID 체크

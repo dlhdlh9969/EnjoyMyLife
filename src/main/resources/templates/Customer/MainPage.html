@@ -35,8 +35,16 @@
                     var valcustAddr = $("#input-custAddr").val();
                     var valcustEmail = $("#input-custEmail").val();
                     var valcustRemark = $("#input-custRemark").val();
-                    var datas = {custCd: valcustCd, custNm: valcustNm, custBusnum: valcustBusnum, custNum: valcustNum, custCeonm: valcustCeonm, custCeonum: valcustCeonum
-                        , custAddr: valcustAddr, custEmail: valcustEmail, custRemark: valcustRemark};
+                    var datas = {custCd: valcustCd
+                        , custNm: valcustNm
+                        , custBusnum: valcustBusnum
+                        , custNum: valcustNum
+                        , custCeonm: valcustCeonm
+                        , custCeonum: valcustCeonum
+                        , custAddr: valcustAddr
+                        , custEmail: valcustEmail
+                        , custRemark: valcustRemark
+                    };
 
                     if(!valcustNm){
 				        alert("업체명이 비어선 안됩니다.");
@@ -135,7 +143,7 @@
                     $("#btn-delete").hide();
                     $("#btn-cancel").show();
                     
-                    $("#detail-head").text("업체 정보 등록 중");
+                    $("#detail-head").text("Writing");
                     $("#input-custCd").val("Auto Increment(자동생성)");
                     $("#input-custNm").val("");
                     $("#input-custBusnum").val("");
@@ -187,13 +195,19 @@
                         });
                     }
                 });
+
+                //maxrow 5줄씩 보기 컨트롤
+                $("#maxrow").change(function(){
+                    searchCust();
+                });
 	        });
 
             //검색 버튼
             function searchCust(){
                 var searchCustNm = document.getElementById('searchCustNm').value;
-                window.location.href = "/dworld/customer?SearchCustNm=" + encodeURIComponent(searchCustNm);
-            }
+                var maxrow = $("#maxrow").val();
+                window.location.href = "/dworld/customer?SearchCustNm=" + encodeURIComponent(searchCustNm) + "&maxrow=" + encodeURIComponent(maxrow);
+            };
         </script>
 
     </head>
@@ -202,40 +216,41 @@
             <header th:include="header :: header"></header>
         </div>
 
-        <div class="container border border-1 border-dark rounded px-3 py-2">
+        <div class="container">
             <form id="input-form">
                 <!-- 마스터 -->
                 <div>
-                    <div class="text-center my-2">
-                        <h1 class="webfont1">Customer List</h1>
-                    </div>
-                    <div class="d-flex mb-2">
-                        <div class="d-flex">
-                            <button type="button" class="btn btn-outline-primary me-2 text-nowrap" onclick="searchCust()">Search</button>
-                            <input type="text" class="form-control" style="width: 400px;" id="searchCustNm" name="searchCustNm" th:value="${SearchCustNm}" onkeyup="if(window.event.keyCode==13){searchCust()}" placeholder="업체명 검색">
+                    <div class="mb-2">
+                        <div class="text-center my-2">
+                            <h1 class="webfont1">Customer List</h1>
                         </div>
-                        <div>
-                            <select class="form-select form-select-sm" style="width: 200px;" aria-label="Small select example">
-                                <option value="5">5줄 보기</option>
-                                <option value="10">10줄 보기</option>
-                                <option value="15">15줄 보기</option>
-                            </select>
+                        <div class="row hstack gy-1">
+                            <div class="col-12 col-md d-flex justify-content-end">
+                                <button type="button" class="col col-md-5 btn btn-outline-primary text-nowrap" onclick="searchCust()">Search</button>
+                            </div>
+                            <div class="col-12 col-md">
+                                <input type="text" class="form-control" id="searchCustNm" name="searchCustNm" th:value="${SearchCustNm}" onkeyup="if(window.event.keyCode==13){searchCust()}" placeholder="업체명 검색">
+                            </div>
+                            <div class="col-12 col-md">
+                                <select class="form-select form-select-sm ms-auto" style="width: 150px;" id="maxrow">
+                                    <option value="5" th:attr="selected=${PersetCust.maxrow == 5} ? 'selected'">5줄씩 보기</option>
+                                    <option value="10" th:attr="selected=${PersetCust.maxrow == 10} ? 'selected'">10줄씩 보기</option>
+                                    <option value="15" th:attr="selected=${PersetCust.maxrow == 15} ? 'selected'">15줄씩 보기</option>
+                                    <option value="20" th:attr="selected=${PersetCust.maxrow == 20} ? 'selected'">20줄씩 보기</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
                     <table class="table table-hover table-hover">
                         <colgroup>
-                            <col width="5%" />
-                            <col width="35%" />
-                            <col width="30%" />
-                            <col width="30%" />
+                            <col width="10%" />
+                            <col width="90%" />
                         </colgroup>
                         <thead>
-                            <tr>
+                            <tr class="bg-dark text-light">
                                 <th>Num</th>
                                 <th>업체명</th>
-                                <th>전화번호</th>
-                                <th>대표자명</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -243,12 +258,10 @@
                             <tr th:each="list : ${CustList.getList()}" class="text-wrap">
                                 <td th:text='${list.rowNum}'></td>
                                 <td><a th:href="@{/dworld/customer(pageNum=${CustList.PageNum}, selectRowNum=${list.rowNum},searchCustNm=${SearchCustNm})}" th:text='${list.custNm}'></a></td>
-                                <td th:text='${list.custNum}'></td>
-                                <td th:text='${list.custCeonm}'></td>
                             </tr>
                             
                             <tr th:unless="${#lists.size(CustList.getList())} > 0">
-                                <td colspan="3" class="text-center">내용이 없습니다.</td>
+                                <td colspan="4" class="text-center"><h3>Empty</h3></td>
                             </tr>
                         </tbody>
                     </table>
@@ -267,11 +280,12 @@
                 </div>
 
                 <!-- 디테일 -->
-                <div class="border border-1 border-dark rounded mt-1 px-3 py-2">
+                <hr>
+                <div>
                     <div class="text-center">
                         <h1 id="detail-head" class="webfont1">Detail Area</h1>
                     </div>
-                    <div class="text-end">
+                    <div class="text-end mb-2">
                         <button class="btn btn-outline-success" type="button" id="btn-insert" name="btn-insert">등록</button>
                         <button class="btn btn-outline-success" type="button" id="btn-insertOK" name="btn-insertOK">등록완료</button>
                         <button class="btn btn-outline-secondary" type="button" id="btn-edit" name="btn-edit">수정</button>
@@ -279,49 +293,50 @@
                         <button class="btn btn-outline-danger" type="button" id="btn-delete" name="btn-delete">삭제</button>
                         <button class="btn btn-outline-info" type="button" id="btn-cancel" name="btn-cancel">취소</button>
                     </div>
-                    
-                    <div class="row my-2">
-                        <div class="col-12 col-lg form-floating">
-                            <input type="text" th:value="${SelectCust.custCd}" class="form-control" disabled id="input-custCd" name="input-custCd">
-                            <label for="input-custCd" class="ms-2">업체 코드</label>
+                    <div>
+                        <div class="row mb-1">
+                            <div class="col-12 col-lg form-floating mb-1 mb-lg-0">
+                                <input type="text" th:value="${SelectCust.custCd}" class="form-control" disabled id="input-custCd" name="input-custCd">
+                                <label for="input-custCd">업체 코드</label>
+                            </div>
+                            <div class="col-12 col-lg form-floating">
+                                <input type="text" th:value="${SelectCust.custNm}" class="form-control" readonly id="input-custNm" name="input-custNm">
+                                <label for="input-custNm"><b>*업 체 명</b></label>
+                            </div>
                         </div>
-                        <div class="col-12 col-lg form-floating">
-                            <input type="text" th:value="${SelectCust.custNm}" class="form-control" readonly id="input-custNm" name="input-custNm">
-                            <label for="input-custNm" class="ms-2"><b>*업 체 명</b></label>
+                        <div class="row mb-1">
+                            <div class="col-12 col-lg form-floating mb-1 mb-lg-0">
+                                <input type="text" th:value="${SelectCust.custBusnum}" class="form-control" readonly id="input-custBusnum" name="input-custBusnum">
+                                <label for="input-custBusnum">사업자 번호</label>
+                            </div>
+                            <div class="col-12 col-lg form-floating">
+                                <input type="text" th:value="${SelectCust.custNum}" class="form-control" readonly id="input-custNum" name="input-custNum">
+                                <label for="input-custNum">전화 번호</label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row my-2">
-                        <div class="col-12 col-lg form-floating">
-                            <input type="text" th:value="${SelectCust.custBusnum}" class="form-control" readonly id="input-custBusnum" name="input-custBusnum">
-                            <label for="input-custBusnum" class="ms-2">사업자 번호</label>
+                        <div class="row mb-1">
+                            <div class="col-12 col-lg form-floating mb-1 mb-lg-0">
+                                <input type="text" th:value="${SelectCust.custCeonm}" class="form-control" readonly id="input-custCeonm" name="input-custCeonm">
+                                <label for="input-custCeonm">대표명</label>
+                            </div>
+                            <div class="col-12 col-lg form-floating">
+                                <input type="text" th:value="${SelectCust.custCeonum}" class="form-control" readonly id="input-custCeonum" name="input-custCeonum">
+                                <label for="input-custCeonum">대표 번호</label>
+                            </div>
                         </div>
-                        <div class="col-12 col-lg form-floating">
-                            <input type="text" th:value="${SelectCust.custNum}" class="form-control" readonly id="input-custNum" name="input-custNum">
-                            <label for="input-custNum" class="ms-2">전화 번호</label>
-                        </div>
-                    </div>
-                    <div class="row my-2">
-                        <div class="col-12 col-lg form-floating">
-                            <input type="text" th:value="${SelectCust.custCeonm}" class="form-control" readonly id="input-custCeonm" name="input-custCeonm">
-                            <label for="input-custCeonm" class="ms-2">대표명</label>
-                        </div>
-                        <div class="col-12 col-lg form-floating">
-                            <input type="text" th:value="${SelectCust.custCeonum}" class="form-control" readonly id="input-custCeonum" name="input-custCeonum">
-                            <label for="input-custCeonum" class="ms-2">대표 번호</label>
-                        </div>
-                    </div>
-                    <div class="row my-2">
-                        <div class="form-floating mb-2">
-                            <input type="text" th:value="${SelectCust.custAddr}" class="form-control" readonly id="input-custAddr" name="input-custAddr">
-                            <label for="input-custAddr" class="ms-2">주 소</label>
-                        </div>
-                        <div class="form-floating mb-2">
-                            <input type="text" th:value="${SelectCust.custEmail}" class="form-control" readonly id="input-custEmail" name="input-custEmail">
-                            <label for="input-custEmail" class="ms-2">E-mail</label>
-                        </div>
-                        <div class="form-floating mb-2">
-                            <textarea class="form-control" style="height: 200px;" th:text="${SelectCust.custRemark}" readonly id="input-custRemark" name="input-custRemark"></textarea>
-                            <label for="input-custRemark" class="ms-2">비 고</label>
+                        <div class="row mb-1">
+                            <div class="form-floating mb-1">
+                                <input type="text" th:value="${SelectCust.custAddr}" class="form-control" readonly id="input-custAddr" name="input-custAddr">
+                                <label for="input-custAddr">주 소</label>
+                            </div>
+                            <div class="form-floating mb-1">
+                                <input type="text" th:value="${SelectCust.custEmail}" class="form-control" readonly id="input-custEmail" name="input-custEmail">
+                                <label for="input-custEmail">E-mail</label>
+                            </div>
+                            <div class="form-floating">
+                                <textarea class="form-control" style="height: 200px;" th:text="${SelectCust.custRemark}" readonly id="input-custRemark" name="input-custRemark"></textarea>
+                                <label for="input-custRemark">비 고</label>
+                            </div>
                         </div>
                     </div>
                 </div>

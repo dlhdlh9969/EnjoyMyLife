@@ -36,7 +36,7 @@ public class MembersController {
 	// 로그인 submit 프로세스
 	@ResponseBody 
 	@RequestMapping(value = "members/loginAjax", method = RequestMethod.POST)
-	public Object LoginProcessAjax(MembersDto membersDto, HttpServletRequest request) throws Exception{
+	public Object LoginProcessAjax(MembersDto membersDto, HttpServletRequest servletRequest) throws Exception{
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		int resultCnt = membersService.LoginCheck(membersDto);
 
@@ -44,7 +44,7 @@ public class MembersController {
 		
 		if(resultCnt > 0){
 			MembersDto getMemberDto = membersService.SelectMemberDto(membersDto.getUserId());
-			HttpSession session = request.getSession();
+			HttpSession session = servletRequest.getSession();
 			session.setAttribute("userId", getMemberDto.getUserId());
 			session.setAttribute("userName", getMemberDto.getUserName());
 			session.setMaxInactiveInterval(1800); //초 단위 10분 600초	

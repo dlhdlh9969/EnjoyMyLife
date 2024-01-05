@@ -20,12 +20,28 @@
 		]]>
 	</select>
 	
+	<!-- 회원가입-->
 	<insert id="InsertMember" parameterType="com.dlhdlh.dto.MembersDto">
 		<![CDATA[ 
 			INSERT INTO Members (user_id, user_pw, user_name, signin_dt)
 			VALUES ( #{userId}, #{userPw}, #{userName}, now());
 		]]>
 	</insert>
+	<insert id="InsertPersetCust" parameterType="com.dlhdlh.dto.MembersDto">
+		<![CDATA[ 
+			INSERT INTO PersetCust (user_id)
+			VALUES ( #{userId});
+		]]>
+	</insert>
+	<insert id="InsertPersetWorkLog" parameterType="com.dlhdlh.dto.MembersDto">
+		<![CDATA[ 
+			INSERT INTO PersetWorkLog (user_id)
+			VALUES ( #{userId});
+		]]>
+	</insert>
+	
+	
+	
 	
 	<!-- 로그인 체크 -->
 	<select id="UserIdCheck" parameterType="com.dlhdlh.dto.MembersDto" resultType="int">
