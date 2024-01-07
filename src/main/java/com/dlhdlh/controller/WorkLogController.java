@@ -3,10 +3,8 @@ package com.dlhdlh.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,7 +19,6 @@ import com.dlhdlh.service.WorkLogService;
 import com.github.pagehelper.PageInfo;
 
 @RestController
-@Controller
 public class WorkLogController {
 	
 	@Autowired
@@ -32,20 +29,21 @@ public class WorkLogController {
 			, HttpServletRequest servletRequest
 			, WorkLogDto worklogDto
 			, PersetWorkLogDto persetWorkLogDto) throws Exception {
-		ModelAndView mv = new ModelAndView("WorkLog/Mainpage");
-		String userId = (String) servletRequest.getSession().getAttribute("userId");
-		persetWorkLogDto.setUserId(userId);
+		ModelAndView mv = new ModelAndView("WorkLog/MainPage");
+		String requestId = (String) servletRequest.getSession().getAttribute("userId");
+		persetWorkLogDto.setUserId(requestId);
 		
 		if(persetWorkLogDto.getMaxrow() != 0) {
 			worklogService.UpdatePersetWorkLog(persetWorkLogDto);
 		}
 		
-		PersetWorkLogDto persetWorkLog = worklogService.GetPersetWorkLog(userId);
+		PersetWorkLogDto persetWorkLog = worklogService.GetPersetWorkLog(requestId);
+		mv.addObject("PersetWorkLog", persetWorkLog);
 		
 		int maxPaging = 10;//페이징 최대 갯수
 		int maxRow = persetWorkLog.getMaxrow(); //페이지당 최대 로우 갯수
 		
-		worklogDto.setUserId(userId);
+		worklogDto.setUserId(requestId);
 		
 		//완료 여부 컨트롤
 		if(worklogDto.getComplYn() == null) {
@@ -108,20 +106,21 @@ public class WorkLogController {
 		}
 		
 		PageInfo<WorkLogDto> workLogList = new PageInfo<>(worklogService.GetWorkLogList(pageNum, maxRow, worklogDto), maxPaging);
-		
-		mv.addObject("PersetWorkLog", persetWorkLog);
 		mv.addObject("WorkLogList", workLogList);
-		return mv;	
+		
+		return mv;
+		
+		
 	}
 	
 	//디테일 페이지 컨트롤
 	@RequestMapping(value = "/dworld/worklog/detail")
 	public ModelAndView WorkLogWrite(HttpServletRequest servletRequest, WorkLogDto worklogDto) throws Exception{
 		ModelAndView mv = new ModelAndView("WorkLog/DetailPage");
-		String userId = (String) servletRequest.getSession().getAttribute("userId");
-		worklogDto.setUserId(userId);
+		String requestId = (String) servletRequest.getSession().getAttribute("userId");
+		worklogDto.setUserId(requestId);
 		WorkLogDto worklogDetail= worklogService.GetWorkLogDetail(worklogDto);
-		
+		mv.addObject("WorkLogDetail",worklogDetail);
 		//신규 등록과 기존 디테일과 구분
 		if(worklogDto.getIdx() == 0) {
 			mv.addObject("MODE", "new");
@@ -129,8 +128,7 @@ public class WorkLogController {
 			mv.addObject("MODE", "detail");	
 		}
 		
-		mv.addObject("WorkLogDetail",worklogDetail);		
-		return mv;
+			return mv;
 	}
 	
 	// 업체검색 모달 컨트롤
@@ -144,9 +142,9 @@ public class WorkLogController {
 	@ResponseBody
 	@RequestMapping(value="/dworld/worklog/control", method = RequestMethod.POST)
 	public void InsertWorkLog(HttpServletRequest servletRequest, WorkLogDto worklogDto) throws Exception {
-		HttpSession session = servletRequest.getSession();
-		String userId = (String) session.getAttribute("userId");
-		worklogDto.setUserId(userId);
+
+		String requestId = (String) servletRequest.getSession().getAttribute("userId");
+		worklogDto.setUserId(requestId);
 		
 		String getReceiptDt = worklogDto.getReceiptDt();
 		String getDueDt = worklogDto.getDueDt();
@@ -168,20 +166,20 @@ public class WorkLogController {
 	//업무일지 삭제
 	@RequestMapping(value = "/dworld/worklog/control", method = RequestMethod.DELETE)
 	public void DeleteWorkLog(HttpServletRequest servletRequest, WorkLogDto worklogDto) throws Exception {
-		HttpSession session = servletRequest.getSession();
-		String userId = (String) session.getAttribute("userId");
-		worklogDto.setUserId(userId);
+
+		String requestId = (String) servletRequest.getSession().getAttribute("userId");
+		worklogDto.setUserId(requestId);
 		
 		worklogService.DeleteWorkLog(worklogDto.getIdx());
 	}
 	
 	//업무일지 수정
 	@RequestMapping(value = "/dworld/worklog/control", method = RequestMethod.PUT)
-	public void UpdateWorkLog(HttpServletRequest servletRequest, WorkLogDto worklogDto) throws Exception {
-		HttpSession session = servletRequest.getSession();
-		String userId = (String) session.getAttribute("userId");
-		worklogDto.setUserId(userId);
+	public String UpdateWorkLog(HttpServletRequest servletRequest, WorkLogDto worklogDto) throws Exception {
 		
+		String requestId = (String) servletRequest.getSession().getAttribute("userId");
+		
+		worklogDto.setUserId(requestId);
 		String getReceiptDt = worklogDto.getReceiptDt();
 		String getDueDt = worklogDto.getDueDt();
 		String getComplDt = worklogDto.getComplDt();
@@ -195,8 +193,18 @@ public class WorkLogController {
 		if(getComplDt.equals("")) {
 			worklogDto.setComplDt(null);
 		}
-	
-		worklogService.UpdateWorkLog(worklogDto);
+		
+
+		String idCheck = "N";
+		try {
+			worklogService.UpdateWorkLog(worklogDto);
+			idCheck = "Y";
+		} catch (Exception e) {
+			return "redirect:/error";
+		}
+		
+		return idCheck;
+		
 	}
 
 

@@ -14,7 +14,7 @@
 		]]>
 	</select>
 	
-	<!-- 업체 선택을 위한 모탈에 들어가는 데이터-->
+	<!-- 업체 선택을 위한 모달에 들어가는 데이터-->
 	<select id="GetCustList" parameterType="String" resultType="com.dlhdlh.dto.WorkLogDto">
 		<![CDATA[ 
 			SELECT row_number() OVER (ORDER BY cust_nm) as row_num,cust_cd, cust_nm

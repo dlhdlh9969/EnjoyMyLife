@@ -39,14 +39,14 @@ public class RefrigeratorController {
 	// 장바구니 추가
 	@RequestMapping("/dworld/re/insertWishList")
 	public String InsertWishList(@RequestParam(required = false, defaultValue = "") String itemName, 
-			HttpServletRequest request) throws Exception {
+			HttpServletRequest servletRequest) throws Exception {
 		
 		RefrigeratorDataListDto paramDto = new RefrigeratorDataListDto();
 		RefrigeratorDataListDto recentData = new RefrigeratorDataListDto();
-		HttpSession session = request.getSession();
+		String requestId = (String) servletRequest.getSession().getAttribute("userId");
 		
-		paramDto.setUserId((String) session.getAttribute("userId"));
-		paramDto.setItemName(itemName);
+		paramDto.setUserId(requestId);
+		paramDto.setItemName(itemName); 
 		
 		if (!itemName.equals("")) {
 			try {
@@ -83,10 +83,9 @@ public class RefrigeratorController {
 	
 	// 냉장고리스트
 	@RequestMapping("/dworld/re/refrigerator")
-	public ModelAndView MyRefrigeratorList(@RequestParam(required = false, defaultValue = "") String type, HttpServletRequest request) throws Exception  {
+	public ModelAndView MyRefrigeratorList(@RequestParam(required = false, defaultValue = "") String type, HttpServletRequest servletRequest) throws Exception  {
 		ModelAndView mv = new ModelAndView("MyRefrigerator/MyRefrigeratorList");
-		HttpSession session = request.getSession();
-		String requestId = (String) session.getAttribute("userId");
+		String requestId = (String) servletRequest.getSession().getAttribute("userId");
 		RefrigeratorDataListDto paramDto = new RefrigeratorDataListDto();
 		paramDto.setType(type);
 		paramDto.setUserId(requestId);

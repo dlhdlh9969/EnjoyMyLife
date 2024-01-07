@@ -6,9 +6,13 @@
 
     <title>D-world/업무일지</title>
     
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <!-- 부트스트랩 기본  -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <!-- jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- 기본Css -->
     <link rel="stylesheet" href="/css/basic.css">
     <link rel="stylesheet" href="/css/WorkLog.css">
     <!-- datetime 포멧 변경에 도움이 되는 라이브러리 Moment.js -->
@@ -29,10 +33,11 @@
             });
 
             //업체명 검색 모달 컨트롤
+            
             var searchCustNm = $("#searchCustNm").val();
             var datas = {searchCustNm};
-            
             $("#searchCustNm").on("keyup",function(key){
+                
                 if(key.keyCode==13){
                     searchCustNm = $("#searchCustNm").val();
                     datas = {searchCustNm};
@@ -53,17 +58,13 @@
                         
                         if (data && data.length > 0) {
                             $.each(data, function(index, item){
-                                listStr += "<tr>";
-                                listStr += "<td><button class='btn border-0 w-100 text-start' onclick='SetCust("+item.rowNum+")'><div id='selectCustNm"+item.rowNum+"'>"+item.custNm+"</div></button></td>"
-                                listStr += "<td><div id='selectCustCd"+item.rowNum+"'>"+item.custCd+"</div></td></tr>";
-                                // listStr += "<td><button class='btn btn-outline-primary' onclick='SetCust("+item.rowNum+")'>선택</button></td>";
-                                // listStr += "<td><div id='selectCustNm"+item.rowNum+"'>"+item.custNm+"</div></td>";
-                                // listStr += "<td><div id='selectCustCd"+item.rowNum+"'>"+item.custCd+"</div></td></tr>";
-
+                                listStr += "<tr onclick='SetCust("+item.rowNum+")'>";
+                                listStr += "<td class='text-start text-truncate' id='selectCustNm"+item.rowNum+"'>"+item.custNm+"</td>"
+                                listStr += "<td><div class='' id='selectCustCd"+item.rowNum+"'>"+item.custCd+"</div></td></tr>";
                             });
                             listArea.append(listStr);
                         } else {
-                            listStr += "<tr><td colspan='2' class='text-center'>데이터가 없습니다.</td></tr>";
+                            listStr += "<tr><td colspan='2' class='text-center'>검색 결과가 없습니다.</td></tr>";
                             listArea.append(listStr);
                         }
 
@@ -182,7 +183,12 @@
                         type: "put",
                         data: datas,
                         success: function(data) {
-                            alert("수정 되었습니다.");
+                            if(data == 'Y'){
+                                alert("수정 되었습니다.");
+                            }else{
+                                alert("접근이 잘못되었습니다.");
+                            }
+                            
                         },
                         error: function() {
                             alert("ajax 통신 오류 발생");
@@ -199,98 +205,94 @@
         <header th:include="header :: header"></header>
     </div>
     <div class="container">
-        <div>
-            <h1 th:if="${MODE} == 'new'" class="text-center webfont1">New WorkLog Write</h1>
-            <h1 th:if="${MODE} == 'detail'" class="text-center webfont1">WorkLog Detail</h1>
+        <div class="text-center webfont1 dlh-headstyle3">
+            <label><h1 th:text="${MODE == 'new' ? 'Write New WorkLog' : 'WorkLog Detail'}"></h1></label>
         </div>
-        <div class="row">
-            <div th:if="${MODE} == 'new'" class="col my-1 ">
-                <button type="button" class="btn btn-outline-primary w-100" id="btn-insert" name="btn-insert">Insert</button>
+        <div class="row g-2 col-md-6 ms-md-auto col-lg-4 my-3">
+            <div th:if="${MODE} == 'new'" class="col">
+                <button type="button" class="col-12 btn btn-primary" id="btn-insert" name="btn-insert">등록</button>
             </div>
-            <div th:if="${MODE} == 'detail'" class="col my-1 ">
-                <button type="button" class="btn btn-outline-secondary w-100" id="btn-edit" name="btn-edit" th:onclick="|UpdateWorkLog(${WorkLogDetail.idx})|">Save</button>
+            <div th:if="${MODE} == 'detail'" class="col">
+                <button type="button" class="col-12 btn btn-secondary" id="btn-edit" name="btn-edit" th:onclick="|UpdateWorkLog(${WorkLogDetail.idx})|">저장</button>
             </div>
-            <div th:if="${MODE} == 'detail'" class="col my-1 ">
-                <button type="button" class="btn btn-outline-danger w-100" id="btn-delete" name="btn-delete" th:onclick="|DeleteWorkLog(${WorkLogDetail.idx})|">Delete</button>
+            <div th:if="${MODE} == 'detail'" class="col">
+                <button type="button" class="col-12 btn btn-danger" id="btn-delete" name="btn-delete" th:onclick="|DeleteWorkLog(${WorkLogDetail.idx})|">삭제</button>
             </div>
-            <div class="col my-1 ">
-                <button type="button" class="btn btn-outline-success w-100" id="btn-back" name="btn-back">Back</button> 
+            <div class="col">
+                <button type="button" class="col-12 btn btn-success" id="btn-back" name="btn-back">뒤로</button> 
             </div>
         </div>
-        <div class="row">
-            <div class="col-12 col-lg-4 form-floating my-1">
+        <div class="row g-2 mt-1">
+            <div class="col-12 col-md-6 col-lg-4 form-floating">
                 <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.custNm}" type="text" class="form-control" id="cust-nm" name="cust-nm" disabled>
                 <label for="cust-nm">업체명</label>
             </div>
-            <div class="col-12 col-lg-4 form-floating my-1">
+            <div class="col-4 col-md-2 col-lg-4 form-floating">
                 <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.custCd}" type="text" class="form-control" id="cust-cd" name="cust-cd" disabled>                
                 <label for="cust-cd">업체코드</label>
             </div>
-            <div class="col-12 col-lg-4 my-1 d-flex">
-                    <button type="button" class="btn btn-primary text-nowrap w-50 me-1" data-bs-toggle="modal" data-bs-target="#selectCustModal">업체 선택</button>
-                    <button type="button" class="btn btn-warning text-nowrap w-50 ms-1" onclick="SelectCancel()">선택 취소</button>
-                <!-- 업체 선택 modal -->
-                <div class="modal fade" id="selectCustModal" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="staticBackdropLabel">업체 선택 팝업</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                <input class="form-control my-2" type="text" id="searchCustNm" name="searchCustNm" placeholder="업체명 검색">
-                                <div style="max-height: 400px; overflow:auto" id="custListDiv" name="custListDiv">
-                                    <table class="table table-hover">
-                                        <colgroup>
-                                            <col width="75%" />
-                                            <col width="25%" />
-                                        </colgroup>
-                                        <thead class="bg-dark text-light">
-                                            <th>업체명</th>
-                                            <th>업체코드</th>
-                                        </thead>
-                                        <tbody id="custListTable" name="custListTable">
+            <div class="col-4 col-md-2 col-lg-2">
+                <button type="button" class="w-100 h-100 btn btn-primary text-nowrap" data-bs-toggle="modal" data-bs-target="#selectCustModal">업체 선택</button>
+            </div>
+            <div class="col-4 col-md-2 col-lg-2">
+                <button type="button" class="w-100 h-100 btn btn-warning text-nowrap" onclick="SelectCancel()">선택 취소</button>
+            </div>
+        </div>
+        <!-- 업체 선택 modal -->
+        <div class="modal fade" id="selectCustModal" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">업체 선택 팝업</h1>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input class="form-control my-2" type="text" id="searchCustNm" name="searchCustNm" placeholder="업체명 검색">
+                        <div style="max-height: 400px; overflow:auto" id="custListDiv" name="custListDiv">
+                            <table class="table table-dark table-striped" style="table-layout:fixed; cursor:pointer;">
+                                <colgroup>
+                                    <col width="75%">
+                                    <col width="25%">
+                                </colgroup>
+                                <thead>
+                                    <th>업체명</th>
+                                    <th>업체코드</th>
+                                </thead>
+                                <tbody id="custListTable" name="custListTable">
 
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <!-- <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            </div> -->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
+                    <!-- <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div> -->
                 </div>
             </div>
-            
         </div>
-        <div class="row my-1">
-            <div class="col-lg-4 form-floating my-1">
+
+        <div class="row g-2 mt-1">
+            <div class="col form-floating">
                 <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.receiptDt}" type="datetime-local" class="form-control" id="receipt-dt" name="receipt-dt">
                 <label for="receipt-dt" class="mx-1">접수일</label>
             </div>
-            <div class="col-lg-4 form-floating my-1">
+            <div class="col form-floating">
                 <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.dueDt}" type="datetime-local" class="form-control" id="due-dt" name="due-dt">
                 <label for="due-dt" class="mx-1">마감예정일</label>
             </div>
-            <div class="col-lg-4 form-floating my-1">
+            <div class="col form-floating">
                 <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.complDt}" type="datetime-local" class="form-control" id="compl-dt" name="compl-dt">
                 <label for="compl-dt" class="mx-1">완료일</label>
             </div>
         </div>
-        <div class="row my-2">
-            <div class="form-floating">
-                <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.title}" type="text" class="form-control" id="title" name="title">
-                <label for="title" class="mx-1">제목</label>
-            </div>
+        <div class="form-floating my-2">
+            <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.title}" type="text" class="form-control" id="title" name="title">
+            <label for="title" class="mx-1">제목</label>
         </div>
-        <div class="row my-2">
-            <div class="form-floating">
-                <textarea th:if="${MODE} == 'new'" type="text" class="form-control" style="height: 500px;" id="content" name="content"></textarea>
-                <textarea th:if="${MODE} == 'detail'" type="text" class="form-control" style="height: 500px;" id="content" name="content" th:text="${WorkLogDetail.content}"></textarea>
-                <label for="content" class="mx-1">내용</label>
-            <div>
-        </div>
+        <div class="form-floating">
+            <textarea th:text="${MODE == 'detail'} ? ${WorkLogDetail.content}" type="text" class="form-control" style="height: 500px;" id="content" name="content"></textarea>
+            <label for="content" class="mx-1">내용</label>
+        <div>
     </div>
 </body>
 </html>
