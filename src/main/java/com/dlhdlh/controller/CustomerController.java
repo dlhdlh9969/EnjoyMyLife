@@ -1,7 +1,6 @@
 package com.dlhdlh.controller;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,13 +29,17 @@ public class CustomerController {
 			, CustomerDto customerDto
 			, PersetCustDto persetCustDto) throws Exception{
 		ModelAndView mv = new ModelAndView("Customer/MainPage");		
-		String userId = (String) servletRequest.getSession().getAttribute("userId");
-		persetCustDto.setUserId(userId);
+		String requestId = (String) servletRequest.getSession().getAttribute("userId");
+		persetCustDto.setUserId(requestId);
+		
+		System.out.println("pageNum:"+pageNum);
+		System.out.println("selectRowNum:"+selectRowNum);
+		System.out.println("SearchCustNm:"+customerDto.getSearchCustNm());
 		
 		if(persetCustDto.getMaxrow() != 0) {
 			customerService.UpdatePersetCust(persetCustDto);
 		}
-		PersetCustDto persetCust = customerService.GetPersetCust(userId);
+		PersetCustDto persetCust = customerService.GetPersetCust(requestId);
 		
 		int maxPaging = 10;//페이징 최대 갯수
 		int maxRow = persetCust.getMaxrow(); //페이지당 최대 로우 갯수
@@ -66,8 +69,10 @@ public class CustomerController {
 		
 		mv.addObject("PersetCust", persetCust);
 		mv.addObject("CustList", custList);
-		mv.addObject("SelectCust", selectCustInfo);
 		mv.addObject("SearchCustNm", searchCustNm);
+		System.out.println("searchCustNm2:"+searchCustNm);
+		mv.addObject("SelectCust", selectCustInfo);
+		
 		return mv;
 	}
 	
@@ -75,9 +80,8 @@ public class CustomerController {
 	@ResponseBody
 	@RequestMapping(value="/dworld/customer/control", method = RequestMethod.PUT)
 	void CustomerUpdate(CustomerDto customerDto, HttpServletRequest servletRequest) throws Exception {
-		HttpSession session = servletRequest.getSession();
-		String userId = (String) session.getAttribute("userId");
-		customerDto.setUpdateUser(userId);
+		String requestId = (String) servletRequest.getSession().getAttribute("userId");
+		customerDto.setUpdateUser(requestId);
 		customerService.CustomerUpdate(customerDto);
 	}
 	
@@ -85,9 +89,8 @@ public class CustomerController {
 	@ResponseBody
 	@RequestMapping(value="/dworld/customer/control", method = RequestMethod.DELETE)
 	void CustomerDelete(CustomerDto customerDto, HttpServletRequest servletRequest) throws Exception{
-		HttpSession session = servletRequest.getSession();
-		String userId = (String) session.getAttribute("userId");
-		customerDto.setDeleteUser(userId);
+		String requestId = (String) servletRequest.getSession().getAttribute("userId");
+		customerDto.setDeleteUser(requestId);
 		customerService.CustomerDelete(customerDto);
 	}
 	
@@ -95,9 +98,8 @@ public class CustomerController {
 	@ResponseBody
 	@RequestMapping(value="/dworld/customer/control", method = RequestMethod.POST)
 	void CustomerInsert(CustomerDto customerDto, HttpServletRequest servletRequest) throws Exception{
-		HttpSession session = servletRequest.getSession();
-		String userId = (String) session.getAttribute("userId");
-		customerDto.setInsertUser(userId);
+		String requestId = (String) servletRequest.getSession().getAttribute("userId");
+		customerDto.setInsertUser(requestId);
 		customerService.CustomerInsert(customerDto);
 	}
 }
