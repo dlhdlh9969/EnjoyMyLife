@@ -52,13 +52,19 @@
             <div class="card m-2">
                 <div class="card-header bg-dark text-light dlh-headstyle3 d-flex align-items-center ">
                     <span class="material-symbols-outlined">Group</span>
-                    <label for=""><strong>Session</strong></label>
-                    <div class="ps-2" th:if="${session.userId != null}" th:text="| : '${session.userName}'|"></div>
+                    <label for=""><strong>Members</strong></label>
+                    <div class="ps-2" th:if="${session.userId != null}" th:text="| : ${session.userName}'${session.auth}'님|"></div>
                 </div>
                 <div class="list-group">
                     <a class="list-group-item d-flex align-items-center" th:href="${session.userId == null ? '/members/login' : '/members/logout'}">
                         <span class="material-symbols-outlined" th:text="${session.userId == null ? 'login' : 'logout'}">login</span>
                         <b th:text="${session.userId == null ? '로그인' : '로그아웃'}">로그인</b>
+                    </a>
+                </div>
+                <div class="list-group" th:if="${session.auth} == 'A' or ${session.auth} == 'M'">
+                    <a class="list-group-item d-flex align-items-center" href="/dworld/auth/memberscontrol">
+                        <span class="material-symbols-outlined">settings_accessibility</span>
+                        <b>Member관리</b>
                     </a>
                 </div>
             </div>

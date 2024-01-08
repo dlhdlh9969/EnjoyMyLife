@@ -14,7 +14,7 @@
 	<!-- 멤버 정보 조회-->
 	<select id="SelectMemberInfo" parameterType="String" resultType="com.dlhdlh.dto.MembersDto">
 		<![CDATA[ 
-			SELECT user_id, user_name 
+			SELECT user_id, user_name , authority 
 			FROM Members
 			WHERE user_id = #{userId};
 		]]>
@@ -40,10 +40,7 @@
 		]]>
 	</insert>
 	
-	
-	
-	
-	<!-- 로그인 체크 -->
+	<!-- Id 체크 -->
 	<select id="UserIdCheck" parameterType="com.dlhdlh.dto.MembersDto" resultType="int">
 		<![CDATA[ 
 			SELECT count(user_id) 
@@ -51,5 +48,25 @@
 			WHERE user_id = #{userId}
 		]]>
 	</select>
+	
+	<!-- 권한 체크 -->
+	<select id="ManagerCheck" resultType="com.dlhdlh.dto.MembersDto" parameterType="String">
+		<![CDATA[ 
+			SELECT user_id, authority 
+			FROM Members 
+			WHERE user_id = #{userId}
+		]]>
+	</select>
+	
+	<!-- 유저 목록 -->
+	<select id="UserList" resultType="com.dlhdlh.dto.MembersDto" parameterType="com.dlhdlh.dto.MembersDto">
+		<![CDATA[ 
+			SELECT *
+			FROM Members 
+			WHERE user_id like concat('%', #{userId}, '%') and user_name like concat('%', #{userName}, '%')
+		]]>
+	</select>
+	
+	
 
 </mapper>

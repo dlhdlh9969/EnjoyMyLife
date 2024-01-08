@@ -116,3 +116,7 @@ a {
 .table>:not(caption)>*>* {
   color: white;
 }
+
+tr > th {
+  color: rgb(224, 199, 253) !important;
+}

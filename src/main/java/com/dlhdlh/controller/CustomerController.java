@@ -32,9 +32,9 @@ public class CustomerController {
 		String requestId = (String) servletRequest.getSession().getAttribute("userId");
 		persetCustDto.setUserId(requestId);
 		
-		System.out.println("pageNum:"+pageNum);
-		System.out.println("selectRowNum:"+selectRowNum);
-		System.out.println("SearchCustNm:"+customerDto.getSearchCustNm());
+//		System.out.println("pageNum:"+pageNum);
+//		System.out.println("selectRowNum:"+selectRowNum);
+//		System.out.println("SearchCustNm:"+customerDto.getSearchCustNm());
 		
 		if(persetCustDto.getMaxrow() != 0) {
 			customerService.UpdatePersetCust(persetCustDto);
@@ -71,7 +71,7 @@ public class CustomerController {
 		mv.addObject("PersetCust", persetCust);
 		mv.addObject("CustList", custList);
 		mv.addObject("SearchCustNm", searchCustNm);
-		System.out.println("searchCustNm2:"+searchCustNm);
+//		System.out.println("searchCustNm2:"+searchCustNm);
 		mv.addObject("SelectCust", selectCustInfo);
 		
 		return mv;

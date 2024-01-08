@@ -3,25 +3,36 @@ package com.dlhdlh.interceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.dlhdlh.dto.MembersDto;
+import com.dlhdlh.service.MembersService;
+
 @Component
-public class LoginInterceptor implements HandlerInterceptor {
+public class AuthorityInterceptor implements HandlerInterceptor {
+
+	@Autowired
+	MembersService membersService; 
 	
 	@Override
 	public boolean preHandle(HttpServletRequest servletRequest, HttpServletResponse response, Object handler) throws Exception { 
 		String userId = (String) servletRequest.getSession().getAttribute("userId");
 		
-		// 로그인 여부 체크
-		if(userId == null) {
-			response.sendRedirect("/members/login");
-			return false;
+		// 관리자 여부 체크
+		MembersDto managerCheck = membersService.ManagerCheck(userId);
+		String auth = managerCheck.getAuthority();
+		
+		if(auth.equals("A")) {
+			return true;
+		}else if(auth.equals("M")){
+			return true;
 		}
 		
-		//return HandlerInterceptor.super.preHandle(request, response, handler);
-		return true;
+		response.sendRedirect("/error");
+		return false;
 	}
 
 	@Override

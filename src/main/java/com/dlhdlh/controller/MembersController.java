@@ -1,6 +1,7 @@
 package com.dlhdlh.controller;
 
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.dlhdlh.dto.MembersDto;
 import com.dlhdlh.service.MembersService;
@@ -47,6 +49,7 @@ public class MembersController {
 			HttpSession session = servletRequest.getSession();
 			session.setAttribute("userId", getMemberDto.getUserId());
 			session.setAttribute("userName", getMemberDto.getUserName());
+			session.setAttribute("auth", getMemberDto.getAuthority());
 			session.setMaxInactiveInterval(1800); //초 단위 10분 600초	
 			return map;
 		}
@@ -83,5 +86,26 @@ public class MembersController {
 			
 			return map;
 		}
-	}	
+	}
+	
+	@RequestMapping(value = "dworld/auth/memberscontrol")
+	public ModelAndView MembersControl(HttpServletRequest servletRequest
+			, MembersDto membersDto) throws Exception {
+		ModelAndView mv = new ModelAndView("Members/members");
+		
+		if(membersDto.getUserId() == null) {
+			membersDto.setUserId("");
+		}
+		if(membersDto.getUserName() == null) {
+			membersDto.setUserName("");
+		}
+		String getUserId = membersDto.getUserId();
+		String getUserName = membersDto.getUserName();
+		List<MembersDto> userList = membersService.UserList(membersDto);
+		
+		mv.addObject("GetUserId", getUserId);
+		mv.addObject("GetUserName", getUserName);
+		mv.addObject("UserList", userList);
+		return mv;
+	}
 }

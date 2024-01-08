@@ -1,5 +1,7 @@
 package com.dlhdlh.service;
 
+import java.util.List;
+
 import com.dlhdlh.dto.MembersDto;
 
 public interface MembersService {
@@ -14,5 +16,9 @@ public interface MembersService {
 	void InsertMember(MembersDto membersDto) throws Exception;
 
 	int UserIdCheck(MembersDto membersDto) throws Exception;
+
+	MembersDto ManagerCheck(String userId) throws Exception;
+
+	List<MembersDto> UserList(MembersDto membersDto) throws Exception;
 
 }

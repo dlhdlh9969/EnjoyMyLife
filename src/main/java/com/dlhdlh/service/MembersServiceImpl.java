@@ -1,5 +1,7 @@
 package com.dlhdlh.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +38,16 @@ public class MembersServiceImpl implements MembersService {
 	@Override
 	public int UserIdCheck(MembersDto membersDto) throws Exception {
 		return membersMapper.UserIdCheck(membersDto);
+	}
+
+	@Override
+	public MembersDto ManagerCheck(String userId) throws Exception {
+		return membersMapper.ManagerCheck(userId);
+	}
+
+	@Override
+	public List<MembersDto> UserList(MembersDto membersDto) throws Exception {
+		return membersMapper.UserList(membersDto);
 	}
 	
 }
