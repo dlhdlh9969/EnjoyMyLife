@@ -28,9 +28,9 @@ public class MembersController {
 	}
 	
 	// 회원가입 페이지
-	@RequestMapping("/members/join")
+	@RequestMapping("/members/signin")
 	public String SignInPage() {
-		return "Members/join";
+		return "Members/signin";
 	}
 	
 	// 로그인 submit 프로세스
@@ -57,8 +57,8 @@ public class MembersController {
 	
 	// 로그아웃
 	@RequestMapping(value="members/logout") 
-	public String logout(HttpServletRequest servletRequest)throws Exception{
-		HttpSession session = servletRequest.getSession();
+	public String logout(HttpServletRequest request)throws Exception{
+		HttpSession session = request.getSession();
 		session.invalidate();
 		return "redirect:/";
 	}

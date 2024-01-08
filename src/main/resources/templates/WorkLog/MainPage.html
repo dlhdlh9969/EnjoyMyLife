@@ -6,20 +6,19 @@
 
         <title>D-world/업무일지</title>
 
-        <!-- 부트스트랩 기본  -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-        <!-- 부트스트랩 아이콘 -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
-        <!-- jquery -->
+        
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <!-- 기본Css -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <link rel="stylesheet" href="/css/basic.css">
         <link rel="stylesheet" href="/css/WorkLog.css">
 
         <script>
             $(document).ready(function() {
+                $('[data-toggle="tooltip"]').tooltip({
+                    template: '<div class="tooltip custom-tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
+                });
 
                 $("#compl-yn").on("change", function(){
                     searchWorkLog();
@@ -52,52 +51,49 @@
 
     </head>
     <body>
-        <header th:include="header :: header"></header>
-        <div class="container px-1">
+        <div>
+            <header th:include="header :: header"></header>
+        </div>
+        <div class="container">
+            <div class="text-center">
+                <H1 class="webfont1">WorkLog List</H1>
+            </div>
             <!-- 검색 영역 -->
-            <div class="row px-2 justify-content-center">
-                <div class="text-center webfont1 dlh-headstyle3">
-                    <label><H1>WorkLog List</H1></label>
-                </div>
-                <div class="row g-2">
-                    <div class="col-6 order-1 col-md-2 order-md-1 col-lg-1 ms-lg-auto">
-                        <button type="button" class="col-12 btn btn-info" onclick="searchWorkLog()">Search</button>
+            <div class="row px-2 py-2">
+                <div class="col-12 row">
+                    <div class="col-12 col-lg-2 text-end p-1">
+                        <button type="button" class="col-12 col-lg btn btn-outline-primary" onclick="searchWorkLog()">Search</button>
                     </div>
-                    <div class="col-6 order-3 col-md-4 order-md-2 col-lg-3">
+                    <div class="col-12 col-lg-5 p-1">
                         <input type="text" class="form-control" id="searchCustNm" name="searchCustNm" placeholder="업체명 검색" th:value="${SearchCustNm}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}"/>
                     </div>
-                    <div class="col-6 order-4 col-md-4 order-md-3 col-lg-3">
+                    <div class="col-12 col-lg-5 p-1">
                         <input type="text" class="form-control" id="searchTitle" name="searchTitle" placeholder="제목 검색" th:value="${SearchTitle}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}"/>
                     </div>
-                    <div class="col-6 order-2 col-md-2 order-md-4 col-lg-1 me-lg-auto">
-                        <a href="/dworld/worklog/detail">
-                            <button type="button" id="btn-new" class="col-12 btn btn-primary">NEW</button>
-                        </a>
-                    </div>
                 </div>
-                <div class="row g-2">
-                    <div class="col-6 col-md-3 col-lg-2 ms-lg-auto">
+                <div class="col-12 row">
+                    <div class="col-6 col-lg p-1">
                         <select class="form-select" id="compl-yn" name="compl-yn">   
                             <option value="N" th:attr="selected=${ResponseComplYn == 'N'}? 'selected'">미완료</option>
                             <option value="Y" th:attr="selected=${ResponseComplYn == 'Y'}? 'selected'">완료</option>
                             <option value="A" th:attr="selected=${ResponseComplYn == 'A'}? 'selected'">완료여부 전체</option>
                         </select>
                     </div>
-                    <div class="col-6 order-6 col-md-3 col-lg-2">
-                        <select class="form-select" id="order1" name="order1">
+                    <div class="col-6 col-lg p-1">
+                        <select class="form-select" id="order1" name="order2">
                             <option value="idx" th:attr="selected=${order1 == 'idx'}? 'selected'">작성 순번</option>
                             <option value="cust_nm" th:attr="selected=${order1 == 'cust_nm'}? 'selected'">업체명</option>
                             <option value="receipt_dt" th:attr="selected=${order1 == 'receipt_dt'}? 'selected'">접수일</option>
                             <option value="due_dt" th:attr="selected=${order1 == 'due_dt'}? 'selected'">완료 예정일</option>
                         </select>
                     </div>
-                    <div class="col-6 order-7 col-md-3 col-lg-2">
+                    <div class="col-6 col-lg p-1">
                         <select class="form-select" id="order2" name="order2">
                             <option value="desc" th:attr="selected=${order2 == 'desc'}? 'selected'">내림차순</option>
                             <option value="asc" th:attr="selected=${order2 == 'asc'}? 'selected'">오름차순</option>
                         </select>
                     </div>
-                    <div class="col-6 order-8 col-md-3 col-lg-2 me-lg-auto">
+                    <div class="col-6 col-lg p-1">
                         <select class="form-select" id="maxrow" name="maxrow">
                             <option value="5" th:attr="selected=${PersetWorkLog.maxrow == 5} ? 'selected'">5줄씩 보기</option>
                             <option value="10" th:attr="selected=${PersetWorkLog.maxrow == 10} ? 'selected'">10줄씩 보기</option>
@@ -107,52 +103,49 @@
                             <option value="30" th:attr="selected=${PersetWorkLog.maxrow == 30} ? 'selected'">30줄씩 보기</option>
                         </select>
                     </div>
+                    <div class="col-12 col-lg-2 p-1">
+                        <a href="/dworld/worklog/detail"><button type="button" class="col-12 btn btn-outline-primary">NEW</button></a>
+                    </div>
                 </div>
             </div>
+
             <!-- 테이블 영역 -->
-            <div class="pt-2 pb-5">
-                <div style="overflow:auto;">
-                    <table class="table table-dark table-striped" style="min-width:800px;table-layout:fixed;">
-                        <colgroup>
-                            <col width="5%">
-                            <col width="20%">
-                            <col width="35%">
-                            <col width="10%">
-                            <col width="10%">
-                        </colgroup>
-                        <thead>
-                            <th>Num</th>
-                            <th>업체명</th>
-                            <th>제목</th>
-                            <th class="text-center">접수일</th>
-                            <th class="text-center">완료</th>
-                        </thead>
-                        <tbody>
-                            <tr th:each="list : ${WorkLogList.getList()}" class="text-wrap" th:onclick="|location.href='/dworld/worklog/detail?idx=${list.idx}'|" style="cursor:pointer;">
-                                <td class="text-truncate" th:text="${list.rowNum}"></td>
-                                <td class="text-truncate" th:text="${list.custNm}"></td>
-                                <td class="text-truncate" th:text='${list.title}'></td>
-                                <td class="text-center" th:text='${list.receiptDt}'></td>
-                                <td class="text-center" th:text='${list.complYn}'></td>
-                            </tr>
-                            <tr th:unless="${#lists.size(WorkLogList.getList())} > 0">
-                                <td colspan="6" class="text-center">내용이 없습니다.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <ul class="pagination justify-content-center pt-4">
-                    <li class="page-item" th:classappend="${WorkLogList.getPrePage() == 0} ? 'disabled'">
-                    <a class="page-link" th:href="@{/dworld/worklog(pageNum=${WorkLogList.getPrePage()}, title=${SearchTitle}, custNm=${SearchCustNm}, complYn=${ResponseComplYn}, order1=${order1}, order2=${order2})}">Prev</a>
-                    </li>
-                    <li class="page-item" th:each="page: ${#numbers.sequence(WorkLogList.getNavigateFirstPage(), WorkLogList.getNavigateLastPage())}" th:classappend="${page == WorkLogList.getPageNum()} ? 'active'">
-                    <a class="page-link" th:text="${page}" th:href="@{/dworld/worklog(pageNum=${page}, title=${SearchTitle}, custNm=${SearchCustNm}, complYn=${ResponseComplYn}, order1=${order1}, order2=${order2})}"></a>
-                    </li>
-                    <li class="page-item" th:classappend="${WorkLogList.getNextPage() == 0} ? 'disabled'">
-                    <a class="page-link"  th:href="@{/dworld/worklog(pageNum=${WorkLogList.getNextPage()}, title=${SearchTitle}, custNm=${SearchCustNm}, complYn=${ResponseComplYn}, order1=${order1}, order2=${order2})}">Next</a>
-                    </li>
-                </ul>
+            <div class="ps-2 pe-4">
+                <table class="table table-striped">
+                    <thead>
+                        <tr class="bg-dark text-light row">
+                            <th class="col-2 col-lg-1">Num</th>
+                            <th class="col-7 col-lg-3">업체명</th>
+                            <th class="text-center col-3 col-lg-2">접수일</th>
+                            <th class="col-9 col-lg-5">제목</th>
+                            <th class="text-center col-3 col-lg-1">완료</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="list : ${WorkLogList.getList()}" class="text-wrap row">
+                            <td class="col-2 col-lg-1 text-break"><a th:text='${list.rowNum}'></a></td>
+                            <td class="col-7 col-lg-3 text-break text-truncate"><a th:text='${list.custNm}'></a></td>
+                            <td class="text-center col-3 col-lg-2 text-break"><a th:text='${list.receiptDt}'></a></td>
+                            <td class="col-9 col-lg-5 text-break text-truncate"><a th:text='${list.title}' th:href="@{/dworld/worklog/detail(idx=${list.idx})}" data-toggle="tooltip" data-placement="bottom" th:attr="title=${list.content}"></a></td>
+                            <td class="text-center col-3 col-lg-1"><a th:text='${list.complYn}'></a></td>
+                        </tr>
+                        <tr th:unless="${#lists.size(WorkLogList.getList())} > 0">
+                            <td colspan="6" class="text-center">내용이 없습니다.</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${WorkLogList.getPrePage() == 0} ? 'disabled'">
+                <a class="page-link" th:href="@{/dworld/worklog(pageNum=${WorkLogList.getPrePage()}, title=${SearchTitle}, custNm=${SearchCustNm}, complYn=${ResponseComplYn}, order1=${order1}, order2=${order2})}">Prev</a>
+                </li>
+                <li class="page-item" th:each="page: ${#numbers.sequence(WorkLogList.getNavigateFirstPage(), WorkLogList.getNavigateLastPage())}" th:classappend="${page == WorkLogList.getPageNum()} ? 'active'">
+                <a class="page-link" th:text="${page}" th:href="@{/dworld/worklog(pageNum=${page}, title=${SearchTitle}, custNm=${SearchCustNm}, complYn=${ResponseComplYn}, order1=${order1}, order2=${order2})}"></a>
+                </li>
+                <li class="page-item" th:classappend="${WorkLogList.getNextPage() == 0} ? 'disabled'">
+                <a class="page-link"  th:href="@{/dworld/worklog(pageNum=${WorkLogList.getNextPage()}, title=${SearchTitle}, custNm=${SearchCustNm}, complYn=${ResponseComplYn}, order1=${order1}, order2=${order2})}">Next</a>
+                </li>
+            </ul>
         </div>
     </body>
 </html>
