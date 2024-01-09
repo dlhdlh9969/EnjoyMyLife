@@ -5,11 +5,26 @@
 	<!-- 업무일지 리스트-->
 	<select id="GetWorkLogList" parameterType="com.dlhdlh.dto.WorkLogDto" resultType="com.dlhdlh.dto.WorkLogDto">
 		<![CDATA[ 
-			SELECT row_number() OVER (ORDER BY ${order1} ${order3}) as row_num, w.idx, w.title, w.content, w.insert_dt, w.insert_user, w.cust_cd, c.cust_nm, DATE_FORMAT(w.receipt_dt, '%Y-%m-%d') as receipt_dt, DATE_FORMAT(w.due_dt, '%Y-%m-%d') as due_dt, DATE_FORMAT(w.compl_dt, '%Y-%m-%d') as compl_dt , compl_yn 
+			SELECT if(#{order2} = 'desc', row_number() OVER (ORDER BY ${order1} asc), row_number() OVER (ORDER BY ${order1} desc)) as row_num
+				, w.idx
+				, w.title
+				, w.content
+				, w.insert_dt
+				, w.insert_user
+				, w.cust_cd
+				, c.cust_nm
+				, DATE_FORMAT(w.receipt_dt, '%Y-%m-%d') as receipt_dt
+				, DATE_FORMAT(w.due_dt, '%Y-%m-%d') as due_dt
+				, DATE_FORMAT(w.compl_dt, '%Y-%m-%d') as compl_dt 
+				, compl_yn 
 			FROM WorkLog w 
 			LEFT OUTER JOIN Customer c 
 			ON w.cust_cd = c.cust_cd 
-			WHERE w.deleted_yn = 'N' AND w.insert_user = #{userId} AND w.compl_yn like concat('%', #{complYn}, '%') AND title like concat('%', #{title}, '%') AND isnull(cust_nm) like  concat('%', #{custNm}, '%')
+			WHERE w.deleted_yn = 'N' 
+				AND w.insert_user = #{userId} 
+				AND w.compl_yn like concat('%', #{complYn}, '%') 
+				AND title like concat('%', #{title}, '%') 
+				AND isnull(cust_nm) like  concat('%', #{custNm}, '%')
 			ORDER BY ${order1} ${order2}
 		]]>
 	</select>
@@ -17,9 +32,12 @@
 	<!-- 업체 선택을 위한 모달에 들어가는 데이터-->
 	<select id="GetCustList" parameterType="String" resultType="com.dlhdlh.dto.WorkLogDto">
 		<![CDATA[ 
-			SELECT row_number() OVER (ORDER BY cust_nm) as row_num,cust_cd, cust_nm
+			SELECT row_number() OVER (ORDER BY cust_nm) as row_num
+				,cust_cd
+				, cust_nm
 			FROM Customer
-			WHERE cust_nm like concat('%', #{searchCustNm}, '%') AND deleted_yn ='N'
+			WHERE cust_nm like concat('%', #{searchCustNm}, '%') 
+				AND deleted_yn ='N'
 			ORDER BY cust_nm desc
 		]]>
 	</select>
@@ -27,19 +45,46 @@
 	<!-- 업무일지 등록 -->
 	<insert id="InsertWorkLog" parameterType="com.dlhdlh.dto.WorkLogDto">
 		<![CDATA[ 
-			INSERT INTO WorkLog (title, content, insert_dt, insert_user, cust_cd, receipt_dt, due_dt, compl_dt, compl_yn) 
-			VALUES(#{title}, #{content}, now(), #{userId}, #{custCd}, #{receiptDt}, #{dueDt}, #{complDt}, #{complYn}) 
+			INSERT INTO WorkLog 
+				(title
+				, content
+				, insert_dt
+				, insert_user
+				, cust_cd
+				, receipt_dt
+				, due_dt
+				, compl_dt
+				, compl_yn) 
+			VALUES(#{title}
+				, #{content}
+				, now()
+				, #{userId}
+				, #{custCd}
+				, #{receiptDt}
+				, #{dueDt}
+				, #{complDt}
+				, #{complYn}) 
 		]]>
 	</insert>
 	
 	<!-- 업무일지 디테일-->
 	<select id="GetWorkLogDetail" parameterType="com.dlhdlh.dto.WorkLogDto" resultType="com.dlhdlh.dto.WorkLogDto">
 		<![CDATA[ 
-			SELECT w.idx, w.title, w.content, w.insert_dt, w.insert_user, w.cust_cd, c.cust_nm, w.receipt_dt, due_dt, compl_dt  
+			SELECT w.idx
+				, w.title
+				, w.content
+				, w.insert_dt
+				, w.insert_user
+				, w.cust_cd
+				, c.cust_nm
+				, w.receipt_dt
+				, due_dt
+				, compl_dt  
 			FROM WorkLog w 
-			LEFT OUTER JOIN Customer c 
-			ON w.cust_cd = c.cust_cd 
-			WHERE w.idx = ${idx} AND w.insert_user = #{userId}
+				LEFT OUTER JOIN Customer c 
+				ON w.cust_cd = c.cust_cd 
+			WHERE w.idx = ${idx} 
+				AND w.insert_user = #{userId}
 		]]>
 	</select>
 	
@@ -47,7 +92,9 @@
 	<update id="DeleteWorkLog" parameterType="com.dlhdlh.dto.WorkLogDto" >
 		<![CDATA[ 
 			UPDATE WorkLog
-			SET deleted_yn = "Y", delete_dt = now(), delete_user = #{userId}
+			SET deleted_yn = "Y"
+				, delete_dt = now()
+				, delete_user = #{userId}
 			WHERE idx = ${idx}
 		]]>
 	</update>
@@ -57,8 +104,15 @@
 	<update id="UpdateWorkLog" parameterType="com.dlhdlh.dto.WorkLogDto">
 		<![CDATA[
 			UPDATE WorkLog
-			SET update_dt = now(), update_user = #{userId}, cust_cd = #{custCd}, 
-				receipt_dt = #{receiptDt} , due_dt = #{dueDt}, compl_dt = #{complDt}, compl_yn = #{complYn}, title= #{title}, content = #{content}   
+			SET update_dt = now()
+				, update_user = #{userId}
+				, cust_cd = #{custCd}
+				, receipt_dt = #{receiptDt} 
+				, due_dt = #{dueDt}
+				, compl_dt = #{complDt}
+				, compl_yn = #{complYn}
+				, title= #{title}
+				, content = #{content}   
 			WHERE idx = ${idx}
 		]]>
 	</update>
@@ -73,12 +127,20 @@
 	</select>
 	
 	<!-- GetPersetWorkLog 수정-->
-	<update id="UpdatePersetWorkLog" parameterType="com.dlhdlh.dto.PersetWorkLogDto">
+	<update id="UpdatePersetWorkLog" parameterType="com.dlhdlh.dto.WorkLogDto">
 		<![CDATA[
 			UPDATE PersetWorkLog
 			SET maxrow = #{maxrow}
 			WHERE user_id = #{userId}
 		]]>
 	</update>
+	
+	<!-- 신규 회원 로우 생성-->
+	<insert id="SetNewMember" parameterType="com.dlhdlh.dto.WorkLogDto">
+		<![CDATA[ 
+			INSERT INTO PersetWorkLog (user_id)
+			VALUES ( #{userId});
+		]]>
+	</insert>
 	
 </mapper >

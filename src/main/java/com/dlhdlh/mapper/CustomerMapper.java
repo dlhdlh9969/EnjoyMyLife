@@ -20,4 +20,6 @@ public interface CustomerMapper {
 	PersetCustDto GetPersetCust(String userId) throws Exception;
 
 	void UpdatePersetCust(PersetCustDto persetCustDto) throws Exception;
+	
+	public void SetNewMember(String requestId) throws Exception;
 }

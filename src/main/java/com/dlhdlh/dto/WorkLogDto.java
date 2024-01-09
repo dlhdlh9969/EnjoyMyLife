@@ -23,7 +23,6 @@ public class WorkLogDto {
 	String complYn;
 	String order1;
 	String order2;
-	String order3;
 	int rowNum;
 	int idx;
 

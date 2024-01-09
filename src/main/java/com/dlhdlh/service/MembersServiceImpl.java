@@ -13,31 +13,17 @@ public class MembersServiceImpl implements MembersService {
 
 	@Autowired
 	MembersMapper membersMapper;
-	
-	//로그인 체크
-	@Override
-	public int LoginCheck(MembersDto membersDto) throws Exception {
-		return membersMapper.LoginCheck(membersDto);
-	}
 
 	//접속자 정보
 	@Override
-	public MembersDto SelectMemberDto(String userId) throws Exception {
-		return membersMapper.SelectMemberInfo(userId);
+	public MembersDto LoginMemberInfo(MembersDto membersDto) throws Exception {
+		return membersMapper.LoginMemberInfo(membersDto);
 	}
 	
 	//회원가입
 	@Override
 	public void InsertMember(MembersDto membersDto) throws Exception {
 		membersMapper.InsertMember(membersDto);
-		membersMapper.InsertPersetCust(membersDto);
-		membersMapper.InsertPersetWorkLog(membersDto);
-	}
-
-	//회원가입 ID 체크
-	@Override
-	public int UserIdCheck(MembersDto membersDto) throws Exception {
-		return membersMapper.UserIdCheck(membersDto);
 	}
 
 	@Override
@@ -48,6 +34,15 @@ public class MembersServiceImpl implements MembersService {
 	@Override
 	public List<MembersDto> UserList(MembersDto membersDto) throws Exception {
 		return membersMapper.UserList(membersDto);
+	}
+
+	@Override
+	public void UpdateMembers(MembersDto membersDto) throws Exception {
+		if(membersDto.getUserPw() == "") {
+			membersMapper.UpdateMembers(membersDto); //Pw 제외 업데이트
+		}else {
+			membersMapper.UpdateMembersWithPw(membersDto); //Pw 포함 업데이트			
+		}
 	}
 	
 }

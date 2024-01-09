@@ -38,34 +38,38 @@
                     var valcustAddr = $("#input-custAddr").val();
                     var valcustEmail = $("#input-custEmail").val();
                     var valcustRemark = $("#input-custRemark").val();
-                    var datas = {custCd: valcustCd
-                        , custNm: valcustNm
-                        , custBusnum: valcustBusnum
-                        , custNum: valcustNum
-                        , custCeonm: valcustCeonm
-                        , custCeonum: valcustCeonum
-                        , custAddr: valcustAddr
-                        , custEmail: valcustEmail
-                        , custRemark: valcustRemark
+                    var datas = { custCd: valcustCd
+                                , custNm: valcustNm
+                                , custBusnum: valcustBusnum
+                                , custNum: valcustNum
+                                , custCeonm: valcustCeonm
+                                , custCeonum: valcustCeonum
+                                , custAddr: valcustAddr
+                                , custEmail: valcustEmail
+                                , custRemark: valcustRemark
                     };
 
-                    if(!valcustNm.trim()){
-				        alert("업체명이 비어선 안됩니다.");
-			        }else if(confirm("수정한 내용을 저장하시겠습니까?")){
+                    if(confirm("수정한 내용을 저장하시겠습니까?")){
                         $.ajax({
                             url: "/dworld/customer/control",
                             type: "put",
                             data: datas,
                             success: function(data) {
-                                alert("수정 되었습니다.");
-                                location.reload();
-                            },
-                            error: function() {
+                                if(data == "titleEmpty"){
+                                    alert("업체명이 비어선 안됩니다.");
+                                }else{
+                                    if(data == "OK"){
+                                        alert("수정 되었습니다.");
+                                        location.reload();
+                                    }else{
+                                        alert("접근이 잘못되었습니다.");
+                                    }
+                                }
+                            }, error: function() {
                                 alert("ajax 통신 오류 발생");
                             }
                         });
                     }
-                    
                 });
 
                 // 수정 버튼
@@ -87,35 +91,6 @@
                     document.getElementById("input-custEmail").readOnly = false;
                     document.getElementById("input-custRemark").readOnly = false;
                 });
-            
-                // $("#btn-editOK").on("click", function(){
-                //     var custCd = $("#input-custCd").val();
-                //     var custNm = $("#input-custNm").val();
-                //     var custBusnum = $("#input-custBusnum").val();
-                //     var custNum = $("#input-custNum").val();
-                //     var custCeonm = $("#input-custCeonm").val();
-                //     var custCeonum = $("#input-custCeonum").val();
-                //     var custAddr = $("#input-custAddr").val();
-                //     var custEmail = $("#input-custEmail").val();
-                //     var custRemark = $("#input-custRemark").val();
-
-                //     if(!custNm){
-                //         alert("회사명을 입력해주세요.");
-                //     }else{
-                //         var frm = $("#input-form")[0];
-                //         frm.action = "/customer/update/";
-                //         frm.submit();
-                //     }
-                // });
-            
-                // $("#btn-delete").on("click", function(){
-                //     if(confirm("삭제 하시겠습니까?"))
-                //     {
-                //         var frm = $("#input-form")[0];
-                //         frm.action = "/board/delete";
-                //         frm.submit();
-                //     }
-                // });
                 
                 // 삭제 버튼
                 $("#btn-delete").on("click", function() {
@@ -128,10 +103,13 @@
                             type: "delete",
                             data: datas,
                             success: function(data) {
-                                alert("삭제 되었습니다.");
-                                location.href="/dworld/customer";
-                            },
-                            error: function() {
+                                if(data == "OK"){
+                                    alert("삭제 되었습니다.");
+                                    location.href="/dworld/customer";
+                                }else{
+                                    alert("접근이 잘못되었습니다.");
+                                }
+                            }, error: function() {
                                 alert("ajax 통신 오류 발생");
                             }
                         });
@@ -178,25 +156,34 @@
                     var valcustAddr = $("#input-custAddr").val();
                     var valcustEmail = $("#input-custEmail").val();
                     var valcustRemark = $("#input-custRemark").val();
-                    var datas = {custNm: valcustNm, custBusnum: valcustBusnum, custNum: valcustNum, custCeonm: valcustCeonm, custCeonum: valcustCeonum
-                        , custAddr: valcustAddr, custEmail: valcustEmail, custRemark: valcustRemark};
+                    var datas = { custNm: valcustNm
+                                , custBusnum: valcustBusnum
+                                , custNum: valcustNum
+                                , custCeonm: valcustCeonm
+                                , custCeonum: valcustCeonum
+                                , custAddr: valcustAddr
+                                , custEmail: valcustEmail
+                                , custRemark: valcustRemark };
 
-                    if(!valcustNm.trim()){
-				        alert("업체명이 비어선 안됩니다.");
-			        }else{
-                        $.ajax({
-                            url: "/dworld/customer/control",
-                            type: "post",
-                            data: datas,
-                            success: function(data) {
-                                alert("등록 되었습니다.");
-                                location.href="/dworld/customer";
-                            },
-                            error: function() {
-                                alert("ajax 통신 오류 발생");
+                    $.ajax({
+                        url: "/dworld/customer/control",
+                        type: "post",
+                        data: datas,
+                        success: function(data) {
+                            if(data = "titleEmpty"){
+                                alert("업체명이 비어선 안됩니다.");
+                            } else{
+                                if(data == "OK"){
+                                    alert("등록 되었습니다.");
+                                    location.href="/dworld/customer";
+                                }else{
+                                    alert("접근이 잘못되었습니다.");
+                                } 
                             }
-                        });
-                    }
+                        }, error: function() {
+                            alert("ajax 통신 오류 발생");
+                        }
+                    });
                 });
 
                 //maxrow 5줄씩 보기 컨트롤
@@ -209,7 +196,8 @@
             function searchCust(){
                 var searchCustNm = document.getElementById('searchCustNm').value;
                 var maxrow = $("#maxrow").val();
-                window.location.href = "/dworld/customer?SearchCustNm=" + encodeURIComponent(searchCustNm) + "&maxrow=" + encodeURIComponent(maxrow);
+                window.location.href= "/dworld/customer?SearchCustNm=" + encodeURIComponent(searchCustNm) 
+                                    + "&maxrow=" + encodeURIComponent(maxrow);
             };
         </script>
     </head>
@@ -217,7 +205,6 @@
         <div>
             <header th:include="header :: header"></header>
         </div>
-
         <div class="container">
             <form id="input-form">
                 <!-- 마스터 -->
@@ -241,7 +228,6 @@
                             </select>
                         </div>
                     </div>
-                    
                     <div style="overflow: auto;">
                         <table class="table table-dark table-striped" style="min-width:1000px; table-layout:fixed;">
                             <colgroup>
@@ -270,7 +256,7 @@
                                 <tr th:each="list : ${CustList.getList()}" class="text-wrap">
                                     <td th:text='${list.rowNum}'></td>
                                     <!-- <td th:text='${list.custNm}' class="text-truncate"></td> -->
-                                    <td><a th:href="@{/dworld/customer(pageNum=${CustList.PageNum}, selectRowNum=${list.rowNum},searchCustNm=${SearchCustNm})}" th:text='${list.custNm}'></a></td>
+                                    <td class="text-truncate"><a th:href="@{/dworld/customer(pageNum=${CustList.PageNum}, selectRowNum=${list.rowNum},searchCustNm=${SearchCustNm})}" th:text='${list.custNm}'></a></td>
                                     <td th:text='${list.custBusnum}'></td>
                                     <td th:text='${list.custNum}'></td>
                                     <td th:text='${list.custCeonm}'></td>
@@ -296,7 +282,6 @@
                         </li>
                     </ul>
                 </div>
-
                 <!-- 디테일 -->
                 <hr>
                 <div class="row gy-2">

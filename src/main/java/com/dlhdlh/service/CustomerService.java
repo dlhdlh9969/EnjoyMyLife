@@ -17,4 +17,6 @@ public interface CustomerService {
 	PersetCustDto GetPersetCust(String userId) throws Exception;
 
 	void UpdatePersetCust(PersetCustDto persetCustDto)throws Exception;
+
+	void SetNewMember(String requestId) throws Exception;
 }

@@ -29,7 +29,10 @@ dependencies {
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	implementation 'com.github.pagehelper:pagehelper-spring-boot-starter:1.4.1' //PageHelper
+	//PageHelper
+	implementation 'com.github.pagehelper:pagehelper-spring-boot-starter:1.4.1'
+	// SHA-256 암호화를 위해 추가함 
+	implementation group: 'commons-codec', name: 'commons-codec', version: '1.15' 
 }
 
 tasks.named('test') {

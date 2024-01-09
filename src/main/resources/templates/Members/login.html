@@ -9,8 +9,6 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-        <!-- 부트스트랩 아이콘 -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
         <!-- jquery -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <!-- 기본Css -->
@@ -18,41 +16,10 @@
 
         <script>
             $(document).ready(function(){
-                $("#btn-cancel").on("click", function(){
-                    history.back();
-                })
 
-
-                $("#btn-submit").on("click", function() {
-                    loginEvent();
-                });
-
-                // 로그인 버튼 hover
-                $("#btn-submit").hover(function(){
-                    $("#btn-submit").text("Login");
-                }, function(){
-                    $("#btn-submit").text("로그인");
-                });
-                // 뒤로 버튼 hover
-                $("#btn-cancel").hover(function(){
-                    $("#btn-cancel").text("Back");
-                }, function(){
-                    $("#btn-cancel").text("뒤로");
-                });
-
-                // 가입 버튼 hover
-                $("#btn-join").hover(function(){
-                    $("#btn-join").text("Join");
-                }, function(){
-                    $("#btn-join").text("가입");
-                });
-
-                $("#btn-submit").on("click", function() {
-                    loginEvent();
-                });
             });
 
-            function loginEvent(){
+            function LoginAjax(){
                 var userId = $("#userId").val();
                 var userPw = $("#userPw").val();
                 var datas = {userId: userId, userPw: userPw};
@@ -62,14 +29,12 @@
                     type: "post",
                     data: datas,
                     success: function(data) {
-                        if(data.resultCnt > 0)
-                        {
+                        if(data == "OK"){
                             location.href="/";  //인덱스로 이동
                         }else{
                             alert("ID와 비밀번호를 다시 확인해주세요.");
                         }
-                    },
-                    error: function() {
+                    }, error: function() {
                         alert("ajax 통신 오류 발생");
                     }
                 });
@@ -85,17 +50,17 @@
                     <label for=""><h2 class="dlh-headfont1 ">Login Page</h2></label>
                 </div>
                 <div class="form-floating clean">
-                    <input type="text" id="userId" name="userId" class="form-control">
+                    <input type="text" id="userId" name="userId" class="form-control" onkeyup="if(window.event.keyCode==13){LoginAjax()}">
                     <label>ID</label>
                 </div>
                 <div class="form-floating">
-                    <input type="password" id="userPw" name="userPw" class="form-control" onkeyup="if(window.event.keyCode==13){loginEvent()}">
+                    <input type="password" id="userPw" name="userPw" class="form-control" onkeyup="if(window.event.keyCode==13){LoginAjax()}">
                     <label>Password</label>
                 </div>
                 <div class="d-flex gap-2">
                     <a href="join" class="col-auto me-auto btn btn-warning text-dark" id="btn-join">가입</a>
-                    <button class="col-auto btn btn-primary" type="button" id="btn-submit">로그인</button>
-                    <button class="col-auto btn btn-success" type="button" id="btn-cancel">뒤로</button>
+                    <button class="col-auto btn btn-primary" type="button" id="btn-submit" onclick="LoginAjax()">로그인</button>
+                    <button class="col-auto btn btn-success" type="button" id="btn-cancel" onclick="history.back()">뒤로</button>
                 </div>
             </form>
         </div>

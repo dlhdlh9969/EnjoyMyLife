@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dlhdlh.mapper.CustomerMapper">
 	<!-- 업체 리스트 --> 
-	<select id="GetCustList" resultType="com.dlhdlh.dto.CustomerDto">
+	<select id="GetCustList" parameterType="com.dlhdlh.dto.WorkLogDto" resultType="com.dlhdlh.dto.CustomerDto">
 		<![CDATA[ 
 			SELECT row_number() OVER (ORDER BY cust_cd) as row_num, cust_cd, cust_nm, cust_busnum, cust_num, cust_addr, cust_email, cust_ceonm, cust_ceonum, cust_remark
 			FROM Customer
@@ -11,7 +11,7 @@
 		]]>
 	</select>
 	
-	<update id="CustomerUpdate" parameterType="com.dlhdlh.dto.CustomerDto">
+	<update id="CustomerUpdate" parameterType="com.dlhdlh.dto.WorkLogDto">
 		<![CDATA[ 
 			UPDATE Customer
 			SET cust_nm = #{custNm} 
@@ -28,7 +28,7 @@
 		]]>
 	</update>
 	
-	<delete id="CustomerDelete" parameterType="com.dlhdlh.dto.CustomerDto">
+	<update id="CustomerDelete" parameterType="com.dlhdlh.dto.WorkLogDto">
 		<![CDATA[ 
 			UPDATE Customer 
 			SET deleted_yn = "Y" 
@@ -36,9 +36,9 @@
 				,delete_user = #{deleteUser}
 			WHERE cust_cd = #{custCd}
 		]]>
-	</delete>
+	</update>
 	
-	<insert id="CustomerInsert" parameterType="com.dlhdlh.dto.CustomerDto">
+	<insert id="CustomerInsert" parameterType="com.dlhdlh.dto.WorkLogDto">
 		<![CDATA[ 
 			INSERT INTO Customer(cust_nm,cust_busnum,cust_num,cust_ceonm,cust_ceonum,cust_addr,cust_email,cust_remark,insert_user, insert_dt) 
 			VALUES (#{custNm},#{custBusnum},#{custNum},#{custCeonm},#{custCeonum},#{custAddr},#{custEmail},#{custRemark},#{insertUser},now())
@@ -55,12 +55,20 @@
 	</select>
 	
 	<!-- GetPersetCust 수정-->
-	<update id="UpdatePersetCust" parameterType="com.dlhdlh.dto.PersetCustDto">
+	<update id="UpdatePersetCust" parameterType="com.dlhdlh.dto.WorkLogDto">
 		<![CDATA[
 			UPDATE PersetCust
 			SET maxrow = #{maxrow}
 			WHERE user_id = #{userId}
 		]]>
 	</update>
+	
+	<!-- 신규 회원 로우 생성-->
+	<insert id="SetNewMember" parameterType="com.dlhdlh.dto.WorkLogDto">
+		<![CDATA[ 
+			INSERT INTO PersetCust (user_id)
+			VALUES ( #{userId});
+		]]>
+	</insert>
 </mapper>
 

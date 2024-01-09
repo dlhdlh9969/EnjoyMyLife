@@ -24,6 +24,7 @@ public class WorkLogController {
 	@Autowired
 	WorkLogService worklogService;
 
+	//업무일지 리스트
 	@RequestMapping(value="/dworld/worklog")
 	public ModelAndView WorkLogList(@RequestParam(required=false, defaultValue = "1") int pageNum
 			, HttpServletRequest servletRequest
@@ -38,6 +39,10 @@ public class WorkLogController {
 		}
 		
 		PersetWorkLogDto persetWorkLog = worklogService.GetPersetWorkLog(requestId);
+		if(persetWorkLog == null) {
+			worklogService.SetNewMember(requestId);
+			persetWorkLog = worklogService.GetPersetWorkLog(requestId);
+		}
 		mv.addObject("PersetWorkLog", persetWorkLog);
 		
 		int maxPaging = 10;//페이징 최대 갯수
@@ -49,37 +54,49 @@ public class WorkLogController {
 		if(worklogDto.getComplYn() == null) {
 			worklogDto.setComplYn("");
 			mv.addObject("ResponseComplYn","A");
-		}else if(worklogDto.getComplYn().equals("A")) {
-			worklogDto.setComplYn("");
-			mv.addObject("ResponseComplYn","A");
-		}else if(worklogDto.getComplYn().equals("Y")) {
-			mv.addObject("ResponseComplYn","Y");
-		}else if(worklogDto.getComplYn().equals("N")) {
-			mv.addObject("ResponseComplYn","N");
+		}else {
+			if(worklogDto.getComplYn().equals("Y")) {
+				mv.addObject("ResponseComplYn","Y");
+			}else {
+				if(worklogDto.getComplYn().equals("N")) {
+					mv.addObject("ResponseComplYn","N");
+				}else {
+					worklogDto.setComplYn("");
+					mv.addObject("ResponseComplYn","A");
+				}
+			}
 		}
 		
 		//order by 컬럼명 컨트롤
 		if(worklogDto.getOrder1() == null) {
 			worklogDto.setOrder1("idx");
 			mv.addObject("order1","idx");
-		}else if(worklogDto.getOrder1().equals("idx")) {
-			mv.addObject("order1","idx");
-		}else if(worklogDto.getOrder1().equals("cust_nm")) {
-			mv.addObject("order1","cust_nm");
-		}else if(worklogDto.getOrder1().equals("receipt_dt")) {
-			mv.addObject("order1","receipt_dt");
-		}else if(worklogDto.getOrder1().equals("due_dt")) {
-			mv.addObject("order1","due_dt");
+		}else {
+			if(worklogDto.getOrder1().equals("cust_nm")) {
+				mv.addObject("order1","cust_nm");
+			}else {
+				if(worklogDto.getOrder1().equals("receipt_dt")) {
+					mv.addObject("order1","receipt_dt");
+				}else {
+					if(worklogDto.getOrder1().equals("due_dt")) {
+						mv.addObject("order1","due_dt");
+					}else {
+						mv.addObject("order1","idx");
+					}
+				}
+			}
 		}
 		
 		// 내림, 오름차순 컨트롤
 		if(worklogDto.getOrder2() == null) {
 			worklogDto.setOrder2("desc");
 			mv.addObject("order2","desc");
-		}else if(worklogDto.getOrder2().equals("desc")) {
-			mv.addObject("order2","desc");
-		}else if(worklogDto.getOrder2().equals("asc")) {
-			mv.addObject("order2","asc");
+		}else {
+			if(worklogDto.getOrder2().equals("asc")) {
+				mv.addObject("order2","asc");
+			}else {
+				mv.addObject("order2","desc");
+			}
 		}
 		
 		//업체명 검색 컨트롤
@@ -98,19 +115,9 @@ public class WorkLogController {
 			mv.addObject("SearchTitle", worklogDto.getTitle());
 		}
 		
-		//order3 컨트롤
-		if(worklogDto.getOrder2().equals("desc")) {
-			worklogDto.setOrder3("asc");
-		}else {
-			worklogDto.setOrder3("desc");
-		}
-		
 		PageInfo<WorkLogDto> workLogList = new PageInfo<>(worklogService.GetWorkLogList(pageNum, maxRow, worklogDto), maxPaging);
 		mv.addObject("WorkLogList", workLogList);
-		
-		return mv;
-		
-		
+		return mv;		
 	}
 	
 	//디테일 페이지 컨트롤
@@ -127,8 +134,7 @@ public class WorkLogController {
 		}else {
 			mv.addObject("MODE", "detail");	
 		}
-		
-			return mv;
+		return mv;
 	}
 	
 	// 업체검색 모달 컨트롤
@@ -141,7 +147,7 @@ public class WorkLogController {
 	//업무일지 등록
 	@ResponseBody
 	@RequestMapping(value="/dworld/worklog/control", method = RequestMethod.POST)
-	public void InsertWorkLog(HttpServletRequest servletRequest, WorkLogDto worklogDto) throws Exception {
+	public String InsertWorkLog(HttpServletRequest servletRequest, WorkLogDto worklogDto) throws Exception {
 
 		String requestId = (String) servletRequest.getSession().getAttribute("userId");
 		worklogDto.setUserId(requestId);
@@ -159,18 +165,28 @@ public class WorkLogController {
 		if(getComplDt.equals("")) {
 			worklogDto.setComplDt(null);
 		}
-		
-		worklogService.InsertWorkLog(worklogDto);
+		try {
+			worklogService.InsertWorkLog(worklogDto);
+			return "OK";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "notOK";
+		}
 	}
 	
 	//업무일지 삭제
 	@RequestMapping(value = "/dworld/worklog/control", method = RequestMethod.DELETE)
-	public void DeleteWorkLog(HttpServletRequest servletRequest, WorkLogDto worklogDto) throws Exception {
+	public String DeleteWorkLog(HttpServletRequest servletRequest, WorkLogDto worklogDto) throws Exception {
 
 		String requestId = (String) servletRequest.getSession().getAttribute("userId");
 		worklogDto.setUserId(requestId);
-		
-		worklogService.DeleteWorkLog(worklogDto.getIdx());
+		try {
+			worklogService.DeleteWorkLog(worklogDto);
+			return "OK";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "notOK";
+		}
 	}
 	
 	//업무일지 수정
@@ -178,34 +194,24 @@ public class WorkLogController {
 	public String UpdateWorkLog(HttpServletRequest servletRequest, WorkLogDto worklogDto) throws Exception {
 		
 		String requestId = (String) servletRequest.getSession().getAttribute("userId");
-		
 		worklogDto.setUserId(requestId);
-		String getReceiptDt = worklogDto.getReceiptDt();
-		String getDueDt = worklogDto.getDueDt();
-		String getComplDt = worklogDto.getComplDt();
-		
-		if(getReceiptDt.equals("")) {
+
+		if(worklogDto.getReceiptDt().equals("")) {
 			worklogDto.setReceiptDt(null);
 		}
-		if(getDueDt.equals("")) {
+		if(worklogDto.getDueDt().equals("")) {
 			worklogDto.setDueDt(null);
 		} 
-		if(getComplDt.equals("")) {
+		if(worklogDto.getComplDt().equals("")) {
 			worklogDto.setComplDt(null);
-		}
-		
+		}		
 
-		String idCheck = "N";
 		try {
 			worklogService.UpdateWorkLog(worklogDto);
-			idCheck = "Y";
+			return "OK";
 		} catch (Exception e) {
-			return "redirect:/error";
+			e.printStackTrace();
+			return "notOK";
 		}
-		
-		return idCheck;
-		
 	}
-
-
 }

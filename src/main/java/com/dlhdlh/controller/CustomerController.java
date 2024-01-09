@@ -31,16 +31,15 @@ public class CustomerController {
 		ModelAndView mv = new ModelAndView("Customer/MainPage");		
 		String requestId = (String) servletRequest.getSession().getAttribute("userId");
 		persetCustDto.setUserId(requestId);
-		
-//		System.out.println("pageNum:"+pageNum);
-//		System.out.println("selectRowNum:"+selectRowNum);
-//		System.out.println("SearchCustNm:"+customerDto.getSearchCustNm());
-		
+
 		if(persetCustDto.getMaxrow() != 0) {
 			customerService.UpdatePersetCust(persetCustDto);
 		}
 		PersetCustDto persetCust = customerService.GetPersetCust(requestId);
-		
+		if(persetCust == null) {
+			customerService.SetNewMember(requestId);
+			persetCust = customerService.GetPersetCust(requestId);
+		}
 		int maxPaging = 10;//페이징 최대 갯수
 		int maxRow = persetCust.getMaxrow(); //페이지당 최대 로우 갯수
 		
@@ -71,7 +70,6 @@ public class CustomerController {
 		mv.addObject("PersetCust", persetCust);
 		mv.addObject("CustList", custList);
 		mv.addObject("SearchCustNm", searchCustNm);
-//		System.out.println("searchCustNm2:"+searchCustNm);
 		mv.addObject("SelectCust", selectCustInfo);
 		
 		return mv;
@@ -80,28 +78,59 @@ public class CustomerController {
 	//업체 관리 수정
 	@ResponseBody
 	@RequestMapping(value="/dworld/customer/control", method = RequestMethod.PUT)
-	void CustomerUpdate(CustomerDto customerDto, HttpServletRequest servletRequest) throws Exception {
-		String requestId = (String) servletRequest.getSession().getAttribute("userId");
-		customerDto.setUpdateUser(requestId);
-		customerService.CustomerUpdate(customerDto);
+	public String CustomerUpdate(CustomerDto customerDto, HttpServletRequest servletRequest) throws Exception {
+		String getCustNm = customerDto.getCustNm().trim();
+		customerDto.setCustNm(getCustNm);
+		if(getCustNm != "") {
+			try {
+				String requestId = (String) servletRequest.getSession().getAttribute("userId");
+				customerDto.setUpdateUser(requestId);
+				customerService.CustomerUpdate(customerDto);
+				return "OK";
+			} catch (Exception e) {
+				e.printStackTrace();
+				return "notOK";
+			}
+		}else {
+			return "titleEmpty";
+		}	
 	}
 	
 	//업체 관리 삭제
 	@ResponseBody
 	@RequestMapping(value="/dworld/customer/control", method = RequestMethod.DELETE)
-	void CustomerDelete(CustomerDto customerDto, HttpServletRequest servletRequest) throws Exception{
-		String requestId = (String) servletRequest.getSession().getAttribute("userId");
-		customerDto.setDeleteUser(requestId);
-		customerService.CustomerDelete(customerDto);
+	public String CustomerDelete(CustomerDto customerDto, HttpServletRequest servletRequest) throws Exception{
+		try {
+			String requestId = (String) servletRequest.getSession().getAttribute("userId");
+			customerDto.setDeleteUser(requestId);
+			customerService.CustomerDelete(customerDto);
+			return "OK";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "notOK";
+		}
 	}
 	
 	//업체 관리 등록
 	@ResponseBody
 	@RequestMapping(value="/dworld/customer/control", method = RequestMethod.POST)
-	void CustomerInsert(CustomerDto customerDto, HttpServletRequest servletRequest) throws Exception{
-		String requestId = (String) servletRequest.getSession().getAttribute("userId");
-		customerDto.setInsertUser(requestId);
-		customerService.CustomerInsert(customerDto);
+	public String CustomerInsert(CustomerDto customerDto, HttpServletRequest servletRequest) throws Exception{
+		String getCustNm = customerDto.getCustNm().trim();
+		customerDto.setCustNm(getCustNm);
+		
+		if(getCustNm != "") {
+			try {
+				String requestId = (String) servletRequest.getSession().getAttribute("userId");
+				customerDto.setInsertUser(requestId);
+				customerService.CustomerInsert(customerDto);
+				return "OK";
+			} catch (Exception e) {
+				e.printStackTrace();
+				return "notOK";
+			}
+		} else{
+			return "titleEmpty";
+		}
 	}
 }
 

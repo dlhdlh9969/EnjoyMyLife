@@ -20,11 +20,13 @@ public interface WorkLogMapper {
 
 	WorkLogDto GetWorkLogDetail(WorkLogDto worklogDto) throws Exception;
 
-	void DeleteWorkLog(int idx) throws Exception;
+	void DeleteWorkLog(WorkLogDto worklogDto) throws Exception;
 
 	void UpdateWorkLog(WorkLogDto worklogDto) throws Exception;
 
 	void UpdatePersetWorkLog(PersetWorkLogDto persetWorkLogDto) throws Exception;
 
 	PersetWorkLogDto GetPersetWorkLog(String userId) throws Exception;
+
+	void SetNewMember(String requestId) throws Exception;
 }

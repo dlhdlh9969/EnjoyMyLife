@@ -46,4 +46,10 @@ public class CustomerServiceImpl implements CustomerService {
 		customerMapper.UpdatePersetCust(persetCustDto);
 	}
 
+	@Override
+	public void SetNewMember(String requestId) throws Exception {
+		customerMapper.SetNewMember(requestId);
+		
+	}
+
 }

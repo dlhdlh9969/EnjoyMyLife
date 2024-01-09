@@ -2,57 +2,37 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dlhdlh.mapper.MembersMapper">
 
-	<!-- 로그인 체크 -->
-	<select id="LoginCheck" parameterType="com.dlhdlh.dto.MembersDto" resultType="int">
-		<![CDATA[ 
-			SELECT count(user_id) 
-			FROM Members 
-			WHERE user_id = #{userId} and user_pw = #{userPw}
-		]]>
-	</select>
-
 	<!-- 멤버 정보 조회-->
-	<select id="SelectMemberInfo" parameterType="String" resultType="com.dlhdlh.dto.MembersDto">
+	<select id="LoginMemberInfo" parameterType="com.dlhdlh.dto.MembersDto" resultType="com.dlhdlh.dto.MembersDto">
 		<![CDATA[ 
-			SELECT user_id, user_name , authority 
+			SELECT user_id
+				, user_name 
+				, authority 
 			FROM Members
-			WHERE user_id = #{userId};
+			WHERE user_id = #{userId} 
+			  AND user_pw = #{userPw}
 		]]>
 	</select>
 	
 	<!-- 회원가입-->
-	<insert id="InsertMember" parameterType="com.dlhdlh.dto.MembersDto">
+	<insert id="InsertMember" parameterType="com.dlhdlh.dto.WorkLogDto">
 		<![CDATA[ 
-			INSERT INTO Members (user_id, user_pw, user_name, signin_dt)
-			VALUES ( #{userId}, #{userPw}, #{userName}, now());
+			INSERT INTO Members ( user_id
+								, user_pw
+								, user_name
+								, join_dt)
+			VALUES ( #{userId}
+				   , #{userPw}
+				   , #{userName}
+				   , now() );
 		]]>
 	</insert>
-	<insert id="InsertPersetCust" parameterType="com.dlhdlh.dto.MembersDto">
-		<![CDATA[ 
-			INSERT INTO PersetCust (user_id)
-			VALUES ( #{userId});
-		]]>
-	</insert>
-	<insert id="InsertPersetWorkLog" parameterType="com.dlhdlh.dto.MembersDto">
-		<![CDATA[ 
-			INSERT INTO PersetWorkLog (user_id)
-			VALUES ( #{userId});
-		]]>
-	</insert>
-	
-	<!-- Id 체크 -->
-	<select id="UserIdCheck" parameterType="com.dlhdlh.dto.MembersDto" resultType="int">
-		<![CDATA[ 
-			SELECT count(user_id) 
-			FROM Members 
-			WHERE user_id = #{userId}
-		]]>
-	</select>
 	
 	<!-- 권한 체크 -->
 	<select id="ManagerCheck" resultType="com.dlhdlh.dto.MembersDto" parameterType="String">
 		<![CDATA[ 
-			SELECT user_id, authority 
+			SELECT user_id
+				 , authority 
 			FROM Members 
 			WHERE user_id = #{userId}
 		]]>
@@ -61,12 +41,35 @@
 	<!-- 유저 목록 -->
 	<select id="UserList" resultType="com.dlhdlh.dto.MembersDto" parameterType="com.dlhdlh.dto.MembersDto">
 		<![CDATA[ 
-			SELECT *
+			SELECT user_id
+				 , user_name
+				 , authority
+				 , join_dt
 			FROM Members 
-			WHERE user_id like concat('%', #{userId}, '%') and user_name like concat('%', #{userName}, '%')
+			WHERE user_id like concat('%', #{userId}, '%')
+			  AND user_name like concat('%', #{userName}, '%')
 		]]>
 	</select>
 	
+	<!-- 회원정보 수정 Pw제외-->
+	<update id="UpdateMembers" parameterType="com.dlhdlh.dto.WorkLogDto">
+		<![CDATA[ 
+			UPDATE Members
+			SET user_name = #{userName}
+			  , user_pw = #{userPw}
+			  , authority = #{authority}
+			WHERE user_id = #{userId}
+		]]>
+	</update >
 	
-
+	<!-- 회원정보 수정 Pw포함-->
+	<update id="UpdateMembersWithPw" parameterType="com.dlhdlh.dto.WorkLogDto">
+		<![CDATA[ 
+			UPDATE Members
+			SET user_name = #{userName}
+			  , user_pw = #{userPw}
+			  , authority = #{authority}
+			WHERE user_id = #{userId}
+		]]>
+	</update >
 </mapper>

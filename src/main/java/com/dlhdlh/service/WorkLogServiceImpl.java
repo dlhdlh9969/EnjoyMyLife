@@ -40,8 +40,8 @@ public class WorkLogServiceImpl implements WorkLogService {
 	}
 
 	@Override
-	public void DeleteWorkLog(int idx) throws Exception {
-		worklogMapper.DeleteWorkLog(idx);
+	public void DeleteWorkLog(WorkLogDto worklogDto) throws Exception {
+		worklogMapper.DeleteWorkLog(worklogDto);
 	}
 
 	@Override
@@ -57,6 +57,12 @@ public class WorkLogServiceImpl implements WorkLogService {
 	@Override
 	public PersetWorkLogDto GetPersetWorkLog(String userId) throws Exception {
 		return worklogMapper.GetPersetWorkLog(userId);
+	}
+
+	@Override
+	public void SetNewMember(String requestId) throws Exception {
+		worklogMapper.SetNewMember(requestId);
+		
 	}
 
 }

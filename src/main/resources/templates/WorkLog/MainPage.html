@@ -10,17 +10,13 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-        <!-- 부트스트랩 아이콘 -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
         <!-- jquery -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <!-- 기본Css -->
         <link rel="stylesheet" href="/css/basic.css">
-        <link rel="stylesheet" href="/css/WorkLog.css">
 
         <script>
             $(document).ready(function() {
-
                 $("#compl-yn").on("change", function(){
                     searchWorkLog();
                 });
@@ -46,19 +42,23 @@
                 var searchTitle = document.getElementById('searchTitle').value;
                 var maxrow = $("#maxrow").val();
 
-                window.location.href = "/dworld/worklog?complYn=" + encodeURIComponent(complYn) + "&order1=" + encodeURIComponent(order1) + "&order2=" + encodeURIComponent(order2) + "&custNm=" + encodeURIComponent(searchCustNm)+ "&title=" + encodeURIComponent(searchTitle) + "&maxrow=" + encodeURIComponent(maxrow);
-            }
+                window.location.href= "/dworld/worklog?complYn=" + encodeURIComponent(complYn) 
+                                    + "&order1=" + encodeURIComponent(order1) 
+                                    + "&order2=" + encodeURIComponent(order2) 
+                                    + "&custNm=" + encodeURIComponent(searchCustNm) 
+                                    + "&title=" + encodeURIComponent(searchTitle) 
+                                    + "&maxrow=" + encodeURIComponent(maxrow);
+                }
         </script>
-
     </head>
     <body>
         <header th:include="header :: header"></header>
         <div class="container px-1">
-            <!-- 검색 영역 -->
             <div class="row px-2 justify-content-center">
                 <div class="text-center webfont1 dlh-headstyle3">
                     <label><H1>WorkLog List</H1></label>
                 </div>
+                <!-- 검색 영역 -->
                 <div class="row g-2">
                     <div class="col-6 order-1 col-md-2 order-md-1 col-lg-1 ms-lg-auto">
                         <button type="button" class="col-12 btn btn-info" onclick="searchWorkLog()">Search</button>
