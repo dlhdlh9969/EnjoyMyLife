@@ -57,10 +57,17 @@
                     <input type="password" id="userPw" name="userPw" class="form-control" onkeyup="if(window.event.keyCode==13){LoginAjax()}">
                     <label>Password</label>
                 </div>
-                <div class="d-flex gap-2">
-                    <a href="join" class="col-auto me-auto btn btn-warning text-dark" id="btn-join">가입</a>
-                    <button class="col-auto btn btn-primary" type="button" id="btn-submit" onclick="LoginAjax()">로그인</button>
-                    <button class="col-auto btn btn-success" type="button" id="btn-cancel" onclick="history.back()">뒤로</button>
+                <div class="row g-2">
+                    <div class="col-auto me-auto">
+                        <a href="join" class="btn btn-dark border-warning" id="btn-join">가입</a>
+                    </div>
+                    <div class="col-auto">
+                        <button class=" btn btn-dark border-primary" type="button" id="btn-submit" onclick="LoginAjax()">로그인</button>
+                    </div>
+                    <div class="col-auto">
+                        <button class=" btn btn-dark border-success" type="button" id="btn-cancel" onclick="history.back()">뒤로</button>
+                    </div>
+
                 </div>
             </form>
         </div>

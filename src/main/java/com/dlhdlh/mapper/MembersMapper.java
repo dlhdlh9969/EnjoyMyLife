@@ -19,6 +19,4 @@ public interface MembersMapper {
 
 	public void UpdateMembers(MembersDto membersDto) throws Exception;
 
-	public void UpdateMembersWithPw(MembersDto membersDto) throws Exception;
-	
 }

@@ -9,7 +9,7 @@
 				, w.idx
 				, w.title
 				, w.content
-				, w.insert_dt
+				, DATE_FORMAT(w.insert_dt, '%Y-%m-%d') as insert_dt
 				, w.insert_user
 				, w.cust_cd
 				, c.cust_nm
@@ -23,12 +23,13 @@
 			WHERE w.deleted_yn = 'N' 
 				AND w.insert_user = #{userId} 
 				AND w.compl_yn like concat('%', #{complYn}, '%') 
-				AND title like concat('%', #{title}, '%') 
-				AND isnull(cust_nm) like  concat('%', #{custNm}, '%')
+				AND w.title like concat('%', #{title}, '%') 
+				AND isnull(c.cust_nm) like  concat('%', #{custNm}, '%')
+				AND w.insert_dt BETWEEN DATE_FORMAT(#{searchStartDt}, '%Y-%m-%d') AND DATE_FORMAT(#{searchEndDt}, '%Y-%m-%d')
 			ORDER BY ${order1} ${order2}
 		]]>
 	</select>
-	
+		
 	<!-- 업체 선택을 위한 모달에 들어가는 데이터-->
 	<select id="GetCustList" parameterType="String" resultType="com.dlhdlh.dto.WorkLogDto">
 		<![CDATA[ 

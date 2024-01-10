@@ -78,9 +78,13 @@
                     <input type="text" id="userName" name="userName" class="form-control" onkeyup="if(window.event.keyCode==13){JoinAjax()}">
                     <label>이름</label>
                 </div>
-                <div class="text-end">
-                    <button type="button" id="btn-submit" class="btn btn-primary">가입</button>
-                    <button type="button" id="btn-cancel" class="btn btn-success">뒤로</button>
+                <div class="text-end row gx-2">
+                    <div class="col-6 col-md-3 ms-md-auto">
+                        <button type="button" id="btn-submit" class="btn btn-dark border-primary w-100">가입</button>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <button type="button" id="btn-cancel" class="btn btn-dark border-success w-100">뒤로</button>
+                    </div>
                 </div>
             </form>
         </div>

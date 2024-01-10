@@ -17,6 +17,7 @@
 
         <script>
             $(document).ready(function() {
+
                 $("#compl-yn").on("change", function(){
                     searchWorkLog();
                 });
@@ -41,13 +42,17 @@
                 var searchCustNm = document.getElementById('searchCustNm').value;
                 var searchTitle = document.getElementById('searchTitle').value;
                 var maxrow = $("#maxrow").val();
+                var searchStartDt = $("#searchStartDt").val();
+                var searchEndDt = $("#searchEndDt").val();
 
                 window.location.href= "/dworld/worklog?complYn=" + encodeURIComponent(complYn) 
                                     + "&order1=" + encodeURIComponent(order1) 
                                     + "&order2=" + encodeURIComponent(order2) 
                                     + "&custNm=" + encodeURIComponent(searchCustNm) 
                                     + "&title=" + encodeURIComponent(searchTitle) 
-                                    + "&maxrow=" + encodeURIComponent(maxrow);
+                                    + "&maxrow=" + encodeURIComponent(maxrow)
+                                    + "&searchStartDt=" + encodeURIComponent(searchStartDt)
+                                    + "&searchEndDt=" + encodeURIComponent(searchEndDt);
                 }
         </script>
     </head>
@@ -59,9 +64,12 @@
                     <label><H1>WorkLog List</H1></label>
                 </div>
                 <!-- 검색 영역 -->
+                <div class="row">
+                    <button type="button" class="col-auto btn btn-dark border-danger ms-auto" onclick="location.href='/dworld/worklog'">초기화</button>
+                </div>
                 <div class="row g-2">
                     <div class="col-6 order-1 col-md-2 order-md-1 col-lg-1 ms-lg-auto">
-                        <button type="button" class="col-12 btn btn-info" onclick="searchWorkLog()">Search</button>
+                        <button type="button" class="col-12 btn btn-dark border-info" onclick="searchWorkLog()">Search</button>
                     </div>
                     <div class="col-6 order-3 col-md-4 order-md-2 col-lg-3">
                         <input type="text" class="form-control" id="searchCustNm" name="searchCustNm" placeholder="업체명 검색" th:value="${SearchCustNm}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}"/>
@@ -71,34 +79,46 @@
                     </div>
                     <div class="col-6 order-2 col-md-2 order-md-4 col-lg-1 me-lg-auto">
                         <a href="/dworld/worklog/detail">
-                            <button type="button" id="btn-new" class="col-12 btn btn-primary">NEW</button>
+                            <button type="button" id="btn-new" class="col-12 btn btn-dark border-primary">New</button>
                         </a>
                     </div>
                 </div>
                 <div class="row g-2">
-                    <div class="col-6 col-md-3 col-lg-2 ms-lg-auto">
-                        <select class="form-select" id="compl-yn" name="compl-yn">   
-                            <option value="N" th:attr="selected=${ResponseComplYn == 'N'}? 'selected'">미완료</option>
-                            <option value="Y" th:attr="selected=${ResponseComplYn == 'Y'}? 'selected'">완료</option>
-                            <option value="A" th:attr="selected=${ResponseComplYn == 'A'}? 'selected'">완료여부 전체</option>
-                        </select>
+                    <div class="col-6 col-md-6 col-lg-2 ms-lg-auto">
+                        <div class="col form-floating">
+                            <input type="date" th:value="${searchStartDt}" class="form-control" id="searchStartDt" name="searchStartDt">
+                            <label for="receipt-dt" class="mx-1">검색 시작일</label>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-6 col-lg-2">
+                        <div class="col form-floating">
+                            <input type="date" th:value="${searchEndDt}" class="form-control" id="searchEndDt" name="searchEndDt">
+                            <label for="receipt-dt" class="mx-1">검색 종료일</label>
+                        </div>
                     </div>
                     <div class="col-6 order-6 col-md-3 col-lg-2">
-                        <select class="form-select" id="order1" name="order1">
-                            <option value="idx" th:attr="selected=${order1 == 'idx'}? 'selected'">작성 순번</option>
+                        <select class="form-select h-100" id="order1" name="order1">
+                            <option value="idx" th:attr="selected=${order1 == 'idx'}? 'selected'">작성일</option>
                             <option value="cust_nm" th:attr="selected=${order1 == 'cust_nm'}? 'selected'">업체명</option>
                             <option value="receipt_dt" th:attr="selected=${order1 == 'receipt_dt'}? 'selected'">접수일</option>
                             <option value="due_dt" th:attr="selected=${order1 == 'due_dt'}? 'selected'">완료 예정일</option>
                         </select>
                     </div>
                     <div class="col-6 order-7 col-md-3 col-lg-2">
-                        <select class="form-select" id="order2" name="order2">
+                        <select class="form-select h-100" id="order2" name="order2">
                             <option value="desc" th:attr="selected=${order2 == 'desc'}? 'selected'">내림차순</option>
                             <option value="asc" th:attr="selected=${order2 == 'asc'}? 'selected'">오름차순</option>
                         </select>
                     </div>
+                    <div class="col-6 col-md-3 col-lg-2">
+                        <select class="form-select h-100" id="compl-yn" name="compl-yn">   
+                            <option value="N" th:attr="selected=${ResponseComplYn == 'N'}? 'selected'">미완료</option>
+                            <option value="Y" th:attr="selected=${ResponseComplYn == 'Y'}? 'selected'">완료</option>
+                            <option value="A" th:attr="selected=${ResponseComplYn == 'A'}? 'selected'">완료여부 전체</option>
+                        </select>
+                    </div>
                     <div class="col-6 order-8 col-md-3 col-lg-2 me-lg-auto">
-                        <select class="form-select" id="maxrow" name="maxrow">
+                        <select class="form-select h-100" id="maxrow" name="maxrow">
                             <option value="5" th:attr="selected=${PersetWorkLog.maxrow == 5} ? 'selected'">5줄씩 보기</option>
                             <option value="10" th:attr="selected=${PersetWorkLog.maxrow == 10} ? 'selected'">10줄씩 보기</option>
                             <option value="15" th:attr="selected=${PersetWorkLog.maxrow == 15} ? 'selected'">15줄씩 보기</option>
@@ -112,18 +132,20 @@
             <!-- 테이블 영역 -->
             <div class="pt-2 pb-5">
                 <div style="overflow:auto;">
-                    <table class="table table-dark table-striped" style="min-width:800px;table-layout:fixed;">
+                    <table class="table table-dark table-striped" style="min-width:1000px;table-layout:fixed;">
                         <colgroup>
                             <col width="5%">
+                            <col width="10%">
                             <col width="20%">
-                            <col width="35%">
-                            <col width="10%">
-                            <col width="10%">
+                            <col width="8%">
+                            <col width="8%">
+                            <col width="4%">
                         </colgroup>
                         <thead>
                             <th>Num</th>
                             <th>업체명</th>
                             <th>제목</th>
+                            <th class="text-center">작성일</th>
                             <th class="text-center">접수일</th>
                             <th class="text-center">완료</th>
                         </thead>
@@ -132,6 +154,7 @@
                                 <td class="text-truncate" th:text="${list.rowNum}"></td>
                                 <td class="text-truncate" th:text="${list.custNm}"></td>
                                 <td class="text-truncate" th:text='${list.title}'></td>
+                                <td class="text-center" th:text='${list.insertDt}'></td>
                                 <td class="text-center" th:text='${list.receiptDt}'></td>
                                 <td class="text-center" th:text='${list.complYn}'></td>
                             </tr>

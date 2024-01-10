@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dlhdlh.mapper.DworldMapper">
+	<!-- 업체 리스트 --> 
+	<select id="DworldValues" parameterType="String" resultType="com.dlhdlh.dto.DworldValuesDto">
+		<![CDATA[ 
+			SELECT * 
+			FROM DworldValues
+			WHERE var_name = #{varName}
+		]]>
+	</select>
+	
+	<!-- PrevPage 수정 --> 
+	<select id="UpdatePrevUrl" parameterType="com.dlhdlh.dto.PrevPageDto" resultType="com.dlhdlh.dto.PrevPageDto">
+		<![CDATA[ 
+			UPDATE PrevPage
+			SET url = #{url}
+			WHERE user_id = #{userId} AND menu = #{menu}
+		]]>
+	</select>
+	<!-- PrevPage 저장 --> 
+	<select id="InsertPrevUrl" parameterType="com.dlhdlh.dto.PrevPageDto" resultType="com.dlhdlh.dto.PrevPageDto">
+		<![CDATA[ 
+			INSERT INTO PrevPage
+			VALUES(#{userId} , #{url}, #{menu} )
+		]]>
+	</select>
+	<!-- PrevPage 조회 --> 
+	<select id="SelectPrevPage" parameterType="com.dlhdlh.dto.PrevPageDto" resultType="String">
+		<![CDATA[ 
+			SELECT url
+			FROM PrevPage
+			WHERE user_id = #{userId} AND menu = #{menu}
+		]]>
+	</select>
+	
+</mapper>
+

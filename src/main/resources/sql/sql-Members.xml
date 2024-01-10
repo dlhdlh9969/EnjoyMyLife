@@ -51,25 +51,18 @@
 		]]>
 	</select>
 	
-	<!-- 회원정보 수정 Pw제외-->
+	<!-- 회원정보 수정 -->
 	<update id="UpdateMembers" parameterType="com.dlhdlh.dto.WorkLogDto">
 		<![CDATA[ 
-			UPDATE Members
-			SET user_name = #{userName}
-			  , user_pw = #{userPw}
-			  , authority = #{authority}
-			WHERE user_id = #{userId}
-		]]>
-	</update >
-	
-	<!-- 회원정보 수정 Pw포함-->
-	<update id="UpdateMembersWithPw" parameterType="com.dlhdlh.dto.WorkLogDto">
-		<![CDATA[ 
-			UPDATE Members
-			SET user_name = #{userName}
-			  , user_pw = #{userPw}
-			  , authority = #{authority}
-			WHERE user_id = #{userId}
+			UPDATE Members m1
+			JOIN (SELECT user_id, user_name, user_pw, authority
+      			  FROM Members
+      			  WHERE user_id = #{userId}) m2
+			ON m1.user_id = m2.user_id
+			SET m1.user_name = #{userName},
+				m1.user_pw = if(#{userPw} = '', m2.user_pw, #{userPw}),
+			    m1.authority = IF(m2.authority = 'A', 'A', #{authority})
+			WHERE m1.user_id = #{userId};
 		]]>
 	</update >
 </mapper>

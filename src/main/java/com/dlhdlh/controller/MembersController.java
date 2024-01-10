@@ -54,7 +54,6 @@ public class MembersController {
 			session.setAttribute("userName", getLoginUser.getUserName());
 			session.setAttribute("auth", getLoginUser.getAuthority());
 			session.setMaxInactiveInterval(Integer.parseInt(sessionInterval)); //초 단위 10분=600초
-			System.out.println(session.getMaxInactiveInterval());
 			return "OK";
 		}else {
 			return "notOK";

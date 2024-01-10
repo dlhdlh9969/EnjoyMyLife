@@ -38,11 +38,7 @@ public class MembersServiceImpl implements MembersService {
 
 	@Override
 	public void UpdateMembers(MembersDto membersDto) throws Exception {
-		if(membersDto.getUserPw() == "") {
-			membersMapper.UpdateMembers(membersDto); //Pw 제외 업데이트
-		}else {
-			membersMapper.UpdateMembersWithPw(membersDto); //Pw 포함 업데이트			
-		}
+		membersMapper.UpdateMembers(membersDto);
 	}
 	
 }

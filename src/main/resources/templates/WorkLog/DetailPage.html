@@ -27,10 +27,10 @@
             };
 
             //뒤로 버튼
-            $("#btn-back").on("click", function(){
-                location.href="/dworld/worklog";
-                // window.history.back()
-            });
+            // $("#btn-back").on("click", function(){
+            //     // location.href="/dworld/worklog";
+            //     window.history.back();
+            // });
 
             //업체명 검색 모달 컨트롤
             
@@ -214,16 +214,16 @@
         </div>
         <div class="row g-2 col-md-6 ms-md-auto col-lg-4 my-3">
             <div th:if="${MODE} == 'new'" class="col">
-                <button type="button" class="col-12 btn btn-primary" id="btn-insert" name="btn-insert">등록</button>
+                <button type="button" class="col-12 btn btn-dark border-primary" id="btn-insert" name="btn-insert">등록</button>
             </div>
             <div th:if="${MODE} == 'detail'" class="col">
-                <button type="button" class="col-12 btn btn-secondary" id="btn-edit" name="btn-edit" th:onclick="|UpdateWorkLog(${WorkLogDetail.idx})|">저장</button>
+                <button type="button" class="col-12 btn btn-dark border-secondary" id="btn-edit" name="btn-edit" th:onclick="|UpdateWorkLog(${WorkLogDetail.idx})|">저장</button>
             </div>
             <div th:if="${MODE} == 'detail'" class="col">
-                <button type="button" class="col-12 btn btn-danger" id="btn-delete" name="btn-delete" th:onclick="|DeleteWorkLog(${WorkLogDetail.idx})|">삭제</button>
+                <button type="button" class="col-12 btn btn-dark border-danger" id="btn-delete" name="btn-delete" th:onclick="|DeleteWorkLog(${WorkLogDetail.idx})|">삭제</button>
             </div>
             <div class="col">
-                <button type="button" class="col-12 btn btn-success" id="btn-back" name="btn-back">뒤로</button> 
+                <button type="button" class="col-12 btn btn-dark border-success" id="btn-back" name="btn-back" th:onclick="|location.href='@{${prevPage}}'|">뒤로</button> 
             </div>
         </div>
         <div class="row g-2 mt-1">
@@ -236,10 +236,10 @@
                 <label for="cust-cd">업체코드</label>
             </div>
             <div class="col-4 col-md-2 col-lg-2">
-                <button type="button" class="w-100 h-100 btn btn-primary text-nowrap" data-bs-toggle="modal" data-bs-target="#selectCustModal">업체 선택</button>
+                <button type="button" class="w-100 h-100 btn btn-dark border-primary text-nowrap" data-bs-toggle="modal" data-bs-target="#selectCustModal">업체 선택</button>
             </div>
             <div class="col-4 col-md-2 col-lg-2">
-                <button type="button" class="w-100 h-100 btn btn-warning text-nowrap" onclick="SelectCancel()">선택 취소</button>
+                <button type="button" class="w-100 h-100 btn btn-dark border-warning text-nowrap" onclick="SelectCancel()">선택 취소</button>
             </div>
         </div>
         <!-- 업체 선택 modal -->
@@ -276,6 +276,10 @@
         </div>
 
         <div class="row g-2 mt-1">
+            <div class="col form-floating">
+                <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.insertDt}" type="datetime-local" class="form-control" id="insert-dt" name="insert-dt" disabled>
+                <label for="insert-dt" class="mx-1">작성일</label>
+            </div>
             <div class="col form-floating">
                 <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.receiptDt}" type="datetime-local" class="form-control" id="receipt-dt" name="receipt-dt">
                 <label for="receipt-dt" class="mx-1">접수일</label>
