@@ -166,13 +166,13 @@
                 </div>
                 <ul class="pagination justify-content-center pt-4">
                     <li class="page-item" th:classappend="${WorkLogList.getPrePage() == 0} ? 'disabled'">
-                    <a class="page-link" th:href="@{/dworld/worklog(pageNum=${WorkLogList.getPrePage()}, title=${SearchTitle}, custNm=${SearchCustNm}, complYn=${ResponseComplYn}, order1=${order1}, order2=${order2})}">Prev</a>
+                    <a class="page-link" th:href="@{/dworld/worklog(pageNum=${WorkLogList.getPrePage()}, title=${SearchTitle}, custNm=${SearchCustNm}, complYn=${ResponseComplYn}, order1=${order1}, order2=${order2}, searchStartDt=${searchStartDt}, searchEndDt=${searchEndDt})}">Prev</a>
                     </li>
                     <li class="page-item" th:each="page: ${#numbers.sequence(WorkLogList.getNavigateFirstPage(), WorkLogList.getNavigateLastPage())}" th:classappend="${page == WorkLogList.getPageNum()} ? 'active'">
-                    <a class="page-link" th:text="${page}" th:href="@{/dworld/worklog(pageNum=${page}, title=${SearchTitle}, custNm=${SearchCustNm}, complYn=${ResponseComplYn}, order1=${order1}, order2=${order2})}"></a>
+                    <a class="page-link" th:text="${page}" th:href="@{/dworld/worklog(pageNum=${page}, title=${SearchTitle}, custNm=${SearchCustNm}, complYn=${ResponseComplYn}, order1=${order1}, order2=${order2}, searchStartDt=${searchStartDt}, searchEndDt=${searchEndDt})}"></a>
                     </li>
                     <li class="page-item" th:classappend="${WorkLogList.getNextPage() == 0} ? 'disabled'">
-                    <a class="page-link"  th:href="@{/dworld/worklog(pageNum=${WorkLogList.getNextPage()}, title=${SearchTitle}, custNm=${SearchCustNm}, complYn=${ResponseComplYn}, order1=${order1}, order2=${order2})}">Next</a>
+                    <a class="page-link"  th:href="@{/dworld/worklog(pageNum=${WorkLogList.getNextPage()}, title=${SearchTitle}, custNm=${SearchCustNm}, complYn=${ResponseComplYn}, order1=${order1}, order2=${order2}, searchStartDt=${searchStartDt}, searchEndDt=${searchEndDt})}">Next</a>
                     </li>
                 </ul>
             </div>

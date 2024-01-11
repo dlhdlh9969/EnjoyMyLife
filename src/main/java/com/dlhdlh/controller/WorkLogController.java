@@ -1,7 +1,6 @@
 package com.dlhdlh.controller;
 
 import java.time.LocalDate;
-import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.dlhdlh.dto.CustomerDto;
 import com.dlhdlh.dto.PersetWorkLogDto;
-import com.dlhdlh.dto.PrevPageDto;
 import com.dlhdlh.dto.WorkLogDto;
 import com.dlhdlh.service.DworldService;
 import com.dlhdlh.service.WorkLogService;
@@ -30,25 +28,11 @@ public class WorkLogController {
 	
 	@Autowired
 	DworldService dworldService;
-
-	// 개인별 조회 조건이 적용된 페이지
-	@RequestMapping(value="/dworld/worklog/set")
-	public ModelAndView WorkLogList2(HttpServletRequest serveRequest) throws Exception {
-		PrevPageDto prevPageDto = new PrevPageDto();
-		String requestUserId = (String) serveRequest.getSession().getAttribute("userId");
-		prevPageDto.setUserId(requestUserId);
-		System.out.println(requestUserId);
-		prevPageDto.setMenu("WorkLog");
-		String prevPage = dworldService.SelectPrevPage(prevPageDto);
-		System.out.println(prevPage);
-		
-		ModelAndView mv = new ModelAndView("redirect:"+prevPage);
-		
-		return mv;
-		
-	}
 	
-	//업무일지 리스트 디폴트
+	@Autowired
+	DworldController dworldController;
+
+	//업무일지 리스트
 	@RequestMapping(value="/dworld/worklog")
 	public ModelAndView WorkLogList(@RequestParam(required=false, defaultValue = "1") int pageNum
 			, HttpServletRequest servletRequest
@@ -152,31 +136,23 @@ public class WorkLogController {
 			mv.addObject("SearchCustNm", "");
 		}else {
 			mv.addObject("SearchCustNm", worklogDto.getCustNm());
+			
 		}
-		
+
 		//제목 검색 컨트롤
 		if(worklogDto.getTitle() == null) {
-			worklogDto.setTitle("");	
+			worklogDto.setTitle("");
 			mv.addObject("SearchTitle", "");
 		}else {
 			mv.addObject("SearchTitle", worklogDto.getTitle());
+			
 		}
 		// 업무일지 리스트 
 		PageInfo<WorkLogDto> workLogList = new PageInfo<>(worklogService.GetWorkLogList(pageNum, maxRow, worklogDto), maxPaging);
 		mv.addObject("WorkLogList", workLogList);
 		
 		// 현재 페이지 주소 저장
-		String url = PrevPage(servletRequest);
-		PrevPageDto prevPageDto = new PrevPageDto();
-		prevPageDto.setUserId(requestUserId);
-		prevPageDto.setUrl(url);
-		prevPageDto.setMenu("WorkLog");
-		try {
-			dworldService.InsertPrevUrl(prevPageDto);
-		} catch (Exception e) {
-			dworldService.UpdatePrevUrl(prevPageDto);
-		}
-		
+		dworldController.SetPrevPage(servletRequest, "WorkLog");
 		
 		return mv;		
 	}
@@ -197,12 +173,9 @@ public class WorkLogController {
 		}
 		
 		//이전페이지 주소 조회
-		PrevPageDto prevPageDto = new PrevPageDto();
-		prevPageDto.setUserId(requestUserId);
-		prevPageDto.setMenu("WorkLog");
-		String prevPage = dworldService.SelectPrevPage(prevPageDto);
-		mv.addObject("prevPage", prevPage);	
+		String prevPage = dworldController.GetPrevPage(servletRequest, "WorkLog");
 		
+		mv.addObject("prevPage", prevPage);	
 		return mv;
 	}
 	
@@ -279,19 +252,5 @@ public class WorkLogController {
 		} catch (Exception e) {
 			return "notOK";
 		}
-	}
-	
-	//현재 페이지를 저장하여 이전 페이지로 돌아가기 위한 경로에 사용
-	public String PrevPage(HttpServletRequest servletRequest) {
-		StringBuilder stringBuilder = new StringBuilder(servletRequest.getRequestURI().toString());
-	    String requestURL = stringBuilder.toString();  //현재 URL 문자로 변환
-	    String result = requestURL+"?";
-	    Enumeration<String> parameterNames = servletRequest.getParameterNames();
-        while (parameterNames.hasMoreElements()) {
-            String paramName = parameterNames.nextElement();
-            String paramValue = servletRequest.getParameter(paramName);
-            result = result+paramName+"="+paramValue+"&";
-        }
-		return result;
 	}
 }
