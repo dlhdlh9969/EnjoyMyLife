@@ -25,8 +25,8 @@
 				AND w.compl_yn like concat('%', #{complYn}, '%') 
 				AND w.title like concat('%', #{title}, '%') 
 				AND COALESCE(c.cust_nm, '') like concat('%', #{custNm}, '%')
-				AND w.insert_dt BETWEEN DATE_FORMAT(#{searchStartDt}, '%Y-%m-%d') AND DATE_FORMAT(#{searchEndDt}, '%Y-%m-%d')
-			ORDER BY ${order1} ${order2}
+				AND w.insert_dt BETWEEN DATE_FORMAT(#{startDt}, '%Y-%m-%d') AND DATE_FORMAT(#{endDt}, '%Y-%m-%d')
+			ORDER BY row_num desc
 		]]>
 	</select>
 		
@@ -132,6 +132,13 @@
 		<![CDATA[
 			UPDATE PersetWorkLog
 			SET maxrow = #{maxrow}
+			  , cust_nm = #{custNm}
+			  , title = #{title}
+			  , start_dt = #{startDt}
+			  , end_dt = #{endDt}
+			  , compl_yn = #{complYn}
+			  , order1 = #{order1}
+			  , order2 = #{order2}
 			WHERE user_id = #{userId}
 		]]>
 	</update>

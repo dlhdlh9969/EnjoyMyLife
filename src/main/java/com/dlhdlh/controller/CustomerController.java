@@ -26,14 +26,14 @@ public class CustomerController {
 	public ModelAndView CustomerList(@RequestParam(required=false, defaultValue = "1") int pageNum
 			, @RequestParam(required=false, defaultValue = "0")int selectRowNum
 			, HttpServletRequest servletRequest
-			, CustomerDto customerDto
-			, PersetCustDto persetCustDto) throws Exception{
+			, CustomerDto customerParam
+			, PersetCustDto persetCustParam) throws Exception{
 		ModelAndView mv = new ModelAndView("Customer/MainPage");		
 		String requestId = (String) servletRequest.getSession().getAttribute("userId");
-		persetCustDto.setUserId(requestId);
+		persetCustParam.setUserId(requestId);
 
-		if(persetCustDto.getMaxrow() != 0) {
-			customerService.UpdatePersetCust(persetCustDto);
+		if(persetCustParam.getMaxrow() != 0) {
+			customerService.UpdatePersetCust(persetCustParam);
 		}
 		PersetCustDto persetCust = customerService.GetPersetCust(requestId);
 		if(persetCust == null) {
@@ -44,7 +44,7 @@ public class CustomerController {
 		int maxRow = persetCust.getMaxrow(); //페이지당 최대 로우 갯수
 		
 		//업체명 검색 input이 null로 왔을 경우 where절에 like를 할 수 없으므로 빈값을 넣어줌!
-		String searchCustNm = customerDto.getSearchCustNm();
+		String searchCustNm = customerParam.getSearchCustNm();
 		if(searchCustNm == null) {
 			searchCustNm = "";
 		}
@@ -78,14 +78,14 @@ public class CustomerController {
 	//업체 관리 수정
 	@ResponseBody
 	@RequestMapping(value="/dworld/customer/control", method = RequestMethod.PUT)
-	public String CustomerUpdate(CustomerDto customerDto, HttpServletRequest servletRequest) throws Exception {
-		String getCustNm = customerDto.getCustNm().trim();
-		customerDto.setCustNm(getCustNm);
+	public String CustomerUpdate(CustomerDto customerParam, HttpServletRequest servletRequest) throws Exception {
+		String getCustNm = customerParam.getCustNm().trim();
+		customerParam.setCustNm(getCustNm);
 		if(getCustNm != "") {
 			try {
 				String requestId = (String) servletRequest.getSession().getAttribute("userId");
-				customerDto.setUpdateUser(requestId);
-				customerService.CustomerUpdate(customerDto);
+				customerParam.setUpdateUser(requestId);
+				customerService.CustomerUpdate(customerParam);
 				return "OK";
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -99,11 +99,11 @@ public class CustomerController {
 	//업체 관리 삭제
 	@ResponseBody
 	@RequestMapping(value="/dworld/customer/control", method = RequestMethod.DELETE)
-	public String CustomerDelete(CustomerDto customerDto, HttpServletRequest servletRequest) throws Exception{
+	public String CustomerDelete(CustomerDto customerParam, HttpServletRequest servletRequest) throws Exception{
 		try {
 			String requestId = (String) servletRequest.getSession().getAttribute("userId");
-			customerDto.setDeleteUser(requestId);
-			customerService.CustomerDelete(customerDto);
+			customerParam.setDeleteUser(requestId);
+			customerService.CustomerDelete(customerParam);
 			return "OK";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -114,15 +114,15 @@ public class CustomerController {
 	//업체 관리 등록
 	@ResponseBody
 	@RequestMapping(value="/dworld/customer/control", method = RequestMethod.POST)
-	public String CustomerInsert(CustomerDto customerDto, HttpServletRequest servletRequest) throws Exception{
-		String getCustNm = customerDto.getCustNm().trim();
-		customerDto.setCustNm(getCustNm);
+	public String CustomerInsert(CustomerDto customerParam, HttpServletRequest servletRequest) throws Exception{
+		String getCustNm = customerParam.getCustNm().trim();
+		customerParam.setCustNm(getCustNm);
 		
 		if(getCustNm != "") {
 			try {
 				String requestId = (String) servletRequest.getSession().getAttribute("userId");
-				customerDto.setInsertUser(requestId);
-				customerService.CustomerInsert(customerDto);
+				customerParam.setInsertUser(requestId);
+				customerService.CustomerInsert(customerParam);
 				return "OK";
 			} catch (Exception e) {
 				e.printStackTrace();

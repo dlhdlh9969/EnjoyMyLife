@@ -25,7 +25,8 @@ public class WorkLogDto {
 	String order2;
 	int rowNum;
 	int idx;
-	String searchStartDt;
-	String searchEndDt;
+	String startDt;
+	String endDt;
+	int maxrow;
 
 }

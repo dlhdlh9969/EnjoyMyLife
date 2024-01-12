@@ -41,10 +41,10 @@ public class MembersController {
 	// 로그인 submit 프로세스
 	@ResponseBody 
 	@RequestMapping(value = "members/loginAjax", method = RequestMethod.POST)
-	public String LoginProcessAjax(MembersDto membersDto, HttpServletRequest servletRequest) throws Exception{
-		String getUserPw = PasswordSHA256(membersDto.getUserPw());
-		membersDto.setUserPw(getUserPw);
-		MembersDto getLoginUser = membersService.LoginMemberInfo(membersDto);
+	public String LoginProcessAjax(MembersDto membersParam, HttpServletRequest servletRequest) throws Exception{
+		String getUserPw = PasswordSHA256(membersParam.getUserPw());
+		membersParam.setUserPw(getUserPw);
+		MembersDto getLoginUser = membersService.LoginMemberInfo(membersParam);
 		
 		DworldValuesDto dworldValues =  dworldService.DworldValues("SessionInterval");
 		String sessionInterval = dworldValues.getValue();
@@ -70,10 +70,10 @@ public class MembersController {
 	// 회원가입 submit 프로세스
 	@ResponseBody 
 	@RequestMapping(value = "member/joinAjax", method = RequestMethod.POST)
-	public String JoinProcess(MembersDto membersDto, HttpServletRequest request) throws Exception{
-		String getUserId = membersDto.getUserId().trim();
-		String getUserPw = membersDto.getUserPw().trim();
-		String getUserName = membersDto.getUserName().trim();
+	public String JoinProcess(MembersDto membersParam, HttpServletRequest servletRequest) throws Exception{
+		String getUserId = membersParam.getUserId().trim();
+		String getUserPw = membersParam.getUserPw().trim();
+		String getUserName = membersParam.getUserName().trim();
 		
 		if(getUserId == "") {
 			return "userIdEmpty";
@@ -85,8 +85,8 @@ public class MembersController {
 					return "userNameEmpty";
 				}else {
 					try {
-						membersDto.setUserPw(PasswordSHA256(getUserPw));
-						membersService.InsertMember(membersDto);
+						membersParam.setUserPw(PasswordSHA256(getUserPw));
+						membersService.InsertMember(membersParam);
 						return "OK"; 
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -99,18 +99,18 @@ public class MembersController {
 	
 	// 회원관리 페이지
 	@RequestMapping(value = "dworld/auth/memberscontrol")
-	public ModelAndView MembersControl(HttpServletRequest servletRequest, MembersDto membersDto) throws Exception {
+	public ModelAndView MembersControl(HttpServletRequest servletRequest, MembersDto membersParam) throws Exception {
 		ModelAndView mv = new ModelAndView("Members/members");
 		
-		if(membersDto.getUserId() == null) {
-			membersDto.setUserId("");
+		if(membersParam.getUserId() == null) {
+			membersParam.setUserId("");
 		}
-		if(membersDto.getUserName() == null) {
-			membersDto.setUserName("");
+		if(membersParam.getUserName() == null) {
+			membersParam.setUserName("");
 		}
-		String getUserId = membersDto.getUserId();
-		String getUserName = membersDto.getUserName();
-		List<MembersDto> userList = membersService.UserList(membersDto);
+		String getUserId = membersParam.getUserId();
+		String getUserName = membersParam.getUserName();
+		List<MembersDto> userList = membersService.UserList(membersParam);
 		
 		mv.addObject("GetUserId", getUserId);
 		mv.addObject("GetUserName", getUserName);
@@ -121,26 +121,26 @@ public class MembersController {
 	//회원정보 수정
 	@ResponseBody
 	@RequestMapping(value = "dworld/auth/editMembers", method = RequestMethod.PUT)
-	public String EditMembers(MembersDto membersDto) throws Exception{
-		if(membersDto.getAuthority().equals("true")) {
-			membersDto.setAuthority("M");
+	public String EditMembers(MembersDto membersParam) throws Exception{
+		if(membersParam.getAuthority().equals("true")) {
+			membersParam.setAuthority("M");
 		}else {
-			membersDto.setAuthority("G");
+			membersParam.setAuthority("G");
 		}
 		
-		String getUserName = membersDto.getUserName().trim();
-		String getUserPw = membersDto.getUserPw().trim();
-		membersDto.setUserName(getUserName);
-		membersDto.setUserPw(getUserPw);
+		String getUserName = membersParam.getUserName().trim();
+		String getUserPw = membersParam.getUserPw().trim();
+		membersParam.setUserName(getUserName);
+		membersParam.setUserPw(getUserPw);
 		
 		if(getUserName == "") {
 			return "userIdEmpty";
 		}else {
 			if(getUserPw != "") {
-				membersDto.setUserPw(PasswordSHA256(getUserPw));
+				membersParam.setUserPw(PasswordSHA256(getUserPw));
 			}
 			try {
-				membersService.UpdateMembers(membersDto);
+				membersService.UpdateMembers(membersParam);
 				return "OK";
 			} catch (Exception e) {
 				e.printStackTrace();

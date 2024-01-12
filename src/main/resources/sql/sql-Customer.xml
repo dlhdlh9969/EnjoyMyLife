@@ -4,10 +4,10 @@
 	<!-- 업체 리스트 --> 
 	<select id="GetCustList" parameterType="com.dlhdlh.dto.WorkLogDto" resultType="com.dlhdlh.dto.CustomerDto">
 		<![CDATA[ 
-			SELECT row_number() OVER (ORDER BY cust_cd) as row_num, cust_cd, cust_nm, cust_busnum, cust_num, cust_addr, cust_email, cust_ceonm, cust_ceonum, cust_remark
+			SELECT row_number() OVER (ORDER BY cust_nm desc) as row_num, cust_cd, cust_nm, cust_busnum, cust_num, cust_addr, cust_email, cust_ceonm, cust_ceonum, cust_remark
 			FROM Customer
 			WHERE cust_nm like concat('%', #{searchCustNm}, '%') and deleted_yn = "N"
-			Order By cust_cd desc
+			Order By row_num desc
 		]]>
 	</select>
 	
