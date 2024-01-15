@@ -11,6 +11,8 @@
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
         <!-- jquery -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <!-- 스위트 얼렛 참조 -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
         <!-- 기본Css -->
         <link rel="stylesheet" href="/css/basic.css">
 
@@ -35,19 +37,22 @@
                     data: datas,
                     success: function(data) {
                         if(data == "userIdEmpty"){
-                            alert("ID를 입력해주세요.");
+                            Swal.fire("ID Empty","ID를 입력해주세요.", "warning");
                         }else{
                             if(data == "userPwEmpty"){
-                                alert("비밀번호를 입력해주세요.");
+                                Swal.fire("Password Empty","비밀번호를 입력해주세요.", "warning");
                             }else{
                                 if(data == "userNameEmpty"){
-                                    alert("이름을 입력해주세요.");
+                                    Swal.fire("Your Name Empty","이름을 입력해주세요.", "warning");
                                 }else{
                                     if(data == "OK"){
-                                        alert("회원가입이 되었습니다.");
-                                        location.href="/";
+                                        Swal.fire("Success","회원가입이 되었습니다.", "success")
+                                            .then((result=>{ if(result){
+                                                location.href="/";
+                                            }})
+                                        );
                                     }else{
-                                        alert("이미 존재하는 ID입니다. 다시 입력해 주세요.");
+                                        Swal.fire("Error","이미 존재하는 ID입니다. 다시 입력해 주세요.", "error");
                                     }
                                 }
                             }

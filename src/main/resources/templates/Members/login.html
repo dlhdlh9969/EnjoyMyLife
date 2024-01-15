@@ -13,10 +13,12 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <!-- 기본Css -->
         <link rel="stylesheet" href="/css/basic.css">
+        <!-- 스위트 얼렛 참조 -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
         <script>
             $(document).ready(function(){
-
+                
             });
 
             function LoginAjax(){
@@ -32,7 +34,7 @@
                         if(data == "OK"){
                             location.href="/";  //인덱스로 이동
                         }else{
-                            alert("ID와 비밀번호를 다시 확인해주세요.");
+                            Swal.fire("Error","ID와 비밀번호를 다시 확인해주세요.", "error");
                         }
                     }, error: function() {
                         alert("ajax 통신 오류 발생");

@@ -19,7 +19,7 @@ public interface CustomerMapper {
 
 	PersetCustDto GetPersetCust(String userId) throws Exception;
 
-	void UpdatePersetCust(PersetCustDto persetCustDto) throws Exception;
+	void UpdatePersetCust(PersetCustDto persetCustParam) throws Exception;
 	
 	public void SetNewMember(String requestId) throws Exception;
 }

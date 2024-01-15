@@ -42,8 +42,8 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public void UpdatePersetCust(PersetCustDto persetCustDto) throws Exception {
-		customerMapper.UpdatePersetCust(persetCustDto);
+	public void UpdatePersetCust(PersetCustDto persetCustParam) throws Exception {
+		customerMapper.UpdatePersetCust(persetCustParam);
 	}
 
 	@Override

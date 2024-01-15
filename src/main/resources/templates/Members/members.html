@@ -12,6 +12,8 @@
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
         <!-- jquery -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <!-- 스위트 얼렛 참조 -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
         <!-- 기본Css -->
         <link rel="stylesheet" href="/css/basic.css">
         
@@ -39,27 +41,40 @@
 
                 datas = {userId, userName, userPw, authority};
 
-                if(confirm("수정 하시겠습니까?")){
-                    $.ajax({
-                        url: "/dworld/auth/editMembers",
-                        type: "put",
-                        data: datas,
-                        success: function(data) {
-                            if(data == 'userIdEmpty'){
-                                alert("이름을 입력해주세요.");
-                            }else{
-                                if(data == "OK"){
-                                    alert("수정 되었습니다.");
-                                    location.reload();
+                Swal.fire({
+                    title : ""
+                    , text : "수정 하시겠습니까?"
+                    , icon : "warning"
+                    , showCancelButton: true
+                    , confirmButtonColor: '#3085d6'
+                    , cancelButtonColor: '#d33'
+                    , confirmButtonText: '승인'
+                    , cancelButtonText: '취소', 
+                }).then((result)=>{
+                    if(result.isConfirmed){
+                        $.ajax({
+                            url: "/dworld/auth/editMembers",
+                            type: "put",
+                            data: datas,
+                            success: function(data) {
+                                if(data == 'userIdEmpty'){
+                                    Swal.fire("","이름을 입력해주세요.", "warning");
                                 }else{
-                                    alert("접근이 잘못되었습니다.");
+                                    if(data == "OK"){
+                                        Swal.fire("", "수정 되었습니다.", "success")
+                                        .then((result)=>{
+                                            location.reload();
+                                        });
+                                    }else{
+                                        Swal.fire("", "접근이 잘못되었습니다.", "error");
+                                    }
                                 }
+                            }, error: function() {
+                                aSwal.firelert("", "ajax 통신 오류 발생", "error");
                             }
-                        }, error: function() {
-                            alert("ajax 통신 오류 발생");
-                        }
-                    });
-                }
+                        });
+                    }
+                })
             }
         </script>
     </head>
