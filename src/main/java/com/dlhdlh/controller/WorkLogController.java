@@ -107,6 +107,11 @@ public class WorkLogController {
 			worklogParam.setTitle("");
 		}
 		
+		//내용 검색 컨트롤
+		if(worklogParam.getContent() == null) {
+			worklogParam.setContent("");
+		}
+		
 		// maxrow 컨트롤
 		if(worklogParam.getMaxrow() == 0) {
 			worklogParam.setMaxrow(10);
@@ -124,11 +129,13 @@ public class WorkLogController {
 			persetWorkLog.setOrder1("idx");
 			persetWorkLog.setOrder2("desc");
 			persetWorkLog.setTitle("");
+			persetWorkLog.setContent("");
 		}
 		
 		// 개인별 게시판 설정값 업데이트 여부
 		if(entrance == 1) {
 			worklogParam.setTitle(persetWorkLog.getTitle());
+			worklogParam.setContent(persetWorkLog.getContent());
 			worklogParam.setCustNm(persetWorkLog.getCustNm());
 			worklogParam.setStartDt(persetWorkLog.getStartDt());
 			worklogParam.setEndDt(persetWorkLog.getEndDt());
@@ -137,6 +144,7 @@ public class WorkLogController {
 			worklogParam.setComplYn(persetWorkLog.getComplYn());
 			}else if(entrance == 0) {
 				persetWorkLog.setTitle(worklogParam.getTitle());
+				persetWorkLog.setContent(worklogParam.getContent());
 				persetWorkLog.setCustNm(worklogParam.getCustNm());
 				persetWorkLog.setStartDt(worklogParam.getStartDt());
 				persetWorkLog.setEndDt(worklogParam.getEndDt());

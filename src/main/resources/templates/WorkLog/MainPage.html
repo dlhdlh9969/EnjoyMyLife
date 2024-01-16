@@ -47,6 +47,7 @@
                 var order2 = document.getElementById('order2').value;
                 var searchCustNm = document.getElementById('searchCustNm').value;
                 var searchTitle = document.getElementById('searchTitle').value;
+                var searchContent = document.getElementById('searchContent').value;
                 var maxrow = $("#maxrow").val();
                 var searchStartDt = $("#searchStartDt").val();
                 var searchEndDt = $("#searchEndDt").val();
@@ -55,7 +56,8 @@
                                     + "&order1=" + encodeURIComponent(order1) 
                                     + "&order2=" + encodeURIComponent(order2) 
                                     + "&custNm=" + encodeURIComponent(searchCustNm) 
-                                    + "&title=" + encodeURIComponent(searchTitle) 
+                                    + "&title=" + encodeURIComponent(searchTitle)
+                                    + "&content=" + encodeURIComponent(searchContent)  
                                     + "&maxrow=" + encodeURIComponent(maxrow)
                                     + "&startDt=" + encodeURIComponent(searchStartDt)
                                     + "&endDt=" + encodeURIComponent(searchEndDt);
@@ -71,24 +73,29 @@
                 </div>
                 <!-- 검색 영역 -->
                 <div class="row">
-                    <button type="button" class="col-auto btn btn-dark border-danger ms-auto" onclick="location.href='/dworld/worklog'">조회 초기화</button>
+                    <div class="col-auto ms-auto">
+                        <button type="button" class="btn btn-dark border-info px-4" onclick="searchWorkLog()">조 회</button>
+                    </div>
+                    <div class="col-auto">
+                        <button type="button" class="btn btn-dark border-danger" onclick="location.href='/dworld/worklog'">조회 초기화</button>
+                    </div>
+                    <a class="col-auto" href="/dworld/worklog/detail">
+                        <button type="button" id="btn-new" class="btn btn-dark border-primary">신규 등록</button>
+                    </a>                    
                 </div>
                 <div class="row g-2">
-                    <div class="col-6 order-1 col-md-2 order-md-1 col-lg-1 ms-lg-auto">
-                        <button type="button" class="h-100 w-100 btn btn-dark border-info" onclick="searchWorkLog()">Search</button>
-                    </div>
-                    <div class="col-6 order-3 col-md-4 order-md-2 col-lg-3 form-floating">
+                    
+                    <div class="col-6 col-md-4 form-floating">
                         <input type="text" class="form-control" id="searchCustNm" name="searchCustNm" th:value="${PersetWorkLog.custNm}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}"/>
-                        <label for="">업체명 검색</label>
+                        <label for="searchCustNm">업체명 검색</label>
                     </div>
-                    <div class="col-6 order-4 col-md-4 order-md-3 col-lg-3 form-floating">
+                    <div class="col-6 col-md-4 form-floating">
                         <input type="text" class="form-control" id="searchTitle" name="searchTitle"th:value="${PersetWorkLog.title}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}"/>
-                        <label for="">제목 검색</label>
+                        <label for="searchTitle">제목 검색</label>
                     </div>
-                    <div class="col-6 order-2 col-md-2 order-md-4 col-lg-1 me-lg-auto">
-                        <a href="/dworld/worklog/detail">
-                            <button type="button" id="btn-new" class="h-100 w-100 btn btn-dark border-primary">New</button>
-                        </a>
+                    <div class="col-6 col-md-4 form-floating">
+                        <input type="text" class="form-control" id="searchContent" name="searchContent"th:value="${PersetWorkLog.content}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}"/>
+                        <label for="searchContent">내용 검색</label>
                     </div>
                 </div>
                 <div class="row g-2">

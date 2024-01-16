@@ -24,6 +24,7 @@
 				AND w.insert_user = #{userId} 
 				AND w.compl_yn like concat('%', #{complYn}, '%') 
 				AND w.title like concat('%', #{title}, '%') 
+				AND w.content like concat('%', #{content}, '%')
 				AND COALESCE(c.cust_nm, '') like concat('%', #{custNm}, '%')
 				AND w.insert_dt BETWEEN DATE_FORMAT(#{startDt}, '%Y-%m-%d') AND DATE_FORMAT(#{endDt}, '%Y-%m-%d')
 			ORDER BY row_num desc
@@ -134,6 +135,7 @@
 			SET maxrow = #{maxrow}
 			  , cust_nm = #{custNm}
 			  , title = #{title}
+			  , content = #{content}
 			  , start_dt = #{startDt}
 			  , end_dt = #{endDt}
 			  , compl_yn = #{complYn}

@@ -8,6 +8,7 @@ public class PersetWorkLogDto {
 	int maxrow;
 	String custNm;
 	String title;
+	String content;
 	String startDt;
 	String endDt;
 	String complYn;
