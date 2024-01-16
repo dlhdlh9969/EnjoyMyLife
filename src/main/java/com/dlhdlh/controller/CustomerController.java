@@ -1,5 +1,7 @@
 package com.dlhdlh.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,11 +68,14 @@ public class CustomerController {
 		}
 		selectCustInfo.setSearchCustNm(searchCustNm);
 		
+		// 업체명을 리스트화
+		List<String> custNmList =  customerService.GetCustNmList();
+		
 		mv.addObject("PersetCust", persetCust);
 		mv.addObject("CustList", custList);
 		mv.addObject("SearchCustNm", searchCustNm);
 		mv.addObject("SelectCust", selectCustInfo);
-		
+		mv.addObject("CustNmList", custNmList);
 		return mv;
 	}
 	

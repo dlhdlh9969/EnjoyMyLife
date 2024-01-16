@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.dlhdlh.dto.CustomerDto;
 import com.dlhdlh.dto.PersetWorkLogDto;
 import com.dlhdlh.dto.WorkLogDto;
+import com.dlhdlh.service.CustomerService;
 import com.dlhdlh.service.DworldService;
 import com.dlhdlh.service.WorkLogService;
 import com.github.pagehelper.PageInfo;
@@ -28,6 +29,9 @@ public class WorkLogController {
 	
 	@Autowired
 	DworldService dworldService;
+	
+	@Autowired
+	CustomerService customerService;
 	
 	@Autowired
 	DworldController dworldController;
@@ -166,12 +170,15 @@ public class WorkLogController {
 		}
 		PageInfo<WorkLogDto> workLogList = new PageInfo<>(worklogService.GetWorkLogList(pageNum, maxRow, worklogParam), maxPaging);
 		
-		
 		// 현재 페이지 주소 저장
 		dworldController.SetPrevPage(servletRequest, "WorkLog");
 		
+		// 업체명을 리스트화
+		List<String> custNmList =  customerService.GetCustNmList();
+		
 		mv.addObject("PersetWorkLog", persetWorkLog);
 		mv.addObject("WorkLogList", workLogList);
+		mv.addObject("CustNmList", custNmList);
 		return mv;		
 	}
 	
@@ -193,6 +200,10 @@ public class WorkLogController {
 		//이전페이지 주소 조회
 		String prevPage = dworldController.GetPrevPage(servletRequest, "WorkLog");
 		
+		// 업체명을 리스트화
+		List<String> custNmList =  customerService.GetCustNmList();
+		
+		mv.addObject("CustNmList", custNmList);
 		mv.addObject("prevPage", prevPage);	
 		return mv;
 	}

@@ -286,7 +286,10 @@
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <input class="form-control my-2" type="text" id="searchCustNm" name="searchCustNm" placeholder="업체명 검색">
+                        <input class="form-control my-2" type="text" list="custNmList" id="searchCustNm" name="searchCustNm" placeholder="업체명 검색" autocomplete="off">
+                        <datalist id="custNmList">
+                            <option th:each="list : ${CustNmList}" th:value="${list.custNm}"></option>
+                        </datalist>
                         <div style="max-height: 400px; overflow:auto" id="custListDiv" name="custListDiv">
                             <table class="table table-dark table-striped" style="table-layout:fixed; cursor:pointer;">
                                 <colgroup>

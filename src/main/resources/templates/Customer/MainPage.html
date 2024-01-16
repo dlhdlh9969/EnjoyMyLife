@@ -258,7 +258,10 @@
                             <button type="button" class="col-12 btn btn-dark border-info text-nowrap" onclick="searchCust()">Search</button>
                         </div>
                         <div class="col-12 col-md-8 col-lg-4 mx-auto mx-lg-0 order-1 order-md-2 order-lg-2">
-                            <input type="text" class="form-control" id="searchCustNm" name="searchCustNm" th:value="${SearchCustNm}" onkeyup="if(window.event.keyCode==13){searchCust()}" placeholder="업체명 검색">
+                            <input type="text" class="form-control" list="custNmList" id="searchCustNm" name="searchCustNm" th:value="${SearchCustNm}" onkeyup="if(window.event.keyCode==13){searchCust()}" placeholder="업체명 검색" autocomplete="off">
+                            <datalist id="custNmList">
+                                <option th:each="list : ${CustNmList}" th:value="${list.custNm}"></option>
+                            </datalist>
                         </div>
                         <div class="col-6 col-md-2 col-lg-2 order-3 ms-auto">
                             <select class="form-select" id="maxrow">

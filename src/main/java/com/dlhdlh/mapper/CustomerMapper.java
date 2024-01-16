@@ -1,5 +1,7 @@
 package com.dlhdlh.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.dlhdlh.dto.CustomerDto;
@@ -22,4 +24,6 @@ public interface CustomerMapper {
 	void UpdatePersetCust(PersetCustDto persetCustParam) throws Exception;
 	
 	public void SetNewMember(String requestId) throws Exception;
+
+	List<String> GetCustNmList() throws Exception;
 }

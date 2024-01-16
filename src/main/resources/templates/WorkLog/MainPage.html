@@ -86,7 +86,10 @@
                 <div class="row g-2">
                     
                     <div class="col-6 col-md-4 form-floating">
-                        <input type="text" class="form-control" id="searchCustNm" name="searchCustNm" th:value="${PersetWorkLog.custNm}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}"/>
+                        <input type="text" class="form-control" list="custNmList" id="searchCustNm" name="searchCustNm" th:value="${PersetWorkLog.custNm}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}" autocomplete="off">
+                        <datalist id="custNmList">
+                            <option th:each="list : ${CustNmList}" th:value="${list.custNm}"></option>
+                        </datalist>
                         <label for="searchCustNm">업체명 검색</label>
                     </div>
                     <div class="col-6 col-md-4 form-floating">

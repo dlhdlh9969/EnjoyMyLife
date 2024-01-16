@@ -1,5 +1,7 @@
 package com.dlhdlh.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,7 +51,11 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public void SetNewMember(String requestId) throws Exception {
 		customerMapper.SetNewMember(requestId);
-		
+	}
+
+	@Override
+	public List<String> GetCustNmList() throws Exception {
+		return customerMapper.GetCustNmList();
 	}
 
 }

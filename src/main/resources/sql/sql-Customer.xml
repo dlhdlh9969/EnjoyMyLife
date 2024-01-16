@@ -11,6 +11,16 @@
 		]]>
 	</select>
 	
+	<!-- 업체 이름 리스트 --> 
+	<select id="GetCustNmList" resultType="com.dlhdlh.dto.CustomerDto">
+		<![CDATA[ 
+			SELECT cust_nm
+			FROM Customer
+			WHERE deleted_yn = "N"
+			ORDER BY cust_nm
+		]]>
+	</select>
+	
 	<update id="CustomerUpdate" parameterType="com.dlhdlh.dto.WorkLogDto">
 		<![CDATA[ 
 			UPDATE Customer
@@ -70,5 +80,7 @@
 			VALUES ( #{userId});
 		]]>
 	</insert>
+	
+	
 </mapper>
 
