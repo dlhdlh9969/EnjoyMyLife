@@ -35,7 +35,6 @@
             // });
 
             //업체명 검색 모달 컨트롤
-            
             var searchCustNm = $("#searchCustNm").val();
             var datas = {searchCustNm};
             $("#searchCustNm").on("keyup",function(key){
@@ -73,6 +72,49 @@
                     }
                 });
             };
+
+            // 업체 등록 버튼
+            $("#btn-insertCust").on("click", function(){
+                Swal.fire({
+                    title: "간편 업체 등록"
+                  , text: "업체명을 입력해주세요."
+                  , input: "text"
+                  , icon: "info"
+                  , inputAttributes: {
+                        autocapitalize: "off"}
+                  , showCancelButton: true
+                  , confirmButtonText: "등 록"
+                //   , showLoaderOnConfirm: true
+                //   , allowOutsideClick: () => !Swal.isLoading()
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var datas = {custNm: `${result.value}`}
+                        $.ajax({
+                            url: "/dworld/customer/control",
+                            type: "post",
+                            data: datas,
+                            success: function(data) {
+                                if(data == "custNmEmpty"){
+                                    Swal.fire("","업체명이 비어선 안됩니다.", "warning");
+                                } else{
+                                    if(data == "OK"){
+                                        Swal.fire("","등록 되었습니다.", "success")
+                                            .then((result)=>{
+                                                if(result){
+                                                    location.reload();
+                                                }
+                                            });
+                                    }else{
+                                        Swal.fire("","접근이 잘못되었습니다.", "error");
+                                    } 
+                                }
+                            }, error: function() {
+                                Swal.fire("","ajax 통신 오류 발생", "error");
+                            }
+                        });
+                    }
+                });
+            });
 
             //업무일지 등록
             $("#btn-insert").on("click", function() {
@@ -275,6 +317,9 @@
             </div>
             <div class="col-6 col-md-3 col-lg-auto">
                 <button type="button" class="w-100 h-100 btn btn-dark border-warning text-nowrap" onclick="SelectCancel()">선택 취소</button>
+            </div>
+            <div class="col-6 col-md-3 col-lg-auto">
+                <button type="button" id="btn-insertCust" class="w-100 h-100 btn btn-dark border-info text-nowrap">업체 등록</button>
             </div>
         </div>
         <!-- 업체 선택 modal -->
