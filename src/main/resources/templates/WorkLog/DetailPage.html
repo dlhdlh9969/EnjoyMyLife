@@ -262,18 +262,18 @@
             </div>
         </div>
         <div class="row g-2 mt-1">
-            <div class="col-12 col-md-6 col-lg-4 form-floating">
+            <div class="col-6 col-md-6 col-lg-3 form-floating">
                 <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.custNm}" type="text" class="form-control" id="cust-nm" name="cust-nm" disabled>
                 <label for="cust-nm">업체명</label>
             </div>
-            <div class="col-4 col-md-2 col-lg-4 form-floating">
+            <div class="col-6 col-md-6 col-lg-3 form-floating">
                 <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.custCd}" type="text" class="form-control" id="cust-cd" name="cust-cd" disabled>                
                 <label for="cust-cd">업체코드</label>
             </div>
-            <div class="col-4 col-md-2 col-lg-2">
+            <div class="col-6 col-md-2 col-lg-2">
                 <button type="button" class="w-100 h-100 btn btn-dark border-primary text-nowrap" data-bs-toggle="modal" data-bs-target="#selectCustModal">업체 선택</button>
             </div>
-            <div class="col-4 col-md-2 col-lg-2">
+            <div class="col-6 col-md-2 col-lg-2">
                 <button type="button" class="w-100 h-100 btn btn-dark border-warning text-nowrap" onclick="SelectCancel()">선택 취소</button>
             </div>
         </div>
@@ -311,19 +311,19 @@
         </div>
 
         <div class="row g-2 mt-1">
-            <div class="col form-floating">
+            <div class="col-6 col-lg-3 form-floating">
                 <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.insertDt}" type="datetime-local" class="form-control" id="insert-dt" name="insert-dt" disabled>
                 <label for="insert-dt" class="mx-1">작성일</label>
             </div>
-            <div class="col form-floating">
+            <div class="col-6 col-lg-3 form-floating">
                 <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.receiptDt}" type="datetime-local" class="form-control" id="receipt-dt" name="receipt-dt">
                 <label for="receipt-dt" class="mx-1">접수일</label>
             </div>
-            <div class="col form-floating">
+            <div class="col-6 col-lg-3 form-floating">
                 <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.dueDt}" type="datetime-local" class="form-control" id="due-dt" name="due-dt">
                 <label for="due-dt" class="mx-1">마감예정일</label>
             </div>
-            <div class="col form-floating">
+            <div class="col-6 col-lg-3 form-floating">
                 <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.complDt}" type="datetime-local" class="form-control" id="compl-dt" name="compl-dt">
                 <label for="compl-dt" class="mx-1">완료일</label>
             </div>

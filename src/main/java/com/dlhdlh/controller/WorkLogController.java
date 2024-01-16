@@ -148,7 +148,7 @@ public class WorkLogController {
 		}
 
 		// 업무일지 리스트 
-		int maxPaging = 10;//페이징 최대 갯수
+		int maxPaging = 8;//페이징 최대 갯수
 		int maxRow = persetWorkLog.getMaxrow(); //페이지당 최대 로우 갯수
 		worklogParam.setUserId(requestUserId);
 		LocalDate endDtplus1d = endDt.plusDays(1);
