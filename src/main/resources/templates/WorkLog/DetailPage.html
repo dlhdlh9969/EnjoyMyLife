@@ -247,7 +247,7 @@
         <div class="text-center webfont1 dlh-headstyle3">
             <label><h1 th:text="${MODE == 'new' ? 'Write New WorkLog' : 'WorkLog Detail'}"></h1></label>
         </div>
-        <div class="row g-2 col-md-6 ms-md-auto col-lg-4 my-3">
+        <div class="row g-2 col-md-6 ms-md-auto col-lg-3 my-3">
             <div th:if="${MODE} == 'new'" class="col">
                 <button type="button" class="col-12 btn btn-dark border-primary" id="btn-insert" name="btn-insert">등록</button>
             </div>
@@ -270,10 +270,10 @@
                 <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.custCd}" type="text" class="form-control" id="cust-cd" name="cust-cd" disabled>                
                 <label for="cust-cd">업체코드</label>
             </div>
-            <div class="col-6 col-md-2 col-lg-2">
+            <div class="col-6 col-md-3 col-lg-auto">
                 <button type="button" class="w-100 h-100 btn btn-dark border-primary text-nowrap" data-bs-toggle="modal" data-bs-target="#selectCustModal">업체 선택</button>
             </div>
-            <div class="col-6 col-md-2 col-lg-2">
+            <div class="col-6 col-md-3 col-lg-auto">
                 <button type="button" class="w-100 h-100 btn btn-dark border-warning text-nowrap" onclick="SelectCancel()">선택 취소</button>
             </div>
         </div>
