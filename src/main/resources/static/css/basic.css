@@ -20,6 +20,7 @@
   --body-color: #e4e9f7;
   --sidebar-color: #fff;
   --primary-color: #ff6347;
+  --primary-Reverse-color: #40d13b;
   --primary-color-light: #dfdfdf;
   --text-color: #5f5f5f;
   --toggle-color: #b1b1b1;
@@ -49,7 +50,7 @@ body{
   width: 17rem;
   padding: 0.5rem 0.5rem;
   background: var(--sidebar-color);
-  transition: var(--tran-04);
+  transition: var(--tran-03);
   white-space: nowrap;
   z-index: 100;
 }
@@ -82,7 +83,7 @@ body{
   border-radius: 50%;
   color: var(--sidebar-color);
   font-size: 2rem;
-  transition: var(--tran-04);
+  transition: var(--tran-02);
 }
 
 .sidebar.close {
@@ -95,6 +96,7 @@ body{
 
 .sidebar.close .text{
   display: none;
+  transition: var(--tran-03);
 }
 
 .sidebar.close header .toggle{
@@ -126,6 +128,7 @@ body{
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: var(--tran-03);
 }
 
 .sidebar .text{
@@ -147,13 +150,13 @@ body{
   min-width: 3rem;
   font-size: 1.5rem;
   color: var(--text-color);
-  transition: var(--tran-02);
+
 }
 
 .sidebar li .text{
   padding-left: 1rem;
   color: var(--text-color);
-  transition: var(--tran-02);
+  transition: var(--tran-04);
 }
 
 .sidebar li a{
@@ -272,6 +275,11 @@ body.dark header .image-text .header-text{
 
 .header-text .profession{
   margin-top: -2px;
+}
+
+.header-text .profession::first-letter{
+  color: var(--primary-Reverse-color);
+  font-weight: bold;
 }
 
 /* 부트스트랩 기초설정 Box-sizing */
