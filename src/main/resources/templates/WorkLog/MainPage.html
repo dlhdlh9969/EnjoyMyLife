@@ -6,66 +6,59 @@
 
         <title>D-world/업무일지</title>
 
-        <!-- 부트스트랩 기본  -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-        <!-- jquery -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <!-- 기본Css -->
-        <link rel="stylesheet" href="/css/basic.css">
-
-        <script>
-            $(document).ready(function() {
-
-                $("#compl-yn").on("change", function(){
-                    searchWorkLog();
-                });
-                $("#order1").on("change", function(){
-                    searchWorkLog();
-                });
-                $("#order2").on("change", function(){
-                    searchWorkLog();
-                });
-                $("#searchStartDt").on("change", function(){
-                    searchWorkLog();
-                });
-                $("#searchEndDt").on("change", function(){
-                    searchWorkLog();
-                });
-
-                //maxrow 5줄씩 보기 컨트롤
-                $("#maxrow").change(function(){
-                    searchWorkLog();
-                });
-            });
-            
-            //검색 버튼
-            function searchWorkLog(){
-                var complYn = document.getElementById('compl-yn').value;
-                var order1 = document.getElementById('order1').value;
-                var order2 = document.getElementById('order2').value;
-                var searchCustNm = document.getElementById('searchCustNm').value;
-                var searchTitle = document.getElementById('searchTitle').value;
-                var searchContent = document.getElementById('searchContent').value;
-                var maxrow = $("#maxrow").val();
-                var searchStartDt = $("#searchStartDt").val();
-                var searchEndDt = $("#searchEndDt").val();
-
-                window.location.href= "/dworld/worklog?complYn=" + encodeURIComponent(complYn) 
-                                    + "&order1=" + encodeURIComponent(order1) 
-                                    + "&order2=" + encodeURIComponent(order2) 
-                                    + "&custNm=" + encodeURIComponent(searchCustNm) 
-                                    + "&title=" + encodeURIComponent(searchTitle)
-                                    + "&content=" + encodeURIComponent(searchContent)  
-                                    + "&maxrow=" + encodeURIComponent(maxrow)
-                                    + "&startDt=" + encodeURIComponent(searchStartDt)
-                                    + "&endDt=" + encodeURIComponent(searchEndDt);
-                }
-        </script>
     </head>
     <body>
-        <header th:include="header :: header"></header>
+        <div>
+            <header th:include="header :: header"></header>
+            <script>
+                $(document).ready(function() {
+    
+                    $("#compl-yn").on("change", function(){
+                        searchWorkLog();
+                    });
+                    $("#order1").on("change", function(){
+                        searchWorkLog();
+                    });
+                    $("#order2").on("change", function(){
+                        searchWorkLog();
+                    });
+                    $("#searchStartDt").on("change", function(){
+                        searchWorkLog();
+                    });
+                    $("#searchEndDt").on("change", function(){
+                        searchWorkLog();
+                    });
+    
+                    //maxrow 5줄씩 보기 컨트롤
+                    $("#maxrow").change(function(){
+                        searchWorkLog();
+                    });
+                });
+                
+                //검색 버튼
+                function searchWorkLog(){
+                    var complYn = document.getElementById('compl-yn').value;
+                    var order1 = document.getElementById('order1').value;
+                    var order2 = document.getElementById('order2').value;
+                    var searchCustNm = document.getElementById('searchCustNm').value;
+                    var searchTitle = document.getElementById('searchTitle').value;
+                    var searchContent = document.getElementById('searchContent').value;
+                    var maxrow = $("#maxrow").val();
+                    var searchStartDt = $("#searchStartDt").val();
+                    var searchEndDt = $("#searchEndDt").val();
+    
+                    window.location.href= "/dworld/worklog?complYn=" + encodeURIComponent(complYn) 
+                                        + "&order1=" + encodeURIComponent(order1) 
+                                        + "&order2=" + encodeURIComponent(order2) 
+                                        + "&custNm=" + encodeURIComponent(searchCustNm) 
+                                        + "&title=" + encodeURIComponent(searchTitle)
+                                        + "&content=" + encodeURIComponent(searchContent)  
+                                        + "&maxrow=" + encodeURIComponent(maxrow)
+                                        + "&startDt=" + encodeURIComponent(searchStartDt)
+                                        + "&endDt=" + encodeURIComponent(searchEndDt);
+                }
+            </script>
+        </div>
         <div class="container px-1">
             <div class="row px-2 justify-content-center">
                 <div class="text-center webfont1 dlh-headstyle3">
