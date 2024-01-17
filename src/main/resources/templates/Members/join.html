@@ -5,67 +5,65 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>D-world/회원가입</title>
 
-        <!-- 부트스트랩 기본  -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-        <!-- jquery -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <!-- 스위트 얼렛 참조 -->
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-        <!-- 기본Css -->
-        <link rel="stylesheet" href="/css/basic.css">
-
-        <script>
-            $(document).ready(function(){
-                $("#btn-cancel").on("click", function(){
-                    history.back();
-                })
-                $("#btn-submit").on("click", function() {
-                    JoinAjax();
+    </head>
+    <body>
+        <div>
+            <header th:include="header :: header"></header>
+            <script>
+                $(document).ready(function(){
+                    $("#btn-cancel").on("click", function(){
+                        history.back();
+                    })
+                    $("#btn-submit").on("click", function() {
+                        JoinAjax();
+                    });
                 });
-            });
 
-            function JoinAjax(){
-                var userId = $("#userId").val();
-                var userPw = $("#userPw").val();
-                var userName = $("#userName").val();
-                var datas = { userId: userId, userPw: userPw, userName: userName };
-                $.ajax({
-                    url: "/member/joinAjax",
-                    type: "post",
-                    data: datas,
-                    success: function(data) {
-                        if(data == "userIdEmpty"){
-                            Swal.fire("ID Empty","ID를 입력해주세요.", "warning");
-                        }else{
-                            if(data == "userPwEmpty"){
-                                Swal.fire("Password Empty","비밀번호를 입력해주세요.", "warning");
+                function JoinAjax(){
+                    var userId = $("#userId").val();
+                    var userPw = $("#userPw").val();
+                    var checkUserPw = $("#checkUserPw").val();
+                    var userName = $("#userName").val();
+                    var datas = { userId: userId, userPw: userPw, userName: userName };
+
+                    if(userPw != checkUserPw){
+                        Swal.fire("Check Your Password","비밀번호가 일치 하지 않습니다.", "warning");
+                    }else{
+                        $.ajax({
+                        url: "/member/joinAjax",
+                        type: "post",
+                        data: datas,
+                        success: function(data) {
+                            if(data == "userIdEmpty"){
+                                Swal.fire("ID Empty","ID를 입력해주세요.", "warning");
                             }else{
-                                if(data == "userNameEmpty"){
-                                    Swal.fire("Your Name Empty","이름을 입력해주세요.", "warning");
+                                if(data == "userPwEmpty"){
+                                    Swal.fire("Password Empty","비밀번호를 입력해주세요.", "warning");
                                 }else{
-                                    if(data == "OK"){
-                                        Swal.fire("Success","회원가입이 되었습니다.", "success")
-                                            .then((result=>{ if(result){
-                                                location.href="/";
-                                            }})
-                                        );
+                                    if(data == "userNameEmpty"){
+                                        Swal.fire("Your Name Empty","이름을 입력해주세요.", "warning");
                                     }else{
-                                        Swal.fire("Error","이미 존재하는 ID입니다. 다시 입력해 주세요.", "error");
+                                        if(data == "OK"){
+                                            Swal.fire("Success","회원가입이 되었습니다.", "success")
+                                                .then((result=>{ if(result){
+                                                    location.href="/";
+                                                }})
+                                            );
+                                        }else{
+                                            Swal.fire("Error","이미 존재하는 ID입니다. 다시 입력해 주세요.", "error");
+                                        }
                                     }
                                 }
                             }
+                        }, error: function() {
+                            alert("ajax 통신 오류 발생");
                         }
-                    }, error: function() {
-                        alert("ajax 통신 오류 발생");
+                    });
                     }
-                });
-            }
-        </script>
-    </head>
-    <body>
-        <header th:include="header :: header"></header>
+                    
+                }
+            </script>
+        </div>
         <div class="container ">
             <form class="col-10 col-md-6 col-lg-4 mx-auto py-5 row gy-3">
                 <div class="text-center dlh-headstyle3">
@@ -76,8 +74,12 @@
                     <label>ID</label>
                 </div>
                 <div class="form-floating my-2">
-                    <input type="text" id="userPw" name="userPw" class="form-control" onkeyup="if(window.event.keyCode==13){JoinAjax()}">
+                    <input type="password" id="userPw" name="userPw" class="form-control" onkeyup="if(window.event.keyCode==13){JoinAjax()}">
                     <label>비밀번호</label>
+                </div>
+                <div class="form-floating my-2">
+                    <input type="password" id="checkUserPw" name="checkUserPw" class="form-control" onkeyup="if(window.event.keyCode==13){JoinAjax()}">
+                    <label>비밀번호 확인</label>
                 </div>
                 <div class="form-floating my-2">
                     <input type="text" id="userName" name="userName" class="form-control" onkeyup="if(window.event.keyCode==13){JoinAjax()}">
