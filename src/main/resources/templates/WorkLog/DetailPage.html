@@ -1,18 +1,10 @@
 <!DOCTYPE html>
 <html>
+<header th:include="header :: header"></header>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>D-world/업무일지</title>
-
     <link rel="stylesheet" href="/css/WorkLog.css">
-
-</head>
-<body th:attr="class=${viewMode} == 'dark' ? 'dark'">
-    <div>
-        <header th:include="header :: header"></header>
-        <script>
+    <script>
         $(document).ready(function(){
 
             //업체 선택하지 않은 데이터 리턴시 대응
@@ -272,7 +264,8 @@
             })
         };
     </script>
-    </div>
+</head>
+<body>
     <div class="container">
         <div class="text-center webfont1 dlh-headstyle3">
             <label><h1 th:text="${MODE == 'new' ? 'Write New WorkLog' : 'WorkLog Detail'}"></h1></label>

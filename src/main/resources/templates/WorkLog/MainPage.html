@@ -1,191 +1,185 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<header th:include="header :: header"></header>
+<head>
+    <title>D-world/업무일지</title>
+    <script>
+        $(document).ready(function() {
 
-        <title>D-world/업무일지</title>
+            $("#compl-yn").on("change", function(){
+                searchWorkLog();
+            });
+            $("#order1").on("change", function(){
+                searchWorkLog();
+            });
+            $("#order2").on("change", function(){
+                searchWorkLog();
+            });
+            $("#searchStartDt").on("change", function(){
+                searchWorkLog();
+            });
+            $("#searchEndDt").on("change", function(){
+                searchWorkLog();
+            });
 
-    </head>
-    <body th:attr="class=${viewMode} == 'dark' ? 'dark'">
-        <div>
-            <header th:include="header :: header"></header>
-            <script>
-                $(document).ready(function() {
-    
-                    $("#compl-yn").on("change", function(){
-                        searchWorkLog();
-                    });
-                    $("#order1").on("change", function(){
-                        searchWorkLog();
-                    });
-                    $("#order2").on("change", function(){
-                        searchWorkLog();
-                    });
-                    $("#searchStartDt").on("change", function(){
-                        searchWorkLog();
-                    });
-                    $("#searchEndDt").on("change", function(){
-                        searchWorkLog();
-                    });
-    
-                    //maxrow 5줄씩 보기 컨트롤
-                    $("#maxrow").change(function(){
-                        searchWorkLog();
-                    });
-                });
+            //maxrow 5줄씩 보기 컨트롤
+            $("#maxrow").change(function(){
+                searchWorkLog();
+            });
+        });
+        
+        //검색 버튼
+        function searchWorkLog(){
+            var complYn = document.getElementById('compl-yn').value;
+            var order1 = document.getElementById('order1').value;
+            var order2 = document.getElementById('order2').value;
+            var searchCustNm = document.getElementById('searchCustNm').value;
+            var searchTitle = document.getElementById('searchTitle').value;
+            var searchContent = document.getElementById('searchContent').value;
+            var maxrow = $("#maxrow").val();
+            var searchStartDt = $("#searchStartDt").val();
+            var searchEndDt = $("#searchEndDt").val();
+
+            window.location.href= "/dworld/worklog?complYn=" + encodeURIComponent(complYn) 
+                                + "&order1=" + encodeURIComponent(order1) 
+                                + "&order2=" + encodeURIComponent(order2) 
+                                + "&custNm=" + encodeURIComponent(searchCustNm) 
+                                + "&title=" + encodeURIComponent(searchTitle)
+                                + "&content=" + encodeURIComponent(searchContent)  
+                                + "&maxrow=" + encodeURIComponent(maxrow)
+                                + "&startDt=" + encodeURIComponent(searchStartDt)
+                                + "&endDt=" + encodeURIComponent(searchEndDt);
+        }
+    </script>
+</head>
+<body>
+    <div class="container px-1">
+        <div class="row px-2 justify-content-center">
+            <div class="text-center webfont1 dlh-headstyle3">
+                <label><H1>WorkLog List</H1></label>
+            </div>
+            <!-- 검색 영역 -->
+            <div class="row">
+                <div class="col-auto ms-auto">
+                    <button type="button" class="btn btn-dark border-info px-4" onclick="searchWorkLog()">Search</button>
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-dark border-danger" onclick="location.href='/dworld/worklog'">Reset</button>
+                </div>
+                <a class="col-auto" href="/dworld/worklog/detail">
+                    <button type="button" id="btn-new" class="btn btn-dark border-primary">New</button>
+                </a>                    
+            </div>
+            <div class="row g-2">
                 
-                //검색 버튼
-                function searchWorkLog(){
-                    var complYn = document.getElementById('compl-yn').value;
-                    var order1 = document.getElementById('order1').value;
-                    var order2 = document.getElementById('order2').value;
-                    var searchCustNm = document.getElementById('searchCustNm').value;
-                    var searchTitle = document.getElementById('searchTitle').value;
-                    var searchContent = document.getElementById('searchContent').value;
-                    var maxrow = $("#maxrow").val();
-                    var searchStartDt = $("#searchStartDt").val();
-                    var searchEndDt = $("#searchEndDt").val();
-    
-                    window.location.href= "/dworld/worklog?complYn=" + encodeURIComponent(complYn) 
-                                        + "&order1=" + encodeURIComponent(order1) 
-                                        + "&order2=" + encodeURIComponent(order2) 
-                                        + "&custNm=" + encodeURIComponent(searchCustNm) 
-                                        + "&title=" + encodeURIComponent(searchTitle)
-                                        + "&content=" + encodeURIComponent(searchContent)  
-                                        + "&maxrow=" + encodeURIComponent(maxrow)
-                                        + "&startDt=" + encodeURIComponent(searchStartDt)
-                                        + "&endDt=" + encodeURIComponent(searchEndDt);
-                }
-            </script>
-        </div>
-        <div class="container px-1">
-            <div class="row px-2 justify-content-center">
-                <div class="text-center webfont1 dlh-headstyle3">
-                    <label><H1>WorkLog List</H1></label>
+                <div class="col-6 col-md-4 form-floating">
+                    <input type="text" class="form-control" list="custNmList" id="searchCustNm" name="searchCustNm" th:value="${PersetWorkLog.custNm}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}" autocomplete="off">
+                    <datalist id="custNmList">
+                        <option th:each="list : ${CustNmList}" th:value="${list.custNm}"></option>
+                    </datalist>
+                    <label for="searchCustNm">업체명 검색</label>
                 </div>
-                <!-- 검색 영역 -->
-                <div class="row">
-                    <div class="col-auto ms-auto">
-                        <button type="button" class="btn btn-dark border-info px-4" onclick="searchWorkLog()">Search</button>
-                    </div>
-                    <div class="col-auto">
-                        <button type="button" class="btn btn-dark border-danger" onclick="location.href='/dworld/worklog'">Reset</button>
-                    </div>
-                    <a class="col-auto" href="/dworld/worklog/detail">
-                        <button type="button" id="btn-new" class="btn btn-dark border-primary">New</button>
-                    </a>                    
+                <div class="col-6 col-md-4 form-floating">
+                    <input type="text" class="form-control" id="searchTitle" name="searchTitle"th:value="${PersetWorkLog.title}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}"/>
+                    <label for="searchTitle">제목 검색</label>
                 </div>
-                <div class="row g-2">
-                    
-                    <div class="col-6 col-md-4 form-floating">
-                        <input type="text" class="form-control" list="custNmList" id="searchCustNm" name="searchCustNm" th:value="${PersetWorkLog.custNm}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}" autocomplete="off">
-                        <datalist id="custNmList">
-                            <option th:each="list : ${CustNmList}" th:value="${list.custNm}"></option>
-                        </datalist>
-                        <label for="searchCustNm">업체명 검색</label>
-                    </div>
-                    <div class="col-6 col-md-4 form-floating">
-                        <input type="text" class="form-control" id="searchTitle" name="searchTitle"th:value="${PersetWorkLog.title}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}"/>
-                        <label for="searchTitle">제목 검색</label>
-                    </div>
-                    <div class="col-6 col-md-4 form-floating">
-                        <input type="text" class="form-control" id="searchContent" name="searchContent"th:value="${PersetWorkLog.content}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}"/>
-                        <label for="searchContent">내용 검색</label>
-                    </div>
-                </div>
-                <div class="row g-2">
-                    <div class="col-6 col-md-6 col-lg-2 ms-lg-auto">
-                        <div class="col form-floating">
-                            <input type="date" th:value="${PersetWorkLog.startDt}" class="form-control" id="searchStartDt" name="searchStartDt">
-                            <label for="searchStartDt" class="mx-1">검색 시작일</label>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-6 col-lg-2">
-                        <div class="col form-floating">
-                            <input type="date" th:value="${PersetWorkLog.endDt}" class="form-control" id="searchEndDt" name="searchEndDt">
-                            <label for="searchEndDt" class="mx-1">검색 종료일</label>
-                        </div>
-                    </div>
-                    <div class="col-6 order-6 col-md-3 col-lg-2">
-                        <select class="form-select h-100" id="order1" name="order1">
-                            <option value="idx" th:attr="selected=${PersetWorkLog.order1 == 'idx'}? 'selected'">작성일</option>
-                            <option value="cust_nm" th:attr="selected=${PersetWorkLog.order1 == 'cust_nm'}? 'selected'">업체명</option>
-                            <option value="receipt_dt" th:attr="selected=${PersetWorkLog.order1 == 'receipt_dt'}? 'selected'">접수일</option>
-                        </select>
-                    </div>
-                    <div class="col-6 order-7 col-md-3 col-lg-2">
-                        <select class="form-select h-100" id="order2" name="order2">
-                            <option value="desc" th:attr="selected=${PersetWorkLog.order2 == 'desc'}? 'selected'">내림차순</option>
-                            <option value="asc" th:attr="selected=${PersetWorkLog.order2 == 'asc'}? 'selected'">오름차순</option>
-                        </select>
-                    </div>
-                    <div class="col-6 col-md-3 col-lg-2">
-                        <select class="form-select h-100" id="compl-yn" name="compl-yn">   
-                            <option value="N" th:attr="selected=${PersetWorkLog.complYn == 'N'}? 'selected'">미완료</option>
-                            <option value="Y" th:attr="selected=${PersetWorkLog.complYn == 'Y'}? 'selected'">완료</option>
-                            <option value="A" th:attr="selected=${PersetWorkLog.complYn == 'A'}? 'selected'">완료여부 전체</option>
-                        </select>
-                    </div>
-                    <div class="col-6 order-8 col-md-3 col-lg-2 me-lg-auto">
-                        <select class="form-select h-100" id="maxrow" name="maxrow">
-                            <option value="5" th:attr="selected=${PersetWorkLog.maxrow == 5} ? 'selected'">5줄씩 보기</option>
-                            <option value="10" th:attr="selected=${PersetWorkLog.maxrow == 10} ? 'selected'">10줄씩 보기</option>
-                            <option value="15" th:attr="selected=${PersetWorkLog.maxrow == 15} ? 'selected'">15줄씩 보기</option>
-                            <option value="20" th:attr="selected=${PersetWorkLog.maxrow == 20} ? 'selected'">20줄씩 보기</option>
-                            <option value="25" th:attr="selected=${PersetWorkLog.maxrow == 25} ? 'selected'">25줄씩 보기</option>
-                            <option value="30" th:attr="selected=${PersetWorkLog.maxrow == 30} ? 'selected'">30줄씩 보기</option>
-                        </select>
-                    </div>
+                <div class="col-6 col-md-4 form-floating">
+                    <input type="text" class="form-control" id="searchContent" name="searchContent"th:value="${PersetWorkLog.content}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}"/>
+                    <label for="searchContent">내용 검색</label>
                 </div>
             </div>
-            <!-- 테이블 영역 -->
-            <div class="pt-2 pb-5">
-                <div style="overflow:auto;">
-                    <table class="table table-dark table-striped" style="min-width:1000px;table-layout:fixed;">
-                        <colgroup>
-                            <col width="5%">
-                            <col width="10%">
-                            <col width="20%">
-                            <col width="8%">
-                            <col width="8%">
-                            <col width="4%">
-                        </colgroup>
-                        <thead>
-                            <th>Num</th>
-                            <th>업체명</th>
-                            <th>제목</th>
-                            <th class="text-center">작성일</th>
-                            <th class="text-center">접수일</th>
-                            <th class="text-center">완료</th>
-                        </thead>
-                        <tbody>
-                            <tr th:each="list : ${WorkLogList.getList()}" class="text-wrap" th:onclick="|location.href='/dworld/worklog/detail?idx=${list.idx}'|" style="cursor:pointer;">
-                                <td class="text-truncate" th:text="${list.rowNum}"></td>
-                                <td class="text-truncate" th:text="${list.custNm}"></td>
-                                <td class="text-truncate" th:text='${list.title}'></td>
-                                <td class="text-center" th:text='${list.insertDt}'></td>
-                                <td class="text-center" th:text='${list.receiptDt}'></td>
-                                <td class="text-center" th:text='${list.complYn}'></td>
-                            </tr>
-                            <tr th:unless="${#lists.size(WorkLogList.getList())} > 0">
-                                <td colspan="6" class="text-center">내용이 없습니다.</td>
-                            </tr>
-                        </tbody>
-                    </table>
+            <div class="row g-2">
+                <div class="col-6 col-md-6 col-lg-2 ms-lg-auto">
+                    <div class="col form-floating">
+                        <input type="date" th:value="${PersetWorkLog.startDt}" class="form-control" id="searchStartDt" name="searchStartDt">
+                        <label for="searchStartDt" class="mx-1">검색 시작일</label>
+                    </div>
                 </div>
-                <ul class="pagination justify-content-center pt-4">
-                    <li class="page-item" th:classappend="${WorkLogList.getPrePage() == 0} ? 'disabled'">
-                    <a class="page-link" th:href="@{/dworld/worklog(pageNum=${WorkLogList.getPrePage()}, title=${PersetWorkLog.title}, custNm=${PersetWorkLog.custNm}, complYn=${PersetWorkLog.complYn}, order1=${PersetWorkLog.order1}, order2=${PersetWorkLog.order2}, startDt=${PersetWorkLog.startDt}, endDt=${PersetWorkLog.endDt}, maxrow=${PersetWorkLog.maxrow})}">Prev</a>
-                    </li>
-                    <li class="page-item" th:each="page: ${#numbers.sequence(WorkLogList.getNavigateFirstPage(), WorkLogList.getNavigateLastPage())}" th:classappend="${page == WorkLogList.getPageNum()} ? 'active'">
-                    <a class="page-link" th:text="${page}" th:href="@{/dworld/worklog(pageNum=${page}, title=${PersetWorkLog.title}, custNm=${PersetWorkLog.custNm}, complYn=${PersetWorkLog.complYn}, order1=${PersetWorkLog.order1}, order2=${PersetWorkLog.order2}, startDt=${PersetWorkLog.startDt}, endDt=${PersetWorkLog.endDt}, maxrow=${PersetWorkLog.maxrow})}"></a>
-                    </li>
-                    <li class="page-item" th:classappend="${WorkLogList.getNextPage() == 0} ? 'disabled'">
-                    <a class="page-link"  th:href="@{/dworld/worklog(pageNum=${WorkLogList.getNextPage()}, title=${PersetWorkLog.title}, custNm=${PersetWorkLog.custNm}, complYn=${PersetWorkLog.complYn}, order1=${PersetWorkLog.order1}, order2=${PersetWorkLog.order2}, searchStartDt=${PersetWorkLog.startDt}, endDt=${PersetWorkLog.endDt}, maxrow=${PersetWorkLog.maxrow})}">Next</a>
-                    </li>
-                </ul>
+                <div class="col-6 col-md-6 col-lg-2">
+                    <div class="col form-floating">
+                        <input type="date" th:value="${PersetWorkLog.endDt}" class="form-control" id="searchEndDt" name="searchEndDt">
+                        <label for="searchEndDt" class="mx-1">검색 종료일</label>
+                    </div>
+                </div>
+                <div class="col-6 order-6 col-md-3 col-lg-2">
+                    <select class="form-select h-100" id="order1" name="order1">
+                        <option value="idx" th:attr="selected=${PersetWorkLog.order1 == 'idx'}? 'selected'">작성일</option>
+                        <option value="cust_nm" th:attr="selected=${PersetWorkLog.order1 == 'cust_nm'}? 'selected'">업체명</option>
+                        <option value="receipt_dt" th:attr="selected=${PersetWorkLog.order1 == 'receipt_dt'}? 'selected'">접수일</option>
+                    </select>
+                </div>
+                <div class="col-6 order-7 col-md-3 col-lg-2">
+                    <select class="form-select h-100" id="order2" name="order2">
+                        <option value="desc" th:attr="selected=${PersetWorkLog.order2 == 'desc'}? 'selected'">내림차순</option>
+                        <option value="asc" th:attr="selected=${PersetWorkLog.order2 == 'asc'}? 'selected'">오름차순</option>
+                    </select>
+                </div>
+                <div class="col-6 col-md-3 col-lg-2">
+                    <select class="form-select h-100" id="compl-yn" name="compl-yn">   
+                        <option value="N" th:attr="selected=${PersetWorkLog.complYn == 'N'}? 'selected'">미완료</option>
+                        <option value="Y" th:attr="selected=${PersetWorkLog.complYn == 'Y'}? 'selected'">완료</option>
+                        <option value="A" th:attr="selected=${PersetWorkLog.complYn == 'A'}? 'selected'">완료여부 전체</option>
+                    </select>
+                </div>
+                <div class="col-6 order-8 col-md-3 col-lg-2 me-lg-auto">
+                    <select class="form-select h-100" id="maxrow" name="maxrow">
+                        <option value="5" th:attr="selected=${PersetWorkLog.maxrow == 5} ? 'selected'">5줄씩 보기</option>
+                        <option value="10" th:attr="selected=${PersetWorkLog.maxrow == 10} ? 'selected'">10줄씩 보기</option>
+                        <option value="15" th:attr="selected=${PersetWorkLog.maxrow == 15} ? 'selected'">15줄씩 보기</option>
+                        <option value="20" th:attr="selected=${PersetWorkLog.maxrow == 20} ? 'selected'">20줄씩 보기</option>
+                        <option value="25" th:attr="selected=${PersetWorkLog.maxrow == 25} ? 'selected'">25줄씩 보기</option>
+                        <option value="30" th:attr="selected=${PersetWorkLog.maxrow == 30} ? 'selected'">30줄씩 보기</option>
+                    </select>
+                </div>
             </div>
         </div>
-    </body>
+        <!-- 테이블 영역 -->
+        <div class="pt-2 pb-5">
+            <div style="overflow:auto;">
+                <table class="table table-dark table-striped" style="min-width:1000px;table-layout:fixed;">
+                    <colgroup>
+                        <col width="5%">
+                        <col width="10%">
+                        <col width="20%">
+                        <col width="8%">
+                        <col width="8%">
+                        <col width="4%">
+                    </colgroup>
+                    <thead>
+                        <th>Num</th>
+                        <th>업체명</th>
+                        <th>제목</th>
+                        <th class="text-center">작성일</th>
+                        <th class="text-center">접수일</th>
+                        <th class="text-center">완료</th>
+                    </thead>
+                    <tbody>
+                        <tr th:each="list : ${WorkLogList.getList()}" class="text-wrap" th:onclick="|location.href='/dworld/worklog/detail?idx=${list.idx}'|" style="cursor:pointer;">
+                            <td class="text-truncate" th:text="${list.rowNum}"></td>
+                            <td class="text-truncate" th:text="${list.custNm}"></td>
+                            <td class="text-truncate" th:text='${list.title}'></td>
+                            <td class="text-center" th:text='${list.insertDt}'></td>
+                            <td class="text-center" th:text='${list.receiptDt}'></td>
+                            <td class="text-center" th:text='${list.complYn}'></td>
+                        </tr>
+                        <tr th:unless="${#lists.size(WorkLogList.getList())} > 0">
+                            <td colspan="6" class="text-center">내용이 없습니다.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <ul class="pagination justify-content-center pt-4">
+                <li class="page-item" th:classappend="${WorkLogList.getPrePage() == 0} ? 'disabled'">
+                <a class="page-link" th:href="@{/dworld/worklog(pageNum=${WorkLogList.getPrePage()}, title=${PersetWorkLog.title}, custNm=${PersetWorkLog.custNm}, complYn=${PersetWorkLog.complYn}, order1=${PersetWorkLog.order1}, order2=${PersetWorkLog.order2}, startDt=${PersetWorkLog.startDt}, endDt=${PersetWorkLog.endDt}, maxrow=${PersetWorkLog.maxrow})}">Prev</a>
+                </li>
+                <li class="page-item" th:each="page: ${#numbers.sequence(WorkLogList.getNavigateFirstPage(), WorkLogList.getNavigateLastPage())}" th:classappend="${page == WorkLogList.getPageNum()} ? 'active'">
+                <a class="page-link" th:text="${page}" th:href="@{/dworld/worklog(pageNum=${page}, title=${PersetWorkLog.title}, custNm=${PersetWorkLog.custNm}, complYn=${PersetWorkLog.complYn}, order1=${PersetWorkLog.order1}, order2=${PersetWorkLog.order2}, startDt=${PersetWorkLog.startDt}, endDt=${PersetWorkLog.endDt}, maxrow=${PersetWorkLog.maxrow})}"></a>
+                </li>
+                <li class="page-item" th:classappend="${WorkLogList.getNextPage() == 0} ? 'disabled'">
+                <a class="page-link"  th:href="@{/dworld/worklog(pageNum=${WorkLogList.getNextPage()}, title=${PersetWorkLog.title}, custNm=${PersetWorkLog.custNm}, complYn=${PersetWorkLog.complYn}, order1=${PersetWorkLog.order1}, order2=${PersetWorkLog.order2}, searchStartDt=${PersetWorkLog.startDt}, endDt=${PersetWorkLog.endDt}, maxrow=${PersetWorkLog.maxrow})}">Next</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
 </html>

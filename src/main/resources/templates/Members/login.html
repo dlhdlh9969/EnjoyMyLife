@@ -1,68 +1,63 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>D-world/로그인</title>
-    </head>
-    <body>
-        <div>
-            <header th:include="header :: header"></header>
-            <script>
-                $(document).ready(function(){
-                
-                });
-
-                function LoginAjax(){
-                    var userId = $("#userId").val();
-                    var userPw = $("#userPw").val();
-                    var datas = {userId: userId, userPw: userPw};
-
-                    $.ajax({
-                        url: "/members/loginAjax",
-                        type: "post",
-                        data: datas,
-                        success: function(data) {
-                            if(data == "OK"){
-                                location.href="/";  //인덱스로 이동
-                            }else{
-                                Swal.fire("Error","ID와 비밀번호를 다시 확인해주세요.", "question");
-                            }
-                        }, error: function() {
-                            alert("ajax 통신 오류 발생");
-                        }
-                    });
-                };
-            </script>
-        </div>
+<header th:include="header :: header"></header>
+<head>
+    <title>D-world/로그인</title>
+    <script>
+        $(document).ready(function(){
         
-        <div class="container">
-            <form class="col-10 col-md-6 col-lg-4 mx-auto py-5 row gy-3">
-                <div class="text-center dlh-headstyle3">
-                    <label for=""><h2 class="dlh-headfont1 ">Login Page</h2></label>
-                </div>
-                <div class="form-floating clean">
-                    <input type="text" id="userId" name="userId" class="form-control" onkeyup="if(window.event.keyCode==13){LoginAjax()}">
-                    <label>ID</label>
-                </div>
-                <div class="form-floating">
-                    <input type="password" id="userPw" name="userPw" class="form-control" onkeyup="if(window.event.keyCode==13){LoginAjax()}">
-                    <label>Password</label>
-                </div>
-                <div>
-                    <div class="row g-2">
-                        <div class="col-auto me-auto">
-                            <a href="join" class="btn btn-dark border-warning" id="btn-join">가입</a>
-                        </div>
-                        <div class="col-auto">
-                            <button class=" btn btn-dark border-primary" type="button" id="btn-submit" onclick="LoginAjax()">로그인</button>
-                        </div>
-                        <div class="col-auto">
-                            <button class=" btn btn-dark border-success" type="button" id="btn-cancel" onclick="history.back()">뒤로</button>
-                        </div>
+        });
+
+        function LoginAjax(){
+            var userId = $("#userId").val();
+            var userPw = $("#userPw").val();
+            var datas = {userId: userId, userPw: userPw};
+
+            $.ajax({
+                url: "/members/loginAjax",
+                type: "post",
+                data: datas,
+                success: function(data) {
+                    if(data == "OK"){
+                        location.href="/";  //인덱스로 이동
+                    }else{
+                        Swal.fire("Error","ID와 비밀번호를 다시 확인해주세요.", "question");
+                    }
+                }, error: function() {
+                    alert("ajax 통신 오류 발생");
+                }
+            });
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <form class="col-10 col-md-6 col-lg-4 mx-auto py-5 row gy-3">
+            <div class="text-center dlh-headstyle3">
+                <label for=""><h2 class="dlh-headfont1 ">Login Page</h2></label>
+            </div>
+            <div class="form-floating clean">
+                <input type="text" id="userId" name="userId" class="form-control" onkeyup="if(window.event.keyCode==13){LoginAjax()}">
+                <label>ID</label>
+            </div>
+            <div class="form-floating">
+                <input type="password" id="userPw" name="userPw" class="form-control" onkeyup="if(window.event.keyCode==13){LoginAjax()}">
+                <label>Password</label>
+            </div>
+            <div>
+                <div class="row g-2">
+                    <div class="col-auto me-auto">
+                        <a href="join" class="btn btn-dark border-warning" id="btn-join">Join Members</a>
+                    </div>
+                    <div class="col-auto">
+                        <button class=" btn btn-dark border-primary" type="button" id="btn-submit" onclick="LoginAjax()">Login</button>
+                    </div>
+                    <div class="col-auto">
+                        <button class=" btn btn-dark border-success" type="button" id="btn-cancel" onclick="history.back()">Back</button>
                     </div>
                 </div>
-            </form>
-        </div>
-    </body>
+            </div>
+        </form>
+    </div>
+</body>
 </html>

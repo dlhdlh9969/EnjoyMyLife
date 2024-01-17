@@ -7,6 +7,10 @@ body.dark{
     --text-color: #fff;
     --toggle-color: #4e4e4e;
 }
+
+*{
+    color: var(--text-color);
+}
   
 body.dark .sidebar header .toggle{
     color: var(--text-color);

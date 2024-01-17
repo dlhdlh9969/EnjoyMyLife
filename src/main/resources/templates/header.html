@@ -1,87 +1,82 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <title>D-world.header</title>
-    
-</head>
-<body>
-    <header th:fragment="header">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-            <link rel="shortcut icon" href="images/logo.ico" type="image/x-icon">
+<header th:fragment="header">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="images/logo.ico" type="image/x-icon">
 
-            <!-- 부트스트랩 기본  -->
-            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-            <!-- jquery -->
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-            <!-- 스위트 얼렛 참조 -->
-            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-            <!-- datetime 포멧 변경에 도움이 되는 라이브러리 Moment.js -->
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-            <!-- boxicons 참조 -->
-            <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-            <!-- 기본Css -->
-            <link rel="stylesheet" href="/css/Basic.css">
-            <link rel="stylesheet" href="/css/BasicDark.css">
-            
-            <script>
-                $(document).ready(function(){
-                    $("#btn-home").hover(function(){
-                        $("#label-btnhome").text("Home");
-                    }, function(){
-                        $("#label-btnhome").text("");
-                    });
-
-                    var body = document.querySelector("body");
-                    var sidebar = body.querySelector(".sidebar");
-                    var toggle = body.querySelector(".toggle");
-                    var searchBtn = body.querySelector(".search-box");
-                    var modeSwitch = body.querySelector(".toggle-switch");
-                    var modeText = body.querySelector(".mode-text");
-
-                    modeSwitch.addEventListener("click", ()=>{
-                        body.classList.toggle("dark");
-                        var viewMode;
-                        if(body.classList.contains("dark")){
-                            modeText.innerText = "Light Mode"
-                            viewMode = "dark"
-                        }else{
-                            modeText.innerText = "Dark Mode"
-                            viewMode = "light"
-                        }
-
-                        var datas = {viewMode};
-                        $.ajax({
-                            url: "/dworld/viewmode",
-                            type: "post",
-                            data: datas,
-                            success: function(data) {
-                                // if(data == "OK"){
-                                //     Swal.fire("","통신 성공", "success")
-                                // }
-                            }, error: function() {
-                                Swal.fire("","ajax 통신 오류 발생", "error");
-                            }
-                        });
-
-                    });
-
-                    toggle.addEventListener("click", ()=>{
-                        sidebar.classList.toggle("close");
-                    })
-                });
+        <!-- 부트스트랩 기본  -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+        <!-- jquery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <!-- 스위트 얼렛 참조 -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+        <!-- datetime 포멧 변경에 도움이 되는 라이브러리 Moment.js -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+        <!-- boxicons 참조 -->
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+        <!-- 기본Css -->
+        <link rel="stylesheet" href="/css/Basic.css">
+        <link rel="stylesheet" href="/css/BasicDark.css">
         
-                document.addEventListener('keydown', function(event){
-                    if (event.key === 'Escape'){
-                        $('#offcanvasbody').offcanvas('hide');
-                    }
+        <script>
+            $(document).ready(function(){
+                $("#btn-home").hover(function(){
+                    $("#label-btnhome").text("Home");
+                }, function(){
+                    $("#label-btnhome").text("");
                 });
-            </script>
-        </head>
+
+                var body = document.querySelector("body");
+                var sidebar = body.querySelector(".sidebar");
+                var toggle = body.querySelector(".toggle");
+                var searchBtn = body.querySelector(".search-box");
+                var modeSwitch = body.querySelector(".toggle-switch");
+                var modeText = body.querySelector(".mode-text");
+
+                modeSwitch.addEventListener("click", ()=>{
+                    body.classList.toggle("dark");
+                    var viewMode;
+                    if(body.classList.contains("dark")){
+                        modeText.innerText = "Light Mode"
+                        viewMode = "dark"
+                    }else{
+                        modeText.innerText = "Dark Mode"
+                        viewMode = "light"
+                    }
+
+                    var datas = {viewMode};
+                    $.ajax({
+                        url: "/dworld/viewmode",
+                        type: "post",
+                        data: datas,
+                        success: function(data) {
+                            // if(data == "OK"){
+                            //     Swal.fire("","통신 성공", "success")
+                            // }
+                        }, error: function() {
+                            Swal.fire("","ajax 통신 오류 발생", "error");
+                        }
+                    });
+
+                });
+
+                toggle.addEventListener("click", ()=>{
+                    sidebar.classList.toggle("close");
+                })
+            });
+
+            document.addEventListener('keydown', function(event){
+                if (event.key === 'Escape'){
+                    $('#offcanvasbody').offcanvas('hide');
+                }
+            });
+        </script>
+</head>
+    <body th:attr="class=${viewMode} == 'dark' ? 'dark'">
         <!-- 사이드바 시작 -->
         <div class="sidebar close">
             <header>
@@ -158,7 +153,6 @@
                 </div>
             </div>
         </div>
-    </header>
-
-</body>
+    </body>
+</header>
 </html>

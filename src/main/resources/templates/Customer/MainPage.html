@@ -1,370 +1,365 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        
-        <title>D-world/고객사 관리</title>
+<header th:include="header :: header"></header>
+<head>
+    <title>D-world/고객사 관리</title>
 
-        <link rel="stylesheet" href="/css/Customer.css">
+    <link rel="stylesheet" href="/css/Customer.css">
+    <script>
+        $(document).ready(function() {
+            $("#btn-editOK").hide();
+            $("#btn-insertOK").hide();
+            $("#btn-cancel").hide();
+            
+            //취소 버튼
+            $("#btn-cancel").on("click", function(){
+                location.reload();
+            });
 
-    </head>
-    <body th:attr="class=${viewMode} == 'dark' ? 'dark'">
-        <div>
-            <header th:include="header :: header"></header>
-            <script>
-                $(document).ready(function() {
-                    $("#btn-editOK").hide();
-                    $("#btn-insertOK").hide();
-                    $("#btn-cancel").hide();
-                    
-                    //취소 버튼
-                    $("#btn-cancel").on("click", function(){
-                        location.reload();
-                    });
-    
-                    // 수정완료 버튼
-                    $("#btn-editOK").on("click", function() {
-                        var valcustCd = $("#input-custCd").val();
-                        var valcustNm = $("#input-custNm").val();
-                        var valcustBusnum = $("#input-custBusnum").val();
-                        var valcustNum = $("#input-custNum").val();
-                        var valcustCeonm = $("#input-custCeonm").val();
-                        var valcustCeonum = $("#input-custCeonum").val();
-                        var valcustAddr = $("#input-custAddr").val();
-                        var valcustEmail = $("#input-custEmail").val();
-                        var valcustRemark = $("#input-custRemark").val();
-                        var datas = { custCd: valcustCd
-                                    , custNm: valcustNm
-                                    , custBusnum: valcustBusnum
-                                    , custNum: valcustNum
-                                    , custCeonm: valcustCeonm
-                                    , custCeonum: valcustCeonum
-                                    , custAddr: valcustAddr
-                                    , custEmail: valcustEmail
-                                    , custRemark: valcustRemark
-                        };
-    
-                        Swal.fire({
-                            title : "Update Request"
-                            , text : "수정 하시겠습니까?"
-                            , icon : "warning"
-                            , showCancelButton: true
-                            , confirmButtonColor: '#3085d6'
-                            , cancelButtonColor: '#d33'
-                            , confirmButtonText: 'Ok! Save'
-                            , cancelButtonText: 'Cancel', 
-                        }).then((result)=>{
-                            if(result.isConfirmed){
-                                $.ajax({
-                                    url: "/dworld/customer/control",
-                                    type: "put",
-                                    data: datas,
-                                    success: function(data) {
-                                        if(data == "custNmEmpty"){
-                                            Swal.fire("Cust Name Empty","업체명이 비어선 안됩니다.", "warning");
-                                        }else{
-                                            if(data == "OK"){
-                                                Swal.fire("Success","수정 되었습니다.", "success")
-                                                    .then((result)=>{
-                                                        if(result){
-                                                            location.reload();}
-                                                    });
-                                            }else{
-                                                Swal.fire("Error", "접근이 잘못되었습니다.", "error");}
-                                        }
-                                    }, error: function() {
-                                        Swal.fire("Error", "ajax 통신 오류 발생", "error");}
-                                });
-                            }
-                        })
-                    });
-    
-                    // 수정 버튼
-                    $("#btn-edit").on("click", function(){
-                        $("#btn-editOK").show();
-                        $("#btn-insert").hide();
-                        $("#btn-edit").hide();
-                        $("#btn-delete").hide();
-                        $("#btn-cancel").show();
-                        
-                        $("#detail-head").text("Editing");
-                    
-                        document.getElementById("input-custNm").readOnly = false;
-                        document.getElementById("input-custBusnum").readOnly = false;
-                        document.getElementById("input-custNum").readOnly = false;
-                        document.getElementById("input-custCeonm").readOnly = false;
-                        document.getElementById("input-custCeonum").readOnly = false;
-                        document.getElementById("input-custAddr").readOnly = false;
-                        document.getElementById("input-custEmail").readOnly = false;
-                        document.getElementById("input-custRemark").readOnly = false;
-                    });
-                    
-                    // 삭제 버튼
-                    $("#btn-delete").on("click", function() {
-                        Swal.fire({
-                            title : "Delete Request"
-                          , text : "삭제 하시겠습니까?"
-                          , icon : "warning"
-                          , showCancelButton: true
-                          , confirmButtonColor: '#3085d6'
-                          , cancelButtonColor: '#d33'
-                          , confirmButtonText: 'OK! Delete'
-                          , cancelButtonText: 'Cancel', 
-                        }).then((result)=>{
-                            if(result.isConfirmed){
-                                var valcustCd = $("#input-custCd").val();
-                                var datas = {custCd: valcustCd};
-    
-                                $.ajax({
-                                    url: "/dworld/customer/control",
-                                    type: "delete",
-                                    data: datas,
-                                    success: function(data) {
-                                        if(data == "OK"){
-                                            Swal.fire("Success","삭제 되었습니다.", "success")
-                                                .then((result)=>{
-                                                    if(result){
-                                                        location.href="/dworld/customer";
-                                                    }
-                                                });
-                                            
-                                        }else{
-                                            Swal.fire("Error", "접근이 잘못되었습니다.", "error");
-                                        }
-                                    }, error: function() {
-                                        Swal.fire("Error", "ajax 통신 오류 발생", "error");
-                                    }
-                                });
-                            }
-                        });
-                                
-                                
-                               
-                    });
-    
-                    // 등록 버튼
-                    $("#btn-insert").on("click", function(){
-                        $("#btn-insert").hide();
-                        $("#btn-insertOK").show();
-                        $("#btn-edit").hide();
-                        $("#btn-delete").hide();
-                        $("#btn-cancel").show();
-                        
-                        $("#detail-head").text("Writing");
-                        $("#input-custCd").val("Auto Increment(자동생성)");
-                        $("#input-custNm").val("");
-                        $("#input-custBusnum").val("");
-                        $("#input-custNum").val("");
-                        $("#input-custCeonm").val("");
-                        $("#input-custCeonum").val("");
-                        $("#input-custAddr").val("");
-                        $("#input-custEmail").val("");
-                        $("#input-custRemark").text("");
-    
-                        document.getElementById("input-custNm").readOnly = false;
-                        document.getElementById("input-custBusnum").readOnly = false;
-                        document.getElementById("input-custNum").readOnly = false;
-                        document.getElementById("input-custCeonm").readOnly = false;
-                        document.getElementById("input-custCeonum").readOnly = false;
-                        document.getElementById("input-custAddr").readOnly = false;
-                        document.getElementById("input-custEmail").readOnly = false;
-                        document.getElementById("input-custRemark").readOnly = false;
-    
-                    });
-    
-                    // 등록 완료 버튼
-                    $("#btn-insertOK").on("click", function() {
-                        var valcustNm = $("#input-custNm").val();
-                        var valcustBusnum = $("#input-custBusnum").val();
-                        var valcustNum = $("#input-custNum").val();
-                        var valcustCeonm = $("#input-custCeonm").val();
-                        var valcustCeonum = $("#input-custCeonum").val();
-                        var valcustAddr = $("#input-custAddr").val();
-                        var valcustEmail = $("#input-custEmail").val();
-                        var valcustRemark = $("#input-custRemark").val();
-                        var datas = { custNm: valcustNm
-                                    , custBusnum: valcustBusnum
-                                    , custNum: valcustNum
-                                    , custCeonm: valcustCeonm
-                                    , custCeonum: valcustCeonum
-                                    , custAddr: valcustAddr
-                                    , custEmail: valcustEmail
-                                    , custRemark: valcustRemark };
-    
+            // 수정완료 버튼
+            $("#btn-editOK").on("click", function() {
+                var valcustCd = $("#input-custCd").val();
+                var valcustNm = $("#input-custNm").val();
+                var valcustBusnum = $("#input-custBusnum").val();
+                var valcustNum = $("#input-custNum").val();
+                var valcustCeonm = $("#input-custCeonm").val();
+                var valcustCeonum = $("#input-custCeonum").val();
+                var valcustAddr = $("#input-custAddr").val();
+                var valcustEmail = $("#input-custEmail").val();
+                var valcustRemark = $("#input-custRemark").val();
+                var datas = { custCd: valcustCd
+                            , custNm: valcustNm
+                            , custBusnum: valcustBusnum
+                            , custNum: valcustNum
+                            , custCeonm: valcustCeonm
+                            , custCeonum: valcustCeonum
+                            , custAddr: valcustAddr
+                            , custEmail: valcustEmail
+                            , custRemark: valcustRemark
+                };
+
+                Swal.fire({
+                    title : "Update Request"
+                    , text : "수정 하시겠습니까?"
+                    , icon : "warning"
+                    , showCancelButton: true
+                    , confirmButtonColor: '#3085d6'
+                    , cancelButtonColor: '#d33'
+                    , confirmButtonText: 'Ok! Save'
+                    , cancelButtonText: 'Cancel', 
+                }).then((result)=>{
+                    if(result.isConfirmed){
                         $.ajax({
                             url: "/dworld/customer/control",
-                            type: "post",
+                            type: "put",
                             data: datas,
                             success: function(data) {
                                 if(data == "custNmEmpty"){
-                                    Swal.fire("","업체명이 비어선 안됩니다.", "warning");
-                                } else{
+                                    Swal.fire("Cust Name Empty","업체명이 비어선 안됩니다.", "warning");
+                                }else{
                                     if(data == "OK"){
-                                        Swal.fire("","등록 되었습니다.", "success")
+                                        Swal.fire("Success","수정 되었습니다.", "success")
                                             .then((result)=>{
                                                 if(result){
-                                                    location.href="/dworld/customer";
-                                                }
+                                                    location.reload();}
                                             });
                                     }else{
-                                        Swal.fire("","접근이 잘못되었습니다.", "error");
-                                    } 
+                                        Swal.fire("Error", "접근이 잘못되었습니다.", "error");}
                                 }
                             }, error: function() {
-                                Swal.fire("","ajax 통신 오류 발생", "error");
+                                Swal.fire("Error", "ajax 통신 오류 발생", "error");}
+                        });
+                    }
+                })
+            });
+
+            // 수정 버튼
+            $("#btn-edit").on("click", function(){
+                $("#btn-editOK").show();
+                $("#btn-insert").hide();
+                $("#btn-edit").hide();
+                $("#btn-delete").hide();
+                $("#btn-cancel").show();
+                
+                $("#detail-head").text("Editing");
+            
+                document.getElementById("input-custNm").readOnly = false;
+                document.getElementById("input-custBusnum").readOnly = false;
+                document.getElementById("input-custNum").readOnly = false;
+                document.getElementById("input-custCeonm").readOnly = false;
+                document.getElementById("input-custCeonum").readOnly = false;
+                document.getElementById("input-custAddr").readOnly = false;
+                document.getElementById("input-custEmail").readOnly = false;
+                document.getElementById("input-custRemark").readOnly = false;
+            });
+            
+            // 삭제 버튼
+            $("#btn-delete").on("click", function() {
+                Swal.fire({
+                    title : "Delete Request"
+                    , text : "삭제 하시겠습니까?"
+                    , icon : "warning"
+                    , showCancelButton: true
+                    , confirmButtonColor: '#3085d6'
+                    , cancelButtonColor: '#d33'
+                    , confirmButtonText: 'OK! Delete'
+                    , cancelButtonText: 'Cancel', 
+                }).then((result)=>{
+                    if(result.isConfirmed){
+                        var valcustCd = $("#input-custCd").val();
+                        var datas = {custCd: valcustCd};
+
+                        $.ajax({
+                            url: "/dworld/customer/control",
+                            type: "delete",
+                            data: datas,
+                            success: function(data) {
+                                if(data == "OK"){
+                                    Swal.fire("Success","삭제 되었습니다.", "success")
+                                        .then((result)=>{
+                                            if(result){
+                                                location.href="/dworld/customer";
+                                            }
+                                        });
+                                    
+                                }else{
+                                    Swal.fire("Error", "접근이 잘못되었습니다.", "error");
+                                }
+                            }, error: function() {
+                                Swal.fire("Error", "ajax 통신 오류 발생", "error");
                             }
                         });
-                    });
-    
-                    //maxrow 5줄씩 보기 컨트롤
-                    $("#maxrow").change(function(){
-                        searchCust();
-                    });
+                    }
                 });
-    
-                //검색 버튼
-                function searchCust(){
-                    var searchCustNm = document.getElementById('searchCustNm').value;
-                    var maxrow = $("#maxrow").val();
-                    window.location.href= "/dworld/customer?SearchCustNm=" + encodeURIComponent(searchCustNm) 
-                                        + "&maxrow=" + encodeURIComponent(maxrow);
-                };
-            </script>
-        </div>
-        <div class="container">
-            <form id="input-form">
-                <!-- 마스터 -->
-                <div class="row gy-2 gx-1">
-                    <div class="text-center webfont1 dlh-headstyle3">
-                        <label for=""><h1>Customer List</h1></label>
-                    </div>
-                    <div class="row gy-2 mx-auto">
-                        <div class="col-6 col-md-2 col-lg-auto order-2 order-lg-1 offset-lg-3">
-                            <button type="button" class="col-12 btn btn-dark border-info text-nowrap" onclick="searchCust()">Search</button>
-                        </div>
-                        <div class="col-12 col-md-8 col-lg-4 mx-auto mx-lg-0 order-1 order-md-2 order-lg-2">
-                            <input type="text" class="form-control" list="custNmList" id="searchCustNm" name="searchCustNm" th:value="${SearchCustNm}" onkeyup="if(window.event.keyCode==13){searchCust()}" placeholder="업체명 검색" autocomplete="off">
-                            <datalist id="custNmList">
-                                <option th:each="list : ${CustNmList}" th:value="${list.custNm}"></option>
-                            </datalist>
-                        </div>
-                        <div class="col-6 col-md-2 col-lg-2 order-3 ms-auto">
-                            <select class="form-select" id="maxrow">
-                                <option value="5" th:attr="selected=${PersetCust.maxrow == 5} ? 'selected'">5줄씩 보기</option>
-                                <option value="10" th:attr="selected=${PersetCust.maxrow == 10} ? 'selected'">10줄씩 보기</option>
-                                <option value="15" th:attr="selected=${PersetCust.maxrow == 15} ? 'selected'">15줄씩 보기</option>
-                                <option value="20" th:attr="selected=${PersetCust.maxrow == 20} ? 'selected'">20줄씩 보기</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div style="overflow: auto;">
-                        <table class="table table-dark table-striped" style="min-width:1000px; table-layout:fixed;">
-                            <colgroup>
-                                <col width="10%" />
-                                <col width="30%" />
-                                <col width="15%" />
-                                <col width="15%" />
-                                <col width="15%" />
-                                <col width="15%" />
-                            </colgroup>
-                            <thead>
-                                <tr>
-                                    <th>Num</th>
-                                    <th>업체명</th>
-                                    <th>사업자번호</th>
-                                    <th>전화번호</th>
-                                    <th>대표자명</th>
-                                    <th>대표자 번호</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- <tr th:each="list : ${CustList.getList()}" class="text-wrap" th:onclick="|location.href='/dworld/customer?pageNum=${CustList.PageNum}&selectRowNum=${list.rowNum}&searchCustNm=${SearchCustNm}'|" style="cursor:pointer;" > -->
-                                                                                                                                  <!-- pageNum=${CustList.PageNum}&selectRowNum=${list.rowNum}&searchCustNm=${SearchCustNm} -->
-                                                                                                                    <!-- /dworld/customer?pageNum=1&selectRowNum=32&searchCustNm= -->
-                                                                                        <!-- th:onclick="|location.href='/dworld/worklog/detail?idx=${list.idx}'|" -->
-                                <tr th:each="list : ${CustList.getList()}" class="text-wrap">
-                                    <td th:text='${list.rowNum}'></td>
-                                    <!-- <td th:text='${list.custNm}' class="text-truncate"></td> -->
-                                    <td class="text-truncate"><a th:href="@{/dworld/customer(pageNum=${CustList.PageNum}, selectRowNum=${list.rowNum},searchCustNm=${SearchCustNm})}" th:text='${list.custNm}'></a></td>
-                                    <td th:text='${list.custBusnum}'></td>
-                                    <td th:text='${list.custNum}'></td>
-                                    <td th:text='${list.custCeonm}'></td>
-                                    <td th:text='${list.custCeonum}'></td>
-                                </tr>
-                                
-                                <tr th:unless="${#lists.size(CustList.getList())} > 0">
-                                    <td colspan="6" class="text-center"><h3>검색 결과가 없습니다.</h3></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item" th:classappend="${CustList.getPrePage() == 0} ? 'disabled'">
-                        <a class="page-link" th:href="@{/dworld/customer(pageNum=${CustList.getPrePage()}, searchCustNm=${SearchCustNm})}">Prev</a>
-                        </li>
-                        <li class="page-item" th:each="page: ${#numbers.sequence(CustList.getNavigateFirstPage(), CustList.getNavigateLastPage())}" th:classappend="${page == CustList.getPageNum()} ? 'active'">
-                        <a class="page-link" th:text="${page}" th:href="@{/dworld/customer(pageNum=${page}, searchCustNm=${SearchCustNm})}"></a>
                         
-                        </li>
-                        <li class="page-item" th:classappend="${CustList.getNextPage() == 0} ? 'disabled'">
-                        <a class="page-link"  th:href="@{/dworld/customer(pageNum=${CustList.getNextPage()}, searchCustNm=${SearchCustNm})}">Next</a>
-                        </li>
-                    </ul>
+                        
+                        
+            });
+
+            // 등록 버튼
+            $("#btn-insert").on("click", function(){
+                $("#btn-insert").hide();
+                $("#btn-insertOK").show();
+                $("#btn-edit").hide();
+                $("#btn-delete").hide();
+                $("#btn-cancel").show();
+                
+                $("#detail-head").text("Writing");
+                $("#input-custCd").val("Auto Increment(자동생성)");
+                $("#input-custNm").val("");
+                $("#input-custBusnum").val("");
+                $("#input-custNum").val("");
+                $("#input-custCeonm").val("");
+                $("#input-custCeonum").val("");
+                $("#input-custAddr").val("");
+                $("#input-custEmail").val("");
+                $("#input-custRemark").text("");
+
+                document.getElementById("input-custNm").readOnly = false;
+                document.getElementById("input-custBusnum").readOnly = false;
+                document.getElementById("input-custNum").readOnly = false;
+                document.getElementById("input-custCeonm").readOnly = false;
+                document.getElementById("input-custCeonum").readOnly = false;
+                document.getElementById("input-custAddr").readOnly = false;
+                document.getElementById("input-custEmail").readOnly = false;
+                document.getElementById("input-custRemark").readOnly = false;
+
+            });
+
+            // 등록 완료 버튼
+            $("#btn-insertOK").on("click", function() {
+                var valcustNm = $("#input-custNm").val();
+                var valcustBusnum = $("#input-custBusnum").val();
+                var valcustNum = $("#input-custNum").val();
+                var valcustCeonm = $("#input-custCeonm").val();
+                var valcustCeonum = $("#input-custCeonum").val();
+                var valcustAddr = $("#input-custAddr").val();
+                var valcustEmail = $("#input-custEmail").val();
+                var valcustRemark = $("#input-custRemark").val();
+                var datas = { custNm: valcustNm
+                            , custBusnum: valcustBusnum
+                            , custNum: valcustNum
+                            , custCeonm: valcustCeonm
+                            , custCeonum: valcustCeonum
+                            , custAddr: valcustAddr
+                            , custEmail: valcustEmail
+                            , custRemark: valcustRemark };
+
+                $.ajax({
+                    url: "/dworld/customer/control",
+                    type: "post",
+                    data: datas,
+                    success: function(data) {
+                        if(data == "custNmEmpty"){
+                            Swal.fire("","업체명이 비어선 안됩니다.", "warning");
+                        } else{
+                            if(data == "OK"){
+                                Swal.fire("","등록 되었습니다.", "success")
+                                    .then((result)=>{
+                                        if(result){
+                                            location.href="/dworld/customer";
+                                        }
+                                    });
+                            }else{
+                                Swal.fire("","접근이 잘못되었습니다.", "error");
+                            } 
+                        }
+                    }, error: function() {
+                        Swal.fire("","ajax 통신 오류 발생", "error");
+                    }
+                });
+            });
+
+            //maxrow 5줄씩 보기 컨트롤
+            $("#maxrow").change(function(){
+                searchCust();
+            });
+        });
+
+        //검색 버튼
+        function searchCust(){
+            var searchCustNm = document.getElementById('searchCustNm').value;
+            var maxrow = $("#maxrow").val();
+            window.location.href= "/dworld/customer?SearchCustNm=" + encodeURIComponent(searchCustNm) 
+                                + "&maxrow=" + encodeURIComponent(maxrow);
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <form id="input-form">
+            <!-- 마스터 -->
+            <div class="row gy-2 gx-1">
+                <div class="text-center webfont1 dlh-headstyle3">
+                    <label for=""><h1>Customer List</h1></label>
                 </div>
-                <!-- 디테일 -->
-                <hr>
-                <div class="row gy-2">
-                    <div class="text-center dlh-headstyle3">
-                        <label for=""><h1 id="detail-head" class="webfont1">Detail Area</h1></label>
+                <div class="row gy-2 mx-auto">
+                    <div class="col-6 col-md-2 col-lg-auto order-2 order-lg-1 offset-lg-3">
+                        <button type="button" class="col-12 btn btn-dark border-info text-nowrap" onclick="searchCust()">Search</button>
                     </div>
-                    <div class="text-lg-end text-center">
-                        <button class="col-3 col-lg-1 btn btn-dark border-primary" type="button" id="btn-insert" name="btn-insert">New</button>
-                        <button class="col-3 col-lg-1 btn btn-dark border-primary" type="button" id="btn-insertOK" name="btn-insertOK">Insert</button>
-                        <button class="col-3 col-lg-1 btn btn-dark border-warning" type="button" id="btn-edit" name="btn-edit">Edit</button>
-                        <button class="col-3 col-lg-1 btn btn-dark border-warning" type="button" id="btn-editOK" name="btn-editOK">Save</button>
-                        <button class="col-3 col-lg-1 btn btn-dark border-danger" type="button" id="btn-delete" name="btn-delete">Delete</button>
-                        <button class="col-3 col-lg-1 btn btn-dark border-success" type="button" id="btn-cancel" name="btn-cancel">Back</button>
+                    <div class="col-12 col-md-8 col-lg-4 mx-auto mx-lg-0 order-1 order-md-2 order-lg-2">
+                        <input type="text" class="form-control" list="custNmList" id="searchCustNm" name="searchCustNm" th:value="${SearchCustNm}" onkeyup="if(window.event.keyCode==13){searchCust()}" placeholder="업체명 검색" autocomplete="off">
+                        <datalist id="custNmList">
+                            <option th:each="list : ${CustNmList}" th:value="${list.custNm}"></option>
+                        </datalist>
                     </div>
-                    <div class="row mx-auto gy-2 gx-2">
-                        <div class="col-6 col-md-4 col-lg-3 form-floating">
-                            <input type="text" th:value="${SelectCust.custCd}" class="form-control" disabled id="input-custCd" name="input-custCd">
-                            <label for="input-custCd">업체 코드</label>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3 form-floating">
-                            <input type="text" th:value="${SelectCust.custNm}" class="form-control" readonly id="input-custNm" name="input-custNm">
-                            <label for="input-custNm"><b>*업 체 명</b></label>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3 form-floating">
-                            <input type="text" th:value="${SelectCust.custBusnum}" class="form-control" readonly id="input-custBusnum" name="input-custBusnum">
-                            <label for="input-custBusnum">사업자 번호</label>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3 form-floating">
-                            <input type="text" th:value="${SelectCust.custNum}" class="form-control" readonly id="input-custNum" name="input-custNum">
-                            <label for="input-custNum">전화 번호</label>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3 form-floating">
-                            <input type="text" th:value="${SelectCust.custCeonm}" class="form-control" readonly id="input-custCeonm" name="input-custCeonm">
-                            <label for="input-custCeonm">대표명</label>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3 form-floating">
-                            <input type="text" th:value="${SelectCust.custCeonum}" class="form-control" readonly id="input-custCeonum" name="input-custCeonum">
-                            <label for="input-custCeonum">대표 번호</label>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3 form-floating">
-                            <input type="text" th:value="${SelectCust.custEmail}" class="form-control" readonly id="input-custEmail" name="input-custEmail">
-                            <label for="input-custEmail">E-mail</label>
-                        </div>
-                        <div class="col-12 form-floating">
-                            <input type="text" th:value="${SelectCust.custAddr}" class="form-control" readonly id="input-custAddr" name="input-custAddr">
-                            <label for="input-custAddr">주 소</label>
-                        </div>
-                        <div class="col-12 form-floating">
-                            <textarea class="form-control" style="height: 200px;" th:text="${SelectCust.custRemark}" readonly id="input-custRemark" name="input-custRemark"></textarea>
-                            <label for="input-custRemark">비 고</label>
-                        </div>
+                    <div class="col-6 col-md-2 col-lg-2 order-3 ms-auto">
+                        <select class="form-select" id="maxrow">
+                            <option value="5" th:attr="selected=${PersetCust.maxrow == 5} ? 'selected'">5줄씩 보기</option>
+                            <option value="10" th:attr="selected=${PersetCust.maxrow == 10} ? 'selected'">10줄씩 보기</option>
+                            <option value="15" th:attr="selected=${PersetCust.maxrow == 15} ? 'selected'">15줄씩 보기</option>
+                            <option value="20" th:attr="selected=${PersetCust.maxrow == 20} ? 'selected'">20줄씩 보기</option>
+                        </select>
                     </div>
                 </div>
-            </form>
-        </div>
-    </body>
+                <div style="overflow: auto;">
+                    <table class="table table-dark table-striped" style="min-width:1000px; table-layout:fixed;">
+                        <colgroup>
+                            <col width="10%" />
+                            <col width="30%" />
+                            <col width="15%" />
+                            <col width="15%" />
+                            <col width="15%" />
+                            <col width="15%" />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>Num</th>
+                                <th>업체명</th>
+                                <th>사업자번호</th>
+                                <th>전화번호</th>
+                                <th>대표자명</th>
+                                <th>대표자 번호</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- <tr th:each="list : ${CustList.getList()}" class="text-wrap" th:onclick="|location.href='/dworld/customer?pageNum=${CustList.PageNum}&selectRowNum=${list.rowNum}&searchCustNm=${SearchCustNm}'|" style="cursor:pointer;" > -->
+                                                                                                                                <!-- pageNum=${CustList.PageNum}&selectRowNum=${list.rowNum}&searchCustNm=${SearchCustNm} -->
+                                                                                                                <!-- /dworld/customer?pageNum=1&selectRowNum=32&searchCustNm= -->
+                                                                                    <!-- th:onclick="|location.href='/dworld/worklog/detail?idx=${list.idx}'|" -->
+                            <tr th:each="list : ${CustList.getList()}" class="text-wrap">
+                                <td th:text='${list.rowNum}'></td>
+                                <!-- <td th:text='${list.custNm}' class="text-truncate"></td> -->
+                                <td class="text-truncate"><a th:href="@{/dworld/customer(pageNum=${CustList.PageNum}, selectRowNum=${list.rowNum},searchCustNm=${SearchCustNm})}" th:text='${list.custNm}'></a></td>
+                                <td th:text='${list.custBusnum}'></td>
+                                <td th:text='${list.custNum}'></td>
+                                <td th:text='${list.custCeonm}'></td>
+                                <td th:text='${list.custCeonum}'></td>
+                            </tr>
+                            
+                            <tr th:unless="${#lists.size(CustList.getList())} > 0">
+                                <td colspan="6" class="text-center"><h3>검색 결과가 없습니다.</h3></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${CustList.getPrePage() == 0} ? 'disabled'">
+                    <a class="page-link" th:href="@{/dworld/customer(pageNum=${CustList.getPrePage()}, searchCustNm=${SearchCustNm})}">Prev</a>
+                    </li>
+                    <li class="page-item" th:each="page: ${#numbers.sequence(CustList.getNavigateFirstPage(), CustList.getNavigateLastPage())}" th:classappend="${page == CustList.getPageNum()} ? 'active'">
+                    <a class="page-link" th:text="${page}" th:href="@{/dworld/customer(pageNum=${page}, searchCustNm=${SearchCustNm})}"></a>
+                    
+                    </li>
+                    <li class="page-item" th:classappend="${CustList.getNextPage() == 0} ? 'disabled'">
+                    <a class="page-link"  th:href="@{/dworld/customer(pageNum=${CustList.getNextPage()}, searchCustNm=${SearchCustNm})}">Next</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- 디테일 -->
+            <hr>
+            <div class="row gy-2">
+                <div class="text-center dlh-headstyle3">
+                    <label for=""><h1 id="detail-head" class="webfont1">Detail Area</h1></label>
+                </div>
+                <div class="text-lg-end text-center">
+                    <button class="col-3 col-lg-1 btn btn-dark border-primary" type="button" id="btn-insert" name="btn-insert">New</button>
+                    <button class="col-3 col-lg-1 btn btn-dark border-primary" type="button" id="btn-insertOK" name="btn-insertOK">Insert</button>
+                    <button class="col-3 col-lg-1 btn btn-dark border-warning" type="button" id="btn-edit" name="btn-edit">Edit</button>
+                    <button class="col-3 col-lg-1 btn btn-dark border-warning" type="button" id="btn-editOK" name="btn-editOK">Save</button>
+                    <button class="col-3 col-lg-1 btn btn-dark border-danger" type="button" id="btn-delete" name="btn-delete">Delete</button>
+                    <button class="col-3 col-lg-1 btn btn-dark border-success" type="button" id="btn-cancel" name="btn-cancel">Back</button>
+                </div>
+                <div class="row mx-auto gy-2 gx-2">
+                    <div class="col-6 col-md-4 col-lg-3 form-floating">
+                        <input type="text" th:value="${SelectCust.custCd}" class="form-control" disabled id="input-custCd" name="input-custCd">
+                        <label for="input-custCd">업체 코드</label>
+                    </div>
+                    <div class="col-6 col-md-4 col-lg-3 form-floating">
+                        <input type="text" th:value="${SelectCust.custNm}" class="form-control" readonly id="input-custNm" name="input-custNm">
+                        <label for="input-custNm"><b>*업 체 명</b></label>
+                    </div>
+                    <div class="col-6 col-md-4 col-lg-3 form-floating">
+                        <input type="text" th:value="${SelectCust.custBusnum}" class="form-control" readonly id="input-custBusnum" name="input-custBusnum">
+                        <label for="input-custBusnum">사업자 번호</label>
+                    </div>
+                    <div class="col-6 col-md-4 col-lg-3 form-floating">
+                        <input type="text" th:value="${SelectCust.custNum}" class="form-control" readonly id="input-custNum" name="input-custNum">
+                        <label for="input-custNum">전화 번호</label>
+                    </div>
+                    <div class="col-6 col-md-4 col-lg-3 form-floating">
+                        <input type="text" th:value="${SelectCust.custCeonm}" class="form-control" readonly id="input-custCeonm" name="input-custCeonm">
+                        <label for="input-custCeonm">대표명</label>
+                    </div>
+                    <div class="col-6 col-md-4 col-lg-3 form-floating">
+                        <input type="text" th:value="${SelectCust.custCeonum}" class="form-control" readonly id="input-custCeonum" name="input-custCeonum">
+                        <label for="input-custCeonum">대표 번호</label>
+                    </div>
+                    <div class="col-6 col-md-4 col-lg-3 form-floating">
+                        <input type="text" th:value="${SelectCust.custEmail}" class="form-control" readonly id="input-custEmail" name="input-custEmail">
+                        <label for="input-custEmail">E-mail</label>
+                    </div>
+                    <div class="col-12 form-floating">
+                        <input type="text" th:value="${SelectCust.custAddr}" class="form-control" readonly id="input-custAddr" name="input-custAddr">
+                        <label for="input-custAddr">주 소</label>
+                    </div>
+                    <div class="col-12 form-floating">
+                        <textarea class="form-control" style="height: 200px;" th:text="${SelectCust.custRemark}" readonly id="input-custRemark" name="input-custRemark"></textarea>
+                        <label for="input-custRemark">비 고</label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
 </html>

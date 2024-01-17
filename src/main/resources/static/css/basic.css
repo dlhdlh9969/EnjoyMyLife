@@ -317,5 +317,5 @@ body.dark header .image-text .header-text{
 
 /* <body> 및 기본 설정 */
 a{text-decoration: none}
-a:visited{color: inherit}
 a:link{color:inherit}
+a:visited{color:inherit}
