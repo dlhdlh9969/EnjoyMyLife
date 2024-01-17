@@ -3,6 +3,7 @@ package com.dlhdlh.service;
 import java.util.List;
 
 import com.dlhdlh.dto.MembersDto;
+import com.dlhdlh.dto.PersetMemberDto;
 
 public interface MembersService {
 
@@ -17,5 +18,11 @@ public interface MembersService {
 	List<MembersDto> UserList(MembersDto membersDto) throws Exception;
 
 	void UpdateMembers(MembersDto membersDto) throws Exception;
+
+	void InsertPersetMember(PersetMemberDto persetMemberParam) throws Exception;
+
+	void UpdatePersetMember(PersetMemberDto persetMemberParam) throws Exception;
+
+	PersetMemberDto GetPersetMember(String requestId) throws Exception;
 
 }

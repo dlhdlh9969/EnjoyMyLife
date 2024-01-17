@@ -5,7 +5,7 @@
         <title>D-world.index</title>
         
     </head>
-    <body>
+    <body th:attr="class=${viewMode} == 'dark' ? 'dark'">
         <div class="container">
             <div>
                 <header th:include="header :: header"></header>

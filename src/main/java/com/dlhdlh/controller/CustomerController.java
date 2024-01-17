@@ -14,14 +14,19 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.dlhdlh.dto.CustomerDto;
 import com.dlhdlh.dto.PersetCustDto;
+import com.dlhdlh.dto.PersetMemberDto;
 import com.dlhdlh.service.CustomerService;
+import com.dlhdlh.service.MembersService;
 import com.github.pagehelper.PageInfo;
 
 @Controller
 public class CustomerController {
 	
 	@Autowired
-	public CustomerService customerService;
+	CustomerService customerService;
+	
+	@Autowired
+	MembersService membersService;
 	
 	//업체관리 메인페이지 및 검색 기능
 	@RequestMapping(value="/dworld/customer")
@@ -31,7 +36,16 @@ public class CustomerController {
 			, CustomerDto customerParam
 			, PersetCustDto persetCustParam) throws Exception{
 		ModelAndView mv = new ModelAndView("Customer/MainPage");		
-		String requestId = (String) servletRequest.getSession().getAttribute("userId");
+		String requestId = null;
+		
+		if(servletRequest.getSession().getAttribute("userId") != null) {
+			requestId = servletRequest.getSession().getAttribute("userId").toString();
+			PersetMemberDto persetMember = membersService.GetPersetMember(requestId);
+			mv.addObject("viewMode", persetMember.getViewMode());
+		}else {
+			mv.addObject("viewMode", "light");
+		}
+		
 		persetCustParam.setUserId(requestId);
 		
 		if(persetCustParam.getMaxrow() != 0) {

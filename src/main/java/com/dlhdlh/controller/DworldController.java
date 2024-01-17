@@ -7,9 +7,15 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
+import com.dlhdlh.dto.PersetMemberDto;
 import com.dlhdlh.dto.PrevPageDto;
 import com.dlhdlh.service.DworldService;
+import com.dlhdlh.service.MembersService;
 
 @Controller
 public class DworldController {
@@ -17,9 +23,23 @@ public class DworldController {
 	@Autowired
 	DworldService dworldService;
 	
+	@Autowired
+	MembersService membersService;
+	
 	@RequestMapping("/")
-	public String IndexPage() throws Exception{
-		return "index";
+	public ModelAndView IndexPage(HttpServletRequest servletRequest) throws Exception{
+		ModelAndView mv = new ModelAndView("index");
+		String requestId = null;
+		
+		if(servletRequest.getSession().getAttribute("userId") != null) {
+			requestId = servletRequest.getSession().getAttribute("userId").toString();
+			PersetMemberDto persetMember = membersService.GetPersetMember(requestId);
+			mv.addObject("viewMode", persetMember.getViewMode());
+		}else {
+			mv.addObject("viewMode", "light");
+		}
+
+		return mv;
 	}
 	
 	@RequestMapping("/dworld/error")
@@ -65,5 +85,23 @@ public class DworldController {
 		prevPageDto.setMenu(menu);
 		String prevPage = dworldService.SelectPrevPage(prevPageDto);
 		return prevPage;
+	}
+	
+	//ViewMode 컨트롤
+	@ResponseBody
+	@RequestMapping(value = "/dworld/viewmode", method = RequestMethod.POST)
+	public void ViewModeUpdate(HttpServletRequest servletRequest, @RequestParam(required=false) String viewMode) throws Exception{
+		String requestId = servletRequest.getSession().getAttribute("userId").toString();
+		PersetMemberDto persetMemberParam = new PersetMemberDto();
+		persetMemberParam.setUserId(requestId);
+		persetMemberParam.setViewMode(viewMode);
+		try {
+			if(requestId != null) {
+				membersService.InsertPersetMember(persetMemberParam);
+				
+			}
+		} catch (Exception e) {
+			membersService.UpdatePersetMember(persetMemberParam);
+		}
 	}
 }

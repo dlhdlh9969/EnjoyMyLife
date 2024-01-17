@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.dlhdlh.dto.CustomerDto;
+import com.dlhdlh.dto.PersetMemberDto;
 import com.dlhdlh.dto.PersetWorkLogDto;
 import com.dlhdlh.dto.WorkLogDto;
 import com.dlhdlh.service.CustomerService;
 import com.dlhdlh.service.DworldService;
+import com.dlhdlh.service.MembersService;
 import com.dlhdlh.service.WorkLogService;
 import com.github.pagehelper.PageInfo;
 
@@ -34,6 +36,9 @@ public class WorkLogController {
 	CustomerService customerService;
 	
 	@Autowired
+	MembersService membersService;
+	
+	@Autowired
 	DworldController dworldController;
 
 	//업무일지 리스트
@@ -43,7 +48,15 @@ public class WorkLogController {
 			, WorkLogDto worklogParam
 			, @RequestParam(required=false, defaultValue = "0") int entrance) throws Exception {
 		ModelAndView mv = new ModelAndView("WorkLog/MainPage");
-		String requestUserId = (String) servletRequest.getSession().getAttribute("userId");
+		String requestId = null;
+		
+		if(servletRequest.getSession().getAttribute("userId") != null) {
+			requestId = servletRequest.getSession().getAttribute("userId").toString();
+			PersetMemberDto persetMember = membersService.GetPersetMember(requestId);
+			mv.addObject("viewMode", persetMember.getViewMode());
+		}else {
+			mv.addObject("viewMode", "light");
+		}
 
 		//검색 시작-종료일 초기값
 		LocalDate startDt; 
@@ -122,10 +135,10 @@ public class WorkLogController {
 		}
 		
 		// 개인별 게시판 설정값 조회
-		PersetWorkLogDto persetWorkLog = worklogService.GetPersetWorkLog(requestUserId);
+		PersetWorkLogDto persetWorkLog = worklogService.GetPersetWorkLog(requestId);
 		if(persetWorkLog == null) {
-			worklogService.SetNewMember(requestUserId);
-			persetWorkLog = worklogService.GetPersetWorkLog(requestUserId);
+			worklogService.SetNewMember(requestId);
+			persetWorkLog = worklogService.GetPersetWorkLog(requestId);
 			persetWorkLog.setComplYn("A");
 			persetWorkLog.setCustNm("");
 			persetWorkLog.setEndDt(endDt.toString());
@@ -162,7 +175,7 @@ public class WorkLogController {
 		// 업무일지 리스트 
 		int maxPaging = 8;//페이징 최대 갯수
 		int maxRow = persetWorkLog.getMaxrow(); //페이지당 최대 로우 갯수
-		worklogParam.setUserId(requestUserId);
+		worklogParam.setUserId(requestId);
 		LocalDate endDtplus1d = endDt.plusDays(1);
 		worklogParam.setEndDt(endDtplus1d.toString());
 		if(worklogParam.getComplYn().equals("A")) {
@@ -186,8 +199,16 @@ public class WorkLogController {
 	@RequestMapping(value = "/dworld/worklog/detail")
 	public ModelAndView WorkLogWrite(HttpServletRequest servletRequest, WorkLogDto worklogParam) throws Exception{
 		ModelAndView mv = new ModelAndView("WorkLog/DetailPage");
-		String requestUserId = (String) servletRequest.getSession().getAttribute("userId");
-		worklogParam.setUserId(requestUserId);
+		String requestId = null;
+		if(servletRequest.getSession().getAttribute("userId") != null) {
+			requestId = servletRequest.getSession().getAttribute("userId").toString();
+			PersetMemberDto persetMember = membersService.GetPersetMember(requestId);
+			mv.addObject("viewMode", persetMember.getViewMode());
+		}else {
+			mv.addObject("viewMode", "light");
+		}
+		
+		worklogParam.setUserId(requestId);
 		WorkLogDto worklogDetail= worklogService.GetWorkLogDetail(worklogParam);
 		mv.addObject("WorkLogDetail",worklogDetail);
 		//신규 등록과 기존 디테일과 구분

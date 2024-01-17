@@ -7,7 +7,7 @@
         <title>D-world/업무일지</title>
 
     </head>
-    <body>
+    <body th:attr="class=${viewMode} == 'dark' ? 'dark'">
         <div>
             <header th:include="header :: header"></header>
             <script>
@@ -67,13 +67,13 @@
                 <!-- 검색 영역 -->
                 <div class="row">
                     <div class="col-auto ms-auto">
-                        <button type="button" class="btn btn-dark border-info px-4" onclick="searchWorkLog()">조 회</button>
+                        <button type="button" class="btn btn-dark border-info px-4" onclick="searchWorkLog()">Search</button>
                     </div>
                     <div class="col-auto">
-                        <button type="button" class="btn btn-dark border-danger" onclick="location.href='/dworld/worklog'">조회 초기화</button>
+                        <button type="button" class="btn btn-dark border-danger" onclick="location.href='/dworld/worklog'">Reset</button>
                     </div>
                     <a class="col-auto" href="/dworld/worklog/detail">
-                        <button type="button" id="btn-new" class="btn btn-dark border-primary">신규 등록</button>
+                        <button type="button" id="btn-new" class="btn btn-dark border-primary">New</button>
                     </a>                    
                 </div>
                 <div class="row g-2">
