@@ -59,15 +59,15 @@
                 <label><H1>WorkLog List</H1></label>
             </div>
             <!-- 검색 영역 -->
-            <div class="row">
-                <div class="col-auto ms-auto">
-                    <button type="button" class="btn btn-dark border-info px-4" onclick="searchWorkLog()">Search</button>
+            <div class="row justify-content-end pt-3">
+                <div class="col-4 col-lg-2">
+                    <button type="button" class="w-100 btn btn-dark border-info" onclick="searchWorkLog()">Search</button>
                 </div>
-                <div class="col-auto">
-                    <button type="button" class="btn btn-dark border-danger" onclick="location.href='/dworld/worklog'">Reset</button>
+                <div class="col-4 col-lg-2">
+                    <button type="button" class="w-100 btn btn-dark border-danger" onclick="location.href='/dworld/worklog'">Reset</button>
                 </div>
-                <a class="col-auto" href="/dworld/worklog/detail">
-                    <button type="button" id="btn-new" class="btn btn-dark border-primary">New</button>
+                <a class="col-4 col-lg-2" href="/dworld/worklog/detail">
+                    <button type="button" id="btn-new" class="w-100 btn btn-dark border-primary">New</button>
                 </a>                    
             </div>
             <div class="row g-2">
@@ -136,7 +136,7 @@
         <!-- 테이블 영역 -->
         <div class="pt-2 pb-5">
             <div style="overflow:auto;">
-                <table class="table table-dark table-striped" style="min-width:1000px;table-layout:fixed;">
+                <table class="table table-striped" style="min-width:1000px;table-layout:fixed;">
                     <colgroup>
                         <col width="5%">
                         <col width="10%">

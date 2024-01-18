@@ -55,7 +55,7 @@
                             data: datas,
                             success: function(data) {
                                 if(data == "custNmEmpty"){
-                                    Swal.fire("Cust Name Empty","업체명이 비어선 안됩니다.", "warning");
+                                    Swal.fire("Cust Name Empty","회사명이 비어선 안됩니다.", "warning");
                                 }else{
                                     if(data == "OK"){
                                         Swal.fire("Success","수정 되었습니다.", "success")
@@ -191,7 +191,7 @@
                     data: datas,
                     success: function(data) {
                         if(data == "custNmEmpty"){
-                            Swal.fire("","업체명이 비어선 안됩니다.", "warning");
+                            Swal.fire("","회사명이 비어선 안됩니다.", "warning");
                         } else{
                             if(data == "OK"){
                                 Swal.fire("","등록 되었습니다.", "success")
@@ -238,7 +238,7 @@
                         <button type="button" class="col-12 btn btn-dark border-info text-nowrap" onclick="searchCust()">Search</button>
                     </div>
                     <div class="col-12 col-md-8 col-lg-4 mx-auto mx-lg-0 order-1 order-md-2 order-lg-2">
-                        <input type="text" class="form-control" list="custNmList" id="searchCustNm" name="searchCustNm" th:value="${SearchCustNm}" onkeyup="if(window.event.keyCode==13){searchCust()}" placeholder="업체명 검색" autocomplete="off">
+                        <input type="text" class="form-control" list="custNmList" id="searchCustNm" name="searchCustNm" th:value="${SearchCustNm}" onkeyup="if(window.event.keyCode==13){searchCust()}" placeholder="회사명 검색" autocomplete="off">
                         <datalist id="custNmList">
                             <option th:each="list : ${CustNmList}" th:value="${list.custNm}"></option>
                         </datalist>
@@ -253,7 +253,7 @@
                     </div>
                 </div>
                 <div style="overflow: auto;">
-                    <table class="table table-dark table-striped" style="min-width:1000px; table-layout:fixed;">
+                    <table class="table table-striped" style="min-width:1000px; table-layout:fixed;">
                         <colgroup>
                             <col width="10%" />
                             <col width="30%" />
@@ -265,7 +265,7 @@
                         <thead>
                             <tr>
                                 <th>Num</th>
-                                <th>업체명</th>
+                                <th>회사명</th>
                                 <th>사업자번호</th>
                                 <th>전화번호</th>
                                 <th>대표자명</th>
@@ -327,7 +327,7 @@
                     </div>
                     <div class="col-6 col-md-4 col-lg-3 form-floating">
                         <input type="text" th:value="${SelectCust.custNm}" class="form-control" readonly id="input-custNm" name="input-custNm">
-                        <label for="input-custNm"><b>*업 체 명</b></label>
+                        <label for="input-custNm">회사명</label>
                     </div>
                     <div class="col-6 col-md-4 col-lg-3 form-floating">
                         <input type="text" th:value="${SelectCust.custBusnum}" class="form-control" readonly id="input-custBusnum" name="input-custBusnum">

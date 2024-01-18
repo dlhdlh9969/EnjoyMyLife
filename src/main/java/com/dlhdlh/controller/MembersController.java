@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.dlhdlh.dto.DworldValuesDto;
 import com.dlhdlh.dto.MembersDto;
+import com.dlhdlh.dto.PersetMemberDto;
 import com.dlhdlh.service.DworldService;
 import com.dlhdlh.service.MembersService;
 
@@ -102,18 +103,29 @@ public class MembersController {
 	public ModelAndView MembersControl(HttpServletRequest servletRequest, MembersDto membersParam) throws Exception {
 		ModelAndView mv = new ModelAndView("Members/members");
 		
+		String requestId = null;
+		
+		if(servletRequest.getSession().getAttribute("userId") != null) {
+			requestId = servletRequest.getSession().getAttribute("userId").toString();
+			PersetMemberDto persetMember = membersService.GetPersetMember(requestId);
+			mv.addObject("viewMode", persetMember.getViewMode());
+		}else {
+			mv.addObject("viewMode", "light");
+		}
+		
+		String searchUserId = membersParam.getUserId();
+		String searchUserName = membersParam.getUserName();
+		
 		if(membersParam.getUserId() == null) {
 			membersParam.setUserId("");
 		}
 		if(membersParam.getUserName() == null) {
 			membersParam.setUserName("");
 		}
-		String getUserId = membersParam.getUserId();
-		String getUserName = membersParam.getUserName();
 		List<MembersDto> userList = membersService.UserList(membersParam);
 		
-		mv.addObject("GetUserId", getUserId);
-		mv.addObject("GetUserName", getUserName);
+		mv.addObject("searchUserId", searchUserId);
+		mv.addObject("searchUserName", searchUserName);
 		mv.addObject("UserList", userList);
 		return mv;
 	}

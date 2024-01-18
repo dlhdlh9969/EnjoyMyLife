@@ -34,20 +34,24 @@
     <div class="container">
         <form class="col-10 col-md-6 col-lg-4 mx-auto py-5 row gy-3">
             <div class="text-center dlh-headstyle3">
-                <label for=""><h2 class="dlh-headfont1 ">Login Page</h2></label>
+                <label><h2 class="dlh-headfont1 ">Login Page</h2></label>
             </div>
-            <div class="form-floating clean">
-                <input type="text" id="userId" name="userId" class="form-control" onkeyup="if(window.event.keyCode==13){LoginAjax()}">
-                <label>ID</label>
+            <div>
+                <div class="form-floating">
+                    <input type="text" id="userId" name="userId" class="form-control" onkeyup="if(window.event.keyCode==13){LoginAjax()}">
+                    <label>ID</label>
+                </div>
             </div>
-            <div class="form-floating">
-                <input type="password" id="userPw" name="userPw" class="form-control" onkeyup="if(window.event.keyCode==13){LoginAjax()}">
-                <label>Password</label>
+            <div>
+                <div class="form-floating">
+                    <input type="password" id="userPw" name="userPw" class="form-control" onkeyup="if(window.event.keyCode==13){LoginAjax()}">
+                    <label>Password</label>
+                </div>
             </div>
             <div>
                 <div class="row g-2">
                     <div class="col-auto me-auto">
-                        <a href="join" class="btn btn-dark border-warning" id="btn-join">Join Members</a>
+                        <a href="join" class="btn btn-dark border-warning" id="btn-join">Join</a>
                     </div>
                     <div class="col-auto">
                         <button class=" btn btn-dark border-primary" type="button" id="btn-submit" onclick="LoginAjax()">Login</button>

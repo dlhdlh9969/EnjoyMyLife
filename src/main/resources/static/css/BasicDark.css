@@ -5,10 +5,12 @@ body.dark{
     --primary-Reverse-color: #ff6347;
     --primary-color-light: #3a3b3c;
     --text-color: #fff;
+    --text-Reverse-color: #5f5f5f;
     --toggle-color: #4e4e4e;
+    --formfloation-bgcolor: #b5bac4;
 }
 
-*{
+* {
     color: var(--text-color);
 }
   
@@ -19,4 +21,53 @@ body.dark .sidebar header .toggle{
 body.dark .header-text .profession::first-letter{
     color: var(--primary-Reverse-color);
     font-weight: bold;
+}
+
+body.dark .menu-bar .mode i.sun{
+    opacity: 1;
+}
+
+body.dark .menu-bar .mode i.moon{
+    opacity: 0;
+}
+
+body.dark header .image-text .header-text{
+    color: var(--text-color);
+}
+
+body.dark .switch::before{
+    left:24px;
+}
+
+body.dark select option{
+    color: var(--text-Reverse-color);
+}
+
+body.dark a:link{
+    color: var(--text-Reverse-color);
+}
+
+body.dark .pagination {
+    --bs-pagination-active-bg : var(--primary-color-light)
+}
+
+body.dark .active>.page-link{
+    color: var(--text-color);
+    border-color: var(--toggle-color);
+}
+
+body.dark .btn{
+    color: var(--text-color);
+}
+
+body.dark a:visited{
+    color: var(--text-Reverse-color);
+}
+
+body.dark .form-control:disabled { 
+    background-color:var(--formfloation-bgcolor);
   }
+
+body.dark .form-floating>.form-control:disabled~label::after, .form-floating>:disabled~label::after{
+  background-color:var(--formfloation-bgcolor);
+}

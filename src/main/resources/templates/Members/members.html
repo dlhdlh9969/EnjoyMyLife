@@ -70,18 +70,18 @@
         <div class="my-4 row g-2">
             <div class="col-6 col-md-5 col-lg-2 ms-lg-auto">
                 <div class="form-floating">
-                    <input type="text" class="form-control" id="userId" th:value="${GetUserId}" onkeyup="if(window.event.keyCode==13){searchUser()}">
+                    <input type="text" class="form-control" id="userId" th:value="${searchUserId}" onkeyup="if(window.event.keyCode==13){searchUser()}">
                     <label for="userId">ID</label>
                 </div>
             </div>
             <div class="col-6 col-md-5 col-lg-2">
                 <div class="form-floating">
-                    <input type="text" class="form-control" id="userName" th:value="${GetUserName}" onkeyup="if(window.event.keyCode==13){searchUser()}">
+                    <input type="text" class="form-control" id="userName" th:value="${searchUserName}" onkeyup="if(window.event.keyCode==13){searchUser()}">
                     <label for="userName">이름</label>
                 </div>
             </div>
             <div class="col-12 ms-auto col-md-2 col-lg-1 ms-lg-0">
-                <button type="button" class="w-100 h-100 btn btn-success" id="btn-search" onclick="searchUser()">검색</button>
+                <button type="button" class="w-100 h-100 btn btn-success" id="btn-search" onclick="searchUser()">Search</button>
             </div>
         </div>
         <!-- 테이블 영역 -->
@@ -96,10 +96,10 @@
                 </colgroup>
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>이름</th>
-                        <th>비밀번호</th>
-                        <th class="text-center">관리자</th>
+                        <th>User ID</th>
+                        <th>User Name</th>
+                        <th>User Password</th>
+                        <th class="text-center">Authority</th>
                         <th></th>
                     </tr>
                 </thead>
