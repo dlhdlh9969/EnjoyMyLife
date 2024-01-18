@@ -27,11 +27,6 @@
   --text-color: #5f5f5f;
   --toggle-color: #b1b1b1;
 
-  --dlh-color-red1:rgb(233, 56, 73);
-  --dlh-color-orange1:rgb(255, 95, 67);
-  --dlh-color-dark1 : rgb(33, 37, 41);
-  --dlh-color-dark2 : rgb(44, 48, 52);
-
   --tran-02: all 0.2s ease;
   --tran-03: all 0.3s ease;
   --tran-04: all 0.4s ease;
@@ -259,29 +254,12 @@ header .image-text .header-text{
   color: var(--primary-Reverse-color);
   font-weight: bold;
 }
-
-/* 외부폰트 헤더1 */
-.dlh-headfont1{
-    font-family: 'Oswald', sans-serif;
-    line-height: 1;
-}
-
 /* 헤더 스타일 */
-
-.dlh-headstyle1 label:first-letter{
-  color: rgb(94, 94, 255);
-  font-size: 20;
+.dlh-headstyle label:first-letter{
+  color: var(--primary-color);
+  font-size: 3rem;
   font-weight: bold;
-}
-.dlh-headstyle2 label:first-letter{
-  color: var(--dlh-color-red1);
-  font-size: 20;
-  font-weight: bold;
-}
-.dlh-headstyle3 label:first-letter{
-  color: rgba(27, 247, 93, 0.808);
-  font-size: 20;
-  font-weight: bold;
+  font-family: 'Oswald', sans-serif;
 }
 
 /* <body> 및 기본 설정 */

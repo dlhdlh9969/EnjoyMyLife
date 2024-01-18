@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
+<header th:include="header :: header"></header>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>D-world/error</title>
     <script>
         $(document).ready(function(){
@@ -14,7 +13,8 @@
 </head>
 <body>
     <div class="container text-center pt-5">
-        <H1 class="text-light">접근이 잘못 되었습니다.</H1>
+        <div class="dlh-headstyle"><label for=""><h1>Error</h1></label></div>
+            <H1 class="py-4">접근이 잘못 되었습니다.</H1>
         <button type="button" class="btn btn-primary mt-3" id="back" name="back">뒤로 가기</button>
     </div>
 </body>

@@ -71,3 +71,15 @@ body.dark .form-control:disabled {
 body.dark .form-floating>.form-control:disabled~label::after, .form-floating>:disabled~label::after{
   background-color:var(--formfloation-bgcolor);
 }
+
+body.dark .swal2-icon * {
+    color: var(--text-Reverse-color);
+}
+
+body.dark .swal2-content * {
+    color: var(--text-Reverse-color);
+}
+
+body.dark a.btn:visited {
+    color: var(--text-color);
+}
