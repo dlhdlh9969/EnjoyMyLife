@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dlhdlh.mapper.WorkLogMapper">
-	
 	<!-- 업무일지 리스트-->
 	<select id="GetWorkLogList" parameterType="com.dlhdlh.dto.WorkLogDto" resultType="com.dlhdlh.dto.WorkLogDto">
 		<![CDATA[ 
@@ -19,7 +18,7 @@
 				, compl_yn 
 			FROM WorkLog w 
 			LEFT OUTER JOIN Customer c 
-			ON w.cust_cd = c.cust_cd 
+				ON w.cust_cd = c.cust_cd 
 			WHERE w.deleted_yn = 'N' 
 				AND w.insert_user = #{userId} 
 				AND w.compl_yn like concat('%', #{complYn}, '%') 
@@ -31,7 +30,6 @@
 			ORDER BY row_num desc
 		]]>
 	</select>
-	
 	<!-- 업무일지 등록 -->
 	<insert id="InsertWorkLog" parameterType="com.dlhdlh.dto.WorkLogDto">
 		<![CDATA[ 
@@ -56,7 +54,6 @@
 				, #{complYn}) 
 		]]>
 	</insert>
-	
 	<!-- 업무일지 디테일-->
 	<select id="GetWorkLogDetail" parameterType="com.dlhdlh.dto.WorkLogDto" resultType="com.dlhdlh.dto.WorkLogDto">
 		<![CDATA[ 
@@ -71,13 +68,12 @@
 				, due_dt
 				, compl_dt  
 			FROM WorkLog w 
-				LEFT OUTER JOIN Customer c 
+			LEFT OUTER JOIN Customer c 
 				ON w.cust_cd = c.cust_cd 
 			WHERE w.idx = ${idx} 
 				AND w.insert_user = #{userId}
 		]]>
 	</select>
-	
 	<!-- 업무일지 삭제-->
 	<update id="DeleteWorkLog" parameterType="com.dlhdlh.dto.WorkLogDto" >
 		<![CDATA[ 
@@ -88,8 +84,6 @@
 			WHERE idx = ${idx}
 		]]>
 	</update>
-	
-	
 	<!-- 업무일지 수정-->
 	<update id="UpdateWorkLog" parameterType="com.dlhdlh.dto.WorkLogDto">
 		<![CDATA[
@@ -106,7 +100,6 @@
 			WHERE idx = ${idx}
 		]]>
 	</update>
-	
 	<!-- GetPersetWorkLog 정보 수집-->
 	<select id="GetPersetWorkLog" parameterType="String" resultType="com.dlhdlh.dto.PersetWorkLogDto">
 		<![CDATA[
@@ -115,24 +108,22 @@
 			WHERE user_id = #{userId}
 		]]>
 	</select>
-	
 	<!-- GetPersetWorkLog 수정-->
 	<update id="UpdatePersetWorkLog" parameterType="com.dlhdlh.dto.WorkLogDto">
 		<![CDATA[
 			UPDATE PersetWorkLog
 			SET maxrow = #{maxrow}
-			  , cust_nm = #{custNm}
-			  , title = #{title}
-			  , content = #{content}
-			  , start_dt = #{startDt}
-			  , end_dt = #{endDt}
-			  , compl_yn = #{complYn}
-			  , order1 = #{order1}
-			  , order2 = #{order2}
+				, cust_nm = #{custNm}
+				, title = #{title}
+				, content = #{content}
+				, start_dt = #{startDt}
+				, end_dt = #{endDt}
+				, compl_yn = #{complYn}
+				, order1 = #{order1}
+				, order2 = #{order2}
 			WHERE user_id = #{userId}
 		]]>
 	</update>
-	
 	<!-- 신규 회원 로우 생성-->
 	<insert id="SetNewMember" parameterType="com.dlhdlh.dto.WorkLogDto">
 		<![CDATA[ 
@@ -140,5 +131,4 @@
 			VALUES ( #{userId});
 		]]>
 	</insert>
-	
 </mapper >

@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dlhdlh.mapper.CustomerMapper">
-	<!-- 업체 리스트 --> 
+	<!-- 업체 리스트 -->
 	<select id="GetCustList" parameterType="com.dlhdlh.dto.CustomerDto" resultType="com.dlhdlh.dto.CustomerDto">
 		<![CDATA[ 
 			SELECT row_number() OVER (ORDER BY c.cust_cd = f.cust_cd, c.cust_cd) as row_num
-				, c.cust_cd
-				, if(c.cust_cd = f.cust_cd , '1', '0' ) as cust_favor
-				, c.cust_nm
-				, c.cust_busnum
-				, c.cust_num
-				, c.cust_addr
-				, c.cust_email
-				, c.cust_fax
-				, c.cust_ceonm
-				, c.cust_ceonum
-				, c.cust_remark
+																				, c.cust_cd
+										, if(c.cust_cd = f.cust_cd , '1', '0' ) as cust_favor
+																				, c.cust_nm
+																				, c.cust_busnum
+																				, c.cust_num
+																				, c.cust_addr
+																				, c.cust_email
+																				, c.cust_fax
+																				, c.cust_ceonm
+																				, c.cust_ceonum
+																				, c.cust_remark
 			FROM Customer c
 			LEFT OUTER JOIN CustFavor f
-			ON c.cust_cd = f.cust_cd AND f.user_id = #{userId}
+			ON c.cust_cd = f.cust_cd 
+				AND f.user_id = #{userId}
 			WHERE c.cust_nm like concat('%', #{searchCustNm}, '%') 
 				AND c.deleted_yn = "N"
 			ORDER BY row_num desc
 		]]>
 	</select>
-	
-	<!-- 업체 이름 리스트 --> 
+	<!-- 업체 이름 리스트 -->
 	<select id="GetCustNmList" resultType="com.dlhdlh.dto.CustomerDto">
 		<![CDATA[ 
 			SELECT cust_nm
@@ -34,25 +34,23 @@
 			ORDER BY cust_nm
 		]]>
 	</select>
-	
 	<update id="CustomerUpdate" parameterType="com.dlhdlh.dto.CustomerDto">
 		<![CDATA[ 
 			UPDATE Customer
 			SET cust_nm = #{custNm} 
-				,cust_busnum = #{custBusnum} 
-				,cust_num = #{custNum} 
-				,cust_ceonm = #{custCeonm} 
-				,cust_ceonum = #{custCeonum} 
-				,cust_addr = #{custAddr} 
-				,cust_email = #{custEmail}
-				,cust_fax = #{custFax} 
-				,cust_remark = #{custRemark} 
-				,update_user = #{updateUser} 
-				,update_dt = now() 
+				, cust_busnum = #{custBusnum} 
+				, cust_num = #{custNum} 
+				, cust_ceonm = #{custCeonm} 
+				, cust_ceonum = #{custCeonum} 
+				, cust_addr = #{custAddr} 
+				, cust_email = #{custEmail}
+				, cust_fax = #{custFax} 
+				, cust_remark = #{custRemark} 
+				, update_user = #{updateUser} 
+				, update_dt = now() 
 			WHERE cust_cd = #{custCd}
 		]]>
 	</update>
-	
 	<update id="CustomerDelete" parameterType="com.dlhdlh.dto.CustomerDto">
 		<![CDATA[ 
 			UPDATE Customer 
@@ -62,14 +60,32 @@
 			WHERE cust_cd = #{custCd}
 		]]>
 	</update>
-	
 	<insert id="CustomerInsert" parameterType="com.dlhdlh.dto.WorkLogDto">
 		<![CDATA[ 
-			INSERT INTO Customer(cust_nm,cust_busnum,cust_num,cust_ceonm,cust_ceonum,cust_addr,cust_email, cust_fax, cust_remark,insert_user, insert_dt) 
-			VALUES (#{custNm},#{custBusnum},#{custNum},#{custCeonm},#{custCeonum},#{custAddr},#{custEmail},#{custFax},#{custRemark},#{insertUser},now())
+			INSERT INTO Customer( cust_nm
+								, cust_busnum
+								, cust_num
+								, cust_ceonm
+								, cust_ceonum
+								, cust_addr
+								, cust_email
+								, cust_fax
+								, cust_remark
+								, insert_user
+								, insert_dt) 
+			VALUES (  #{custNm}
+					, #{custBusnum}
+					, #{custNum}
+					, #{custCeonm}
+					, #{custCeonum}
+					, #{custAddr}
+					, #{custEmail}
+					, #{custFax}
+					, #{custRemark}
+					, #{insertUser}
+					, now())
 		]]>
 	</insert>
-	
 	<!-- GetPersetCust 정보 수집-->
 	<select id="GetPersetCust" parameterType="String" resultType="com.dlhdlh.dto.PersetCustDto">
 		<![CDATA[
@@ -78,7 +94,6 @@
 			WHERE user_id = #{userId}
 		]]>
 	</select>
-	
 	<!-- GetPersetCust 수정-->
 	<update id="UpdatePersetCust" parameterType="com.dlhdlh.dto.PersetCustDto">
 		<![CDATA[
@@ -87,7 +102,6 @@
 			WHERE user_id = #{userId}
 		]]>
 	</update>
-	
 	<!-- 신규 회원 로우 생성-->
 	<insert id="SetNewMember" parameterType="com.dlhdlh.dto.PersetCustDto">
 		<![CDATA[ 
@@ -95,7 +109,6 @@
 			VALUES ( #{userId});
 		]]>
 	</insert>
-	
 	<!-- 업체 즐겨찾기 등록-->
 	<insert id="InsertCustFavor" parameterType="com.dlhdlh.dto.CustFavorDto">
 		<![CDATA[ 
@@ -103,28 +116,27 @@
 			VALUES ( #{userId}, #{custCd})
 		]]>
 	</insert>
-	
 	<!-- 업체 즐겨찾기 삭제-->
 	<delete id="DeleteCustFavor" parameterType="com.dlhdlh.dto.CustFavorDto">
 		<![CDATA[ 
 			DELETE FROM CustFavor
-			WHERE user_id = #{userId} AND cust_cd = #{custCd}
+			WHERE user_id = #{userId} 
+				AND cust_cd = #{custCd}
 		]]>
 	</delete>
-	
 	<!-- 업체 선택을 위한 모달에 들어가는 데이터-->
 	<select id="GetModalCustList" parameterType="com.dlhdlh.dto.CustomerDto" resultType="com.dlhdlh.dto.CustomerDto">
 		<![CDATA[ 
 			SELECT if(c.cust_cd = f.cust_cd , '1', '0' ) as cust_favor
-				,c.cust_cd
-				,c.cust_nm
+														, c.cust_cd
+														, c.cust_nm
 			FROM Customer c
 			LEFT OUTER JOIN CustFavor f
-				ON c.cust_cd = f.cust_cd AND f.user_id = #{userId}
+				ON c.cust_cd = f.cust_cd 
+					AND f.user_id = #{userId}
 			WHERE cust_nm like concat('%', #{searchCustNm}, '%')
 				AND deleted_yn ='N'
 			ORDER BY cust_favor desc, cust_nm
 		]]>
 	</select>
 </mapper>
-

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dlhdlh.mapper.MembersMapper">
-
 	<!-- 멤버 정보 조회-->
 	<select id="LoginMemberInfo" parameterType="com.dlhdlh.dto.MembersDto" resultType="com.dlhdlh.dto.MembersDto">
 		<![CDATA[ 
@@ -10,10 +9,9 @@
 				, authority 
 			FROM Members
 			WHERE user_id = #{userId} 
-			  AND user_pw = #{userPw}
+				AND user_pw = #{userPw}
 		]]>
 	</select>
-	
 	<!-- 회원가입-->
 	<insert id="InsertMember" parameterType="com.dlhdlh.dto.WorkLogDto">
 		<![CDATA[ 
@@ -22,58 +20,55 @@
 								, user_name
 								, join_dt)
 			VALUES ( #{userId}
-				   , #{userPw}
-				   , #{userName}
-				   , now() );
+					, #{userPw}
+					, #{userName}
+					, now() );
 		]]>
 	</insert>
-	
 	<!-- 권한 체크 -->
 	<select id="ManagerCheck" resultType="com.dlhdlh.dto.MembersDto" parameterType="String">
 		<![CDATA[ 
 			SELECT user_id
-				 , authority 
+				, authority 
 			FROM Members 
 			WHERE user_id = #{userId}
 		]]>
 	</select>
-	
 	<!-- 유저 목록 -->
 	<select id="UserList" resultType="com.dlhdlh.dto.MembersDto" parameterType="com.dlhdlh.dto.MembersDto">
 		<![CDATA[ 
 			SELECT user_id
-				 , user_name
-				 , authority
-				 , join_dt
+				, user_name
+				, authority
+				, join_dt
 			FROM Members 
 			WHERE user_id like concat('%', #{userId}, '%')
 			  AND user_name like concat('%', #{userName}, '%')
 		]]>
 	</select>
-	
 	<!-- 회원정보 수정 -->
 	<update id="UpdateMembers" parameterType="com.dlhdlh.dto.WorkLogDto">
 		<![CDATA[ 
 			UPDATE Members m1
-			JOIN (SELECT user_id, user_name, user_pw, authority
-      			  FROM Members
-      			  WHERE user_id = #{userId}) m2
-			ON m1.user_id = m2.user_id
+			JOIN (  SELECT user_id, user_name, user_pw, authority
+      				FROM Members
+      				WHERE user_id = #{userId}) m2
+				ON m1.user_id = m2.user_id
 			SET m1.user_name = #{userName},
 				m1.user_pw = if(#{userPw} = '', m2.user_pw, #{userPw}),
 			    m1.authority = IF(m2.authority = 'A', 'A', #{authority})
 			WHERE m1.user_id = #{userId};
 		]]>
 	</update >
-	
 	<!-- 회원개인설정 등록-->
 	<insert id="InsertPersetMember" parameterType="com.dlhdlh.dto.PersetMemberDto">
 		<![CDATA[ 
-			INSERT INTO PersetMember (user_id, view_mode)
-			VALUES (#{userId}, #{viewMode})
+			INSERT INTO PersetMember (user_id
+									, view_mode)
+			VALUES (#{userId}
+				, #{viewMode})
 		]]>
 	</insert>
-	
 	<!-- 회원개인설정 조회-->
 	<select id="GetPersetMember" parameterType="String" resultType="com.dlhdlh.dto.PersetMemberDto">
 		<![CDATA[ 
@@ -82,7 +77,6 @@
 			WHERE user_id = #{userId}
 		]]>
 	</select>
-	
 	<!-- 회원개인설정 인서트-->
 	<insert id="SetPersetMember" parameterType="String">
 		<![CDATA[ 
@@ -90,7 +84,6 @@
 			VALUES (#{userId});
 		]]>
 	</insert>
-	
 	<!-- 회원개인설정 수정-->
 	<update id="UpdatePersetMember" parameterType="com.dlhdlh.dto.PersetMemberDto">
 		<![CDATA[ 
