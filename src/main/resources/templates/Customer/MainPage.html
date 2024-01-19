@@ -290,7 +290,7 @@
                             <tr th:each="list : ${CustList.getList()}" class="text-wrap">
                                 <td th:text='${list.rowNum}'></td>
                                 <!-- <td th:text='${list.custNm}' class="text-truncate"></td> -->
-                                <td class="ps-3">ㅁ</td>
+                                <td class="ps-3"><a ><i class='bx bx-star'></i></a></td>
                                 <td class="text-truncate"><a th:href="@{/dworld/customer(pageNum=${CustList.PageNum}, selectRowNum=${list.rowNum},searchCustNm=${SearchCustNm})}" th:text='${list.custNm}'></a></td>
                                 <td th:text='${list.custBusnum}'></td>
                                 <td th:text='${list.custNum}'></td>

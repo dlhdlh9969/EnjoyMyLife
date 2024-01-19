@@ -4,10 +4,24 @@
 	<!-- 업체 리스트 --> 
 	<select id="GetCustList" parameterType="com.dlhdlh.dto.WorkLogDto" resultType="com.dlhdlh.dto.CustomerDto">
 		<![CDATA[ 
-			SELECT row_number() OVER (ORDER BY cust_cd) as row_num, cust_cd, cust_nm, cust_busnum, cust_num, cust_addr, cust_email, cust_fax, cust_ceonm, cust_ceonum, cust_remark
-			FROM Customer
-			WHERE cust_nm like concat('%', #{searchCustNm}, '%') and deleted_yn = "N"
-			Order By row_num desc
+			SELECT row_number() OVER (ORDER BY c.cust_cd) as row_num
+				, c.cust_cd
+				, c.cust_nm
+				, c.cust_busnum
+				, c.cust_num
+				, c.cust_addr
+				, c.cust_email
+				, c.cust_fax
+				, c.cust_ceonm
+				, c.cust_ceonum
+				, c.cust_remark
+				, f.cust_cd as cust_favor
+			FROM Customer c
+			LEFT OUTER JOIN CustFavor f
+			ON c.insert_user = f.user_id AND c.cust_cd = f.cust_cd
+			WHERE c.cust_nm like concat('%', #{searchCustNm}, '%') 
+				AND c.deleted_yn = "N"
+			ORDER BY row_num desc
 		]]>
 	</select>
 	
