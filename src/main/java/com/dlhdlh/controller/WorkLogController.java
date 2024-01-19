@@ -43,9 +43,9 @@ public class WorkLogController {
 	//업무일지 리스트
 	@RequestMapping(value="/dworld/worklog")
 	public ModelAndView WorkLogList(@RequestParam(required=false, defaultValue = "1") int pageNum
-			, HttpServletRequest servletRequest
-			, WorkLogDto worklogParam
-			, @RequestParam(required=false, defaultValue = "0") int entrance) throws Exception {
+								, HttpServletRequest servletRequest
+								, WorkLogDto worklogParam
+								, @RequestParam(required=false, defaultValue = "0") int entrance) throws Exception {
 		ModelAndView mv = new ModelAndView("WorkLog/MainPage");
 		String requestId = null;
 		
@@ -72,7 +72,6 @@ public class WorkLogController {
 			if(!worklogParam.getEndDt().equals("")) {
 				endDt = LocalDate.parse(worklogParam.getEndDt()).plusDays(1);
 			}
-			
 		}
 
 		//완료 여부 컨트롤
@@ -141,7 +140,7 @@ public class WorkLogController {
 		if(persetWorkLog == null) {
 			worklogService.SetNewMember(requestId);
 			persetWorkLog = worklogService.GetPersetWorkLog(requestId);
-			persetWorkLog.setComplYn("A");
+			persetWorkLog.setComplYn("N");
 			persetWorkLog.setCustNm("");
 			persetWorkLog.setStartDt("");
 			persetWorkLog.setEndDt("");
@@ -149,6 +148,7 @@ public class WorkLogController {
 			persetWorkLog.setOrder2("desc");
 			persetWorkLog.setTitle("");
 			persetWorkLog.setContent("");
+			worklogService.UpdatePersetWorkLog(persetWorkLog);
 		}
 		
 		// 개인별 게시판 설정값 업데이트 여부
