@@ -26,7 +26,8 @@
 				AND w.title like concat('%', #{title}, '%') 
 				AND w.content like concat('%', #{content}, '%')
 				AND COALESCE(c.cust_nm, '') like concat('%', #{custNm}, '%')
-				AND w.insert_dt BETWEEN DATE_FORMAT(#{startDt}, '%Y-%m-%d') AND DATE_FORMAT(#{endDt}, '%Y-%m-%d')
+				AND w.insert_dt >= DATE_FORMAT(#{startDt}, '%Y-%m-%d') 
+				AND w.insert_dt <= DATE_FORMAT(#{endDt}, '%Y-%m-%d')
 			ORDER BY row_num desc
 		]]>
 	</select>

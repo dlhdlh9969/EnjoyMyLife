@@ -83,3 +83,7 @@ body.dark .swal2-content * {
 body.dark a.btn:visited {
     color: var(--text-color);
 }
+
+body.dark #selectCustModal .modal-header {
+    color: var(--text-Reverse-color);
+}

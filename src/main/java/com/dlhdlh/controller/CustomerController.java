@@ -137,9 +137,7 @@ public class CustomerController {
 		String getCustNm = customerParam.getCustNm().trim();
 		customerParam.setCustNm(getCustNm);
 		
-		System.out.println("getCustNm:"+getCustNm);
 		if(getCustNm.equals("")) {
-			System.out.println("empty 리턴");
 			return "custNmEmpty";
 			
 		} else{
@@ -147,11 +145,9 @@ public class CustomerController {
 				customerParam.setInsertUser(requestId);
 				customerParam.setCustNm(getCustNm);
 				customerService.CustomerInsert(customerParam);
-				System.out.println("OK 리턴");
 				return "OK";
 			} catch (Exception e) {
 				e.printStackTrace();
-				System.out.println("notOK 리턴");
 				return "notOK";
 			}
 		}

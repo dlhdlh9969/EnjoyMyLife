@@ -67,13 +67,15 @@
                 toggle.addEventListener("click", ()=>{
                     sidebar.classList.toggle("close");
                 })
-            });
 
-            document.addEventListener('keydown', function(event){
+                document.addEventListener('keydown', function(event){
                 if (event.key === 'Escape'){
                     $('#offcanvasbody').offcanvas('hide');
                 }
             });
+            });
+
+            
         </script>
 </head>
     <body th:attr="class=${viewMode} == 'dark' ? 'dark'">
@@ -112,7 +114,7 @@
                             </a>
                         </li>
                         <li class="nav-link">
-                            <a href="#">
+                            <a href="/dworld/carmanage">
                                 <i class='bx bx-ghost icon'></i>
                                 <span class="text nav-text">Empty</span>
                             </a>

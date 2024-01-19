@@ -26,6 +26,7 @@
                 var valcustCeonum = $("#input-custCeonum").val();
                 var valcustAddr = $("#input-custAddr").val();
                 var valcustEmail = $("#input-custEmail").val();
+                var valcustFax = $("#input-custFax").val();
                 var valcustRemark = $("#input-custRemark").val();
                 var datas = { custCd: valcustCd
                             , custNm: valcustNm
@@ -35,6 +36,7 @@
                             , custCeonum: valcustCeonum
                             , custAddr: valcustAddr
                             , custEmail: valcustEmail
+                            , custFax: valcustFax
                             , custRemark: valcustRemark
                 };
 
@@ -90,6 +92,7 @@
                 document.getElementById("input-custCeonum").readOnly = false;
                 document.getElementById("input-custAddr").readOnly = false;
                 document.getElementById("input-custEmail").readOnly = false;
+                document.getElementById("input-custFax").readOnly = false;
                 document.getElementById("input-custRemark").readOnly = false;
             });
             
@@ -153,6 +156,7 @@
                 $("#input-custCeonum").val("");
                 $("#input-custAddr").val("");
                 $("#input-custEmail").val("");
+                $("#input-custFax").val("");
                 $("#input-custRemark").text("");
 
                 document.getElementById("input-custNm").readOnly = false;
@@ -162,6 +166,7 @@
                 document.getElementById("input-custCeonum").readOnly = false;
                 document.getElementById("input-custAddr").readOnly = false;
                 document.getElementById("input-custEmail").readOnly = false;
+                document.getElementById("input-custFax").readOnly = false;
                 document.getElementById("input-custRemark").readOnly = false;
 
             });
@@ -175,6 +180,7 @@
                 var valcustCeonum = $("#input-custCeonum").val();
                 var valcustAddr = $("#input-custAddr").val();
                 var valcustEmail = $("#input-custEmail").val();
+                var valcustFax = $("#input-custFax").val();
                 var valcustRemark = $("#input-custRemark").val();
                 var datas = { custNm: valcustNm
                             , custBusnum: valcustBusnum
@@ -183,6 +189,7 @@
                             , custCeonum: valcustCeonum
                             , custAddr: valcustAddr
                             , custEmail: valcustEmail
+                            , custFax: valcustFax
                             , custRemark: valcustRemark };
 
                 $.ajax({
@@ -215,6 +222,7 @@
                 searchCust();
             });
         });
+        //ready(function()) 종료-------------------------------------------------------------
 
         //검색 버튼
         function searchCust(){
@@ -253,10 +261,11 @@
                     </div>
                 </div>
                 <div style="overflow: auto;">
-                    <table class="table table-striped" style="min-width:1000px; table-layout:fixed;">
+                    <table class="table table-striped" style="min-width:1100px; table-layout:fixed;">
                         <colgroup>
-                            <col width="10%" />
-                            <col width="30%" />
+                            <col width="7%" />
+                            <col width="6%" />
+                            <col width="27%" />
                             <col width="15%" />
                             <col width="15%" />
                             <col width="15%" />
@@ -265,6 +274,7 @@
                         <thead>
                             <tr>
                                 <th>Num</th>
+                                <th>Favor</th>
                                 <th>회사명</th>
                                 <th>사업자번호</th>
                                 <th>전화번호</th>
@@ -280,10 +290,11 @@
                             <tr th:each="list : ${CustList.getList()}" class="text-wrap">
                                 <td th:text='${list.rowNum}'></td>
                                 <!-- <td th:text='${list.custNm}' class="text-truncate"></td> -->
+                                <td class="ps-3">ㅁ</td>
                                 <td class="text-truncate"><a th:href="@{/dworld/customer(pageNum=${CustList.PageNum}, selectRowNum=${list.rowNum},searchCustNm=${SearchCustNm})}" th:text='${list.custNm}'></a></td>
                                 <td th:text='${list.custBusnum}'></td>
                                 <td th:text='${list.custNum}'></td>
-                                <td th:text='${list.custCeonm}'></td>
+                                <td class="text-truncate" th:text='${list.custCeonm}'></td>
                                 <td th:text='${list.custCeonum}'></td>
                             </tr>
                             
@@ -344,6 +355,10 @@
                     <div class="col-6 col-md-4 col-lg-3 form-floating">
                         <input type="text" th:value="${SelectCust.custCeonum}" class="form-control" readonly id="input-custCeonum" name="input-custCeonum">
                         <label for="input-custCeonum">대표 번호</label>
+                    </div>
+                    <div class="col-6 col-md-4 col-lg-3 form-floating">
+                        <input type="text" th:value="${SelectCust.custFax}" class="form-control" readonly id="input-custFax" name="input-custFax">
+                        <label for="input-custFax">Fax</label>
                     </div>
                     <div class="col-6 col-md-4 col-lg-3 form-floating">
                         <input type="text" th:value="${SelectCust.custEmail}" class="form-control" readonly id="input-custEmail" name="input-custEmail">

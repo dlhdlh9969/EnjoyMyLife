@@ -6,7 +6,9 @@
     <link rel="stylesheet" href="/css/WorkLog.css">
     <script>
         $(document).ready(function(){
-
+            checkCust();
+            custListAjax();
+            
             //업체 선택하지 않은 데이터 리턴시 대응
             if($("#cust-cd").val()==0){
                 $("#cust-cd").val("");
@@ -29,34 +31,6 @@
                 };
             });
             
-            custListAjax();
-            function custListAjax(){
-                $.ajax({
-                    url: "/dworld/worklog/searchCust",
-                    type: "get",
-                    data: datas,
-                    success: function(data){
-                        var listArea =$("#custListTable");
-                        var listStr = "";
-                        listArea.empty();
-                        
-                        if (data && data.length > 0) {
-                            $.each(data, function(index, item){
-                                listStr += "<tr onclick='SetCust("+item.rowNum+")'>";
-                                listStr += "<td class='text-start text-truncate' id='selectCustNm"+item.rowNum+"'>"+item.custNm+"</td>"
-                                listStr += "<td><div class='' id='selectCustCd"+item.rowNum+"'>"+item.custCd+"</div></td></tr>";
-                            });
-                            listArea.append(listStr);
-                        } else {
-                            listStr += "<tr><td colspan='2' class='text-center'>검색 결과가 없습니다.</td></tr>";
-                            listArea.append(listStr);
-                        }
-                    }, error: function() {
-                        Swal.fire("Error", "ajax 통신 오류 발생", "error");
-                    }
-                });
-            };
-
             // 업체 등록 버튼
             $("#btn-insertCust").on("click", function(){
                 Swal.fire({
@@ -99,7 +73,7 @@
                     }
                 });
             });
-
+            
             //업무일지 등록
             $("#btn-insert").on("click", function() {
                 var custCd = $("#cust-cd").val();
@@ -149,7 +123,36 @@
                 }
             });
 
-        });
+            // 업체 선택 모달에 사용하는 데이터
+            function custListAjax(){
+                $.ajax({
+                    url: "/dworld/worklog/searchCust",
+                    type: "get",
+                    data: datas,
+                    success: function(data){
+                        var listArea =$("#custListTable");
+                        var listStr = "";
+                        listArea.empty();
+                        
+                        if (data && data.length > 0) {
+                            $.each(data, function(index, item){
+                                listStr += "<tr onclick='SetCust("+item.rowNum+")'>";
+                                listStr += "<td class='text-start text-truncate' id='selectCustNm"+item.rowNum+"'>"+item.custNm+"</td>"
+                                listStr += "<td><div class='' id='selectCustCd"+item.rowNum+"'>"+item.custCd+"</div></td></tr>";
+                            });
+                            listArea.append(listStr);
+                        } else {
+                            listStr += "<tr><td colspan='2' class='text-center'>검색 결과가 없습니다.</td></tr>";
+                            listArea.append(listStr);
+                        }
+                    }, error: function() {
+                        Swal.fire("Error", "ajax 통신 오류 발생", "error");
+                    }
+                });
+            };
+
+            
+        }); // ready(function() 종료--------------------------------
 
         //업체 선택 버튼 클릭 이벤트
         function SetCust(rowNum){
@@ -161,12 +164,14 @@
 
             $("#cust-nm").val(selectCustNm);
             $("#cust-cd").val(selectCustCd);
+            checkCust()
         };
         
         //업체 선택 취소
         function SelectCancel(){
             $("#cust-nm").val("");
             $("#cust-cd").val("");
+            checkCust()
         };
 
         //삭제 버튼 이벤트
@@ -206,6 +211,17 @@
                     });
                 }
             })
+        };
+        
+        // 업체 선택, 취소 버튼 컨트롤
+        function checkCust(){
+            if($("#cust-cd").val() == ""){
+                $("#btn-selectCust").show();
+                $("#btn-cancelCust").hide();
+            }else {
+                $("#btn-selectCust").hide();
+                $("#btn-cancelCust").show();
+            }
         };
 
         //수정버튼 클릭 이벤트
@@ -293,14 +309,9 @@
                 <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.custCd}" type="text" class="form-control" id="cust-cd" name="cust-cd" disabled>                
                 <label for="cust-cd">업체코드</label>
             </div>
-            <div class="col-6 col-md-3 col-lg-auto">
-                <button type="button" class="w-100 h-100 btn btn-dark border-primary text-nowrap" data-bs-toggle="modal" data-bs-target="#selectCustModal">업체 선택</button>
-            </div>
-            <div class="col-6 col-md-3 col-lg-auto">
-                <button type="button" class="w-100 h-100 btn btn-dark border-warning text-nowrap" onclick="SelectCancel()">선택 취소</button>
-            </div>
-            <div class="col-6 col-md-3 col-lg-auto">
-                <button type="button" id="btn-insertCust" class="w-100 h-100 btn btn-dark border-info text-nowrap">업체 등록</button>
+            <div class="col-auto h-100">
+                <button type="button" class="h-100 btn btn-dark border-primary text-nowrap" id="btn-selectCust" data-bs-toggle="modal" data-bs-target="#selectCustModal">업체 선택</button>
+                <button type="button" class="h-100 btn btn-dark border-warning text-nowrap" id="btn-cancelCust" onclick="SelectCancel()">선택 취소</button>
             </div>
         </div>
         <!-- 업체 선택 modal -->
@@ -309,15 +320,20 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="staticBackdropLabel">업체 선택 팝업</h1>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        <button type="button" class="btn-close btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
+                        <div>
+                            <div class="col-6 col-md-3 col-lg-auto">
+                                <button type="button" id="btn-insertCust" class="w-100 h-100 btn btn-dark border-info text-nowrap">업체 등록</button>
+                            </div>
+                        </div>
                         <input class="form-control my-2" type="text" list="custNmList" id="searchCustNm" name="searchCustNm" placeholder="업체명 검색" autocomplete="off">
                         <datalist id="custNmList">
                             <option th:each="list : ${CustNmList}" th:value="${list.custNm}"></option>
                         </datalist>
                         <div style="max-height: 400px; overflow:auto" id="custListDiv" name="custListDiv">
-                            <table class="table table-dark table-striped" style="table-layout:fixed; cursor:pointer;">
+                            <table class="table table-striped" style="table-layout:fixed; cursor:pointer;">
                                 <colgroup>
                                     <col width="75%">
                                     <col width="25%">

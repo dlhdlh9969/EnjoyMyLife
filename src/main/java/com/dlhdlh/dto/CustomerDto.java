@@ -11,6 +11,7 @@ public class CustomerDto {
 	String custNum;
 	String custAddr;
 	String custEmail;
+	String custFax;
 	String custCeonm;
 	String custCeonum;
 	String custRemark;

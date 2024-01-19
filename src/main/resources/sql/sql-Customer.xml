@@ -4,7 +4,7 @@
 	<!-- 업체 리스트 --> 
 	<select id="GetCustList" parameterType="com.dlhdlh.dto.WorkLogDto" resultType="com.dlhdlh.dto.CustomerDto">
 		<![CDATA[ 
-			SELECT row_number() OVER (ORDER BY cust_cd) as row_num, cust_cd, cust_nm, cust_busnum, cust_num, cust_addr, cust_email, cust_ceonm, cust_ceonum, cust_remark
+			SELECT row_number() OVER (ORDER BY cust_cd) as row_num, cust_cd, cust_nm, cust_busnum, cust_num, cust_addr, cust_email, cust_fax, cust_ceonm, cust_ceonum, cust_remark
 			FROM Customer
 			WHERE cust_nm like concat('%', #{searchCustNm}, '%') and deleted_yn = "N"
 			Order By row_num desc
@@ -30,7 +30,8 @@
 				,cust_ceonm = #{custCeonm} 
 				,cust_ceonum = #{custCeonum} 
 				,cust_addr = #{custAddr} 
-				,cust_email = #{custEmail} 
+				,cust_email = #{custEmail}
+				,cust_fax = #{custFax} 
 				,cust_remark = #{custRemark} 
 				,update_user = #{updateUser} 
 				,update_dt = now() 
@@ -50,8 +51,8 @@
 	
 	<insert id="CustomerInsert" parameterType="com.dlhdlh.dto.WorkLogDto">
 		<![CDATA[ 
-			INSERT INTO Customer(cust_nm,cust_busnum,cust_num,cust_ceonm,cust_ceonum,cust_addr,cust_email,cust_remark,insert_user, insert_dt) 
-			VALUES (#{custNm},#{custBusnum},#{custNum},#{custCeonm},#{custCeonum},#{custAddr},#{custEmail},#{custRemark},#{insertUser},now())
+			INSERT INTO Customer(cust_nm,cust_busnum,cust_num,cust_ceonm,cust_ceonum,cust_addr,cust_email, cust_fax, cust_remark,insert_user, insert_dt) 
+			VALUES (#{custNm},#{custBusnum},#{custNum},#{custCeonm},#{custCeonum},#{custAddr},#{custEmail},#{custFax},#{custRemark},#{insertUser},now())
 		]]>
 	</insert>
 	
