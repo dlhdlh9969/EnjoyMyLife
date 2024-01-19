@@ -9,7 +9,7 @@ import com.github.pagehelper.Page;
 
 public interface CustomerService {
 
-	Page<CustomerDto> GetCustList(int pageNum, int maxRow, String searchCustNm) throws Exception;
+	Page<CustomerDto> GetCustList(int pageNum, int maxRow, CustomerDto customerParam) throws Exception;
 
 	void CustomerUpdate(CustomerDto customerDto) throws Exception;
 
@@ -26,4 +26,6 @@ public interface CustomerService {
 	List<String> GetCustNmList() throws Exception;
 
 	String CustFavorToggle(CustFavorDto custFavorParam) throws Exception;
+	
+	List<CustomerDto> GetModalCustList(CustomerDto customerParam) throws Exception;
 }

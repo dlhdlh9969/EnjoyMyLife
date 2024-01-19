@@ -59,13 +59,15 @@ public class CustomerController {
 		}
 		int maxPaging = 5;//페이징 최대 갯수
 		int maxRow = persetCust.getMaxrow(); //페이지당 최대 로우 갯수
+		
 		//업체명 검색 input이 null로 왔을 경우 where절에 like를 할 수 없으므로 빈값을 넣어줌!
-		String searchCustNm = customerParam.getSearchCustNm();
-		if(searchCustNm == null) {
-			searchCustNm = "";
+		if(customerParam.getSearchCustNm() == null) {
+			customerParam.setSearchCustNm("");
 		}
 		
-		PageInfo<CustomerDto> custList = new PageInfo<>(customerService.GetCustList(pageNum, maxRow, searchCustNm), maxPaging);
+		//업체 리스트 조회(검색 기능 포함)
+		customerParam.setUserId(requestId);
+		PageInfo<CustomerDto> custList = new PageInfo<>(customerService.GetCustList(pageNum, maxRow, customerParam), maxPaging);
 		
 		//선택한 업체 정보를 분리하여 디테일 영역에 뿌려줄 데이터
 		CustomerDto selectCustInfo = new CustomerDto();
@@ -81,14 +83,14 @@ public class CustomerController {
 				selectCustInfo = custList.getList().get(0);
 			}
 		}
-		selectCustInfo.setSearchCustNm(searchCustNm);
+		selectCustInfo.setSearchCustNm(customerParam.getSearchCustNm());
 		
 		// 업체명을 리스트화
 		List<String> custNmList =  customerService.GetCustNmList();
 		
 		mv.addObject("PersetCust", persetCust);
 		mv.addObject("CustList", custList);
-		mv.addObject("SearchCustNm", searchCustNm);
+		mv.addObject("SearchCustNm", customerParam.getSearchCustNm());
 		mv.addObject("SelectCust", selectCustInfo);
 		mv.addObject("CustNmList", custNmList);
 		return mv;
@@ -165,8 +167,18 @@ public class CustomerController {
 			return result;
 		} catch (Exception e) {
 			return "notOk";
-		}
+		}	
+	}
+	
+	// 업무일지 > 모달 > 업체검색 컨트롤
+	@ResponseBody
+	@RequestMapping(value="/dworld/customer/searchmodal")
+	public List<CustomerDto> GetModalCustList(CustomerDto customerParam, HttpServletRequest servletRequest) throws Exception{
+		String requestId = servletRequest.getSession().getAttribute("userId").toString();
+		customerParam.setUserId(requestId);
 		
+		List<CustomerDto> getModalCustList = customerService.GetModalCustList(customerParam);
+		return getModalCustList;
 	}
 }
 

@@ -83,6 +83,14 @@
 		]]>
 	</select>
 	
+	<!-- 회원개인설정 인서트-->
+	<insert id="SetPersetMember" parameterType="String">
+		<![CDATA[ 
+			INSERT INTO	PersetMember (user_id)
+			VALUES (#{userId});
+		]]>
+	</insert>
+	
 	<!-- 회원개인설정 수정-->
 	<update id="UpdatePersetMember" parameterType="com.dlhdlh.dto.PersetMemberDto">
 		<![CDATA[ 

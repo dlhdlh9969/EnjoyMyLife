@@ -87,3 +87,7 @@ body.dark a.btn:visited {
 body.dark #selectCustModal .modal-header {
     color: var(--text-Reverse-color);
 }
+
+body.dark table a *{
+    color: var(--text-Reverse-color);
+}

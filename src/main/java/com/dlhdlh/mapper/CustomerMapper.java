@@ -12,7 +12,7 @@ import com.github.pagehelper.Page;
 @Mapper
 public interface CustomerMapper {
 
-	Page<CustomerDto> GetCustList(String searchCustNm) throws Exception;
+	Page<CustomerDto> GetCustList(CustomerDto customerParam) throws Exception;
 
 	void CustomerUpdate(CustomerDto customerDto) throws Exception;
 
@@ -31,4 +31,7 @@ public interface CustomerMapper {
 	void InsertCustFavor(CustFavorDto custFavorParam) throws Exception;
 
 	void DeleteCustFavor(CustFavorDto custFavorParam) throws Exception;
+	
+	List<CustomerDto> GetModalCustList(CustomerDto customerParam) throws Exception;
+
 }

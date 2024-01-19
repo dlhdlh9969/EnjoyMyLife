@@ -1,9 +1,0 @@
-diff a/src/main/java/com/dlhdlh/controller/CustomerController.java b/src/main/java/com/dlhdlh/controller/CustomerController.java	(rejected hunks)
-@@ -25,6 +25,7 @@
- 	@RequestMapping(value="/dworld/customer")
- 	public ModelAndView CustomerList(@RequestParam(required=false, defaultValue = "1") int pageNum
- 			, @RequestParam(required=false, defaultValue = "0")int selectRowNum
-+			, @RequestParam(required=false, defaultValue = "")String searchCustNm
- 			, HttpServletRequest servletRequest
- 			, CustomerDto customerDto
- 			, PersetCustDto persetCustDto) throws Exception{

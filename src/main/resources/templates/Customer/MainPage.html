@@ -302,9 +302,8 @@
                             <tr th:each="list : ${CustList.getList()}" class="text-wrap">
                                 <td th:text='${list.rowNum}'></td>
                                 <td class="ps-3">
-                                    <button type="button" style="border:none" th:onclick="|custFavor(${list.custCd})|">
-                                        <i th:if="${list.custFavor == '0'}" class="bx bx-star custFavorIcon" th:id="|FavorTureIcon${list.custCd}|"></i>
-                                        <i th:if="${list.custFavor == '1'}" class="bx bxs-star custFavorIcon" th:id="|FavorFalseIcon${list.custCd}|"></i>
+                                    <button type="button" style="border:none; background: none;" th:onclick="|custFavor(${list.custCd})|">
+                                        <i class="bx custFavorIcon" th:classappend="${list.custFavor == '1' ? 'bxs-star' : 'bx-star'}"></i>
                                     </button>
                                 </td>
                                 <td>

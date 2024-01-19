@@ -274,6 +274,10 @@ a:visited{color:inherit}
   border-width: 2px;
 }
 
+button{
+  background-color: none !important;
+}
+
 .btn:hover{
   background: var(--primary-color-light);
   color: inherit;

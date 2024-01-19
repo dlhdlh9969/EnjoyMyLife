@@ -25,5 +25,6 @@ public class CustomerDto {
 	int rowNum;
 	String searchCustNm;
 	String custFavor;
+	String userId;
 	
 }

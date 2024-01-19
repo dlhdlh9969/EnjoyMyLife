@@ -76,50 +76,20 @@
         <!-- 검색 영역 -->
         <div class="row justify-content-end pt-3">
           <div class="col-4 col-lg-2">
-            <button
-              type="button"
-              class="w-100 btn btn-dark border-info"
-              onclick="searchWorkLog()"
-            >
-              Search
-            </button>
+            <button type="button" class="w-100 btn btn-dark border-info" onclick="searchWorkLog()">Search</button>
           </div>
           <div class="col-4 col-lg-2">
-            <button
-              type="button"
-              class="w-100 btn btn-dark border-danger"
-              onclick="location.href='/dworld/worklog'"
-            >
-              Reset
-            </button>
+            <button type="button" class="w-100 btn btn-dark border-danger" onclick="location.href='/dworld/worklog'">Reset</button>
           </div>
           <a class="col-4 col-lg-2" href="/dworld/worklog/detail">
-            <button
-              type="button"
-              id="btn-new"
-              class="w-100 btn btn-dark border-primary"
-            >
-              New
-            </button>
+            <button type="button" id="btn-new" class="w-100 btn btn-dark border-primary">New</button>
           </a>
         </div>
         <div class="row g-2">
           <div class="col-6 col-md-4 form-floating">
-            <input
-              type="text"
-              class="form-control"
-              list="custNmList"
-              id="searchCustNm"
-              name="searchCustNm"
-              th:value="${PersetWorkLog.custNm}"
-              onkeyup="if(window.event.keyCode==13){searchWorkLog()}"
-              autocomplete="off"
-            />
+            <input type="text" class="form-control" list="custNmList" id="searchCustNm" name="searchCustNm" th:value="${PersetWorkLog.custNm}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}" autocomplete="off"/>
             <datalist id="custNmList">
-              <option
-                th:each="list : ${CustNmList}"
-                th:value="${list.custNm}"
-              ></option>
+              <option th:each="list : ${CustNmList}" th:value="${list.custNm}"></option>
             </datalist>
             <label for="searchCustNm">회사명 검색</label>
           </div>
@@ -297,12 +267,7 @@
               <th class="text-center">완료</th>
             </thead>
             <tbody>
-              <tr
-                th:each="list : ${WorkLogList.getList()}"
-                class="text-wrap"
-                th:onclick="|location.href='/dworld/worklog/detail?idx=${list.idx}'|"
-                style="cursor: pointer"
-              >
+              <tr th:each="list : ${WorkLogList.getList()}" class="text-wrap" th:onclick="|location.href='/dworld/worklog/detail?idx=${list.idx}'|" style="cursor: pointer">
                 <td class="text-truncate" th:text="${list.rowNum}"></td>
                 <td class="text-truncate" th:text="${list.custNm}"></td>
                 <td class="text-truncate" th:text="${list.title}"></td>

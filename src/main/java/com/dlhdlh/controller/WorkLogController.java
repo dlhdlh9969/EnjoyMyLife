@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.dlhdlh.dto.CustomerDto;
 import com.dlhdlh.dto.PersetMemberDto;
 import com.dlhdlh.dto.PersetWorkLogDto;
 import com.dlhdlh.dto.WorkLogDto;
@@ -236,13 +235,6 @@ public class WorkLogController {
 		mv.addObject("CustNmList", custNmList);
 		mv.addObject("prevPage", prevPage);	
 		return mv;
-	}
-	
-	// 업체검색 모달 컨트롤
-	@ResponseBody
-	@RequestMapping(value="/dworld/worklog/searchCust")
-	public List<CustomerDto> CustList(@RequestParam(required=false, defaultValue = "") String searchCustNm) throws Exception{
-		return worklogService.GetCustList(searchCustNm);
 	}
 	
 	//업무일지 등록

@@ -69,13 +69,11 @@
                 })
 
                 document.addEventListener('keydown', function(event){
-                if (event.key === 'Escape'){
-                    $('#offcanvasbody').offcanvas('hide');
-                }
+                    if (event.key === 'Escape'){
+                        $('#offcanvasbody').offcanvas('hide');
+                    }
+                });
             });
-            });
-
-            
         </script>
 </head>
     <body th:attr="class=${viewMode} == 'dark' ? 'dark'">

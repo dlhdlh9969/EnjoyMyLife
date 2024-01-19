@@ -26,4 +26,6 @@ public interface MembersMapper {
 
 	public PersetMemberDto GetPersetMember(String requestId) throws Exception;
 
+	public void SetPersetMember(String requestId) throws Exception;
+
 }

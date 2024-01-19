@@ -19,9 +19,9 @@ public class CustomerServiceImpl implements CustomerService {
 	public CustomerMapper customerMapper;
 	
 	@Override
-	public Page<CustomerDto> GetCustList(int pageNum, int maxRow, String searchCustNm) throws Exception {
+	public Page<CustomerDto> GetCustList(int pageNum, int maxRow, CustomerDto customerParam) throws Exception {
 		PageHelper.startPage(pageNum, maxRow);
-		return customerMapper.GetCustList(searchCustNm);
+		return customerMapper.GetCustList(customerParam);
 	}
 
 	@Override
@@ -68,6 +68,11 @@ public class CustomerServiceImpl implements CustomerService {
 			customerMapper.DeleteCustFavor(custFavorParam);
 			return "delete";
 		}
+	}
+	
+	@Override
+	public List<CustomerDto> GetModalCustList(CustomerDto customerParam) throws Exception {
+		return customerMapper.GetModalCustList(customerParam);
 	}
 
 }

@@ -54,7 +54,14 @@ public class MembersServiceImpl implements MembersService {
 
 	@Override
 	public PersetMemberDto GetPersetMember(String requestId) throws Exception {
-		return membersMapper.GetPersetMember(requestId);
+		PersetMemberDto getPersetMember = membersMapper.GetPersetMember(requestId);
+		
+		if(getPersetMember == null) {
+			membersMapper.SetPersetMember(requestId);
+			return membersMapper.GetPersetMember(requestId);
+		}else {
+			return getPersetMember;
+		}
 	}
 	
 }
