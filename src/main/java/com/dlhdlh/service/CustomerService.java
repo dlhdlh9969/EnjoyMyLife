@@ -2,6 +2,7 @@ package com.dlhdlh.service;
 
 import java.util.List;
 
+import com.dlhdlh.dto.CustFavorDto;
 import com.dlhdlh.dto.CustomerDto;
 import com.dlhdlh.dto.PersetCustDto;
 import com.github.pagehelper.Page;
@@ -23,4 +24,6 @@ public interface CustomerService {
 	void SetNewMember(String requestId) throws Exception;
 
 	List<String> GetCustNmList() throws Exception;
+
+	String CustFavorToggle(CustFavorDto custFavorParam) throws Exception;
 }

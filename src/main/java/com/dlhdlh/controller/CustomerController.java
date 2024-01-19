@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.dlhdlh.dto.CustFavorDto;
 import com.dlhdlh.dto.CustomerDto;
 import com.dlhdlh.dto.PersetCustDto;
 import com.dlhdlh.dto.PersetMemberDto;
@@ -151,6 +152,21 @@ public class CustomerController {
 				return "notOK";
 			}
 		}
+	}
+	
+	//업체 즐겨찾기
+	@ResponseBody
+	@RequestMapping(value = "/dworld/customer/custfavor", method = RequestMethod.PUT)
+	public String CustFavorToggle(HttpServletRequest servletRequest, CustFavorDto custFavorParam) {
+		String requestId = servletRequest.getSession().getAttribute("userId").toString();
+		custFavorParam.setUserId(requestId);
+		try {
+			String result = customerService.CustFavorToggle(custFavorParam);
+			return result;
+		} catch (Exception e) {
+			return "notOk";
+		}
+		
 	}
 }
 

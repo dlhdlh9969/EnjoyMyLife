@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dlhdlh.dto.CustFavorDto;
 import com.dlhdlh.dto.CustomerDto;
 import com.dlhdlh.dto.PersetCustDto;
 import com.dlhdlh.mapper.CustomerMapper;
@@ -56,6 +57,17 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public List<String> GetCustNmList() throws Exception {
 		return customerMapper.GetCustNmList();
+	}
+
+	@Override
+	public String CustFavorToggle(CustFavorDto custFavorParam) throws Exception {
+		try {
+			customerMapper.InsertCustFavor(custFavorParam);
+			return "insert";
+		} catch (Exception e) {
+			customerMapper.DeleteCustFavor(custFavorParam);
+			return "delete";
+		}
 	}
 
 }

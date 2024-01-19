@@ -231,6 +231,22 @@
             window.location.href= "/dworld/customer?SearchCustNm=" + encodeURIComponent(searchCustNm) 
                                 + "&maxrow=" + encodeURIComponent(maxrow);
         };
+
+        // 업체 즐겨찾기 ajax
+        function custFavor(custCd){
+            var datas = {custCd};
+
+            $.ajax({
+                url: "/dworld/customer/custfavor",
+                type: "put",
+                data: datas,
+                success: function(data) {
+                    searchCust();
+                }, error: function() {
+                    Swal.fire("Error", "ajax 통신 오류 발생", "error");
+                }
+            });
+        }
     </script>
 </head>
 <body>
@@ -283,15 +299,19 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- <tr th:each="list : ${CustList.getList()}" class="text-wrap" th:onclick="|location.href='/dworld/customer?pageNum=${CustList.PageNum}&selectRowNum=${list.rowNum}&searchCustNm=${SearchCustNm}'|" style="cursor:pointer;" > -->
-                                                                                                                                <!-- pageNum=${CustList.PageNum}&selectRowNum=${list.rowNum}&searchCustNm=${SearchCustNm} -->
-                                                                                                                <!-- /dworld/customer?pageNum=1&selectRowNum=32&searchCustNm= -->
-                                                                                    <!-- th:onclick="|location.href='/dworld/worklog/detail?idx=${list.idx}'|" -->
                             <tr th:each="list : ${CustList.getList()}" class="text-wrap">
                                 <td th:text='${list.rowNum}'></td>
-                                <!-- <td th:text='${list.custNm}' class="text-truncate"></td> -->
-                                <td class="ps-3"><a ><i class='bx bx-star'></i></a></td>
-                                <td class="text-truncate"><a th:href="@{/dworld/customer(pageNum=${CustList.PageNum}, selectRowNum=${list.rowNum},searchCustNm=${SearchCustNm})}" th:text='${list.custNm}'></a></td>
+                                <td class="ps-3">
+                                    <button type="button" style="border:none" th:onclick="|custFavor(${list.custCd})|">
+                                        <i th:if="${list.custFavor == '0'}" class="bx bx-star custFavorIcon" th:id="|FavorTureIcon${list.custCd}|"></i>
+                                        <i th:if="${list.custFavor == '1'}" class="bx bxs-star custFavorIcon" th:id="|FavorFalseIcon${list.custCd}|"></i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <a th:href="@{/dworld/customer(pageNum=${CustList.PageNum}, selectRowNum=${list.rowNum},searchCustNm=${SearchCustNm})}">
+                                        <div class="text-truncate" th:text='${list.custNm}'></div>
+                                    </a>
+                                </td>
                                 <td th:text='${list.custBusnum}'></td>
                                 <td th:text='${list.custNum}'></td>
                                 <td class="text-truncate" th:text='${list.custCeonm}'></td>

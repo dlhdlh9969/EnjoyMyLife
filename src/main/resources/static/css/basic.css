@@ -306,3 +306,9 @@ input, select, textarea, label{
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 400;
 }
+
+/* 업체 즐겨찾기 아이콘 */
+.custFavorIcon{
+  color: var(--primary-color);
+  font-size: 1.5rem;
+}

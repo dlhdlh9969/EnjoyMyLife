@@ -4,8 +4,9 @@
 	<!-- 업체 리스트 --> 
 	<select id="GetCustList" parameterType="com.dlhdlh.dto.WorkLogDto" resultType="com.dlhdlh.dto.CustomerDto">
 		<![CDATA[ 
-			SELECT row_number() OVER (ORDER BY c.cust_cd) as row_num
+			SELECT row_number() OVER (ORDER BY c.cust_cd = f.cust_cd, c.cust_cd) as row_num
 				, c.cust_cd
+				, if(c.cust_cd = f.cust_cd , '1', '0' ) as cust_favor
 				, c.cust_nm
 				, c.cust_busnum
 				, c.cust_num
@@ -15,7 +16,6 @@
 				, c.cust_ceonm
 				, c.cust_ceonum
 				, c.cust_remark
-				, f.cust_cd as cust_favor
 			FROM Customer c
 			LEFT OUTER JOIN CustFavor f
 			ON c.insert_user = f.user_id AND c.cust_cd = f.cust_cd
@@ -95,6 +95,22 @@
 			VALUES ( #{userId});
 		]]>
 	</insert>
+	
+	<!-- 업체 즐겨찾기 등록-->
+	<insert id="InsertCustFavor" parameterType="com.dlhdlh.dto.CustFavorDto">
+		<![CDATA[ 
+			INSERT INTO CustFavor (user_id, cust_cd)
+			VALUES ( #{userId}, #{custCd})
+		]]>
+	</insert>
+	
+	<!-- 업체 즐겨찾기 삭제-->
+	<delete id="DeleteCustFavor" parameterType="com.dlhdlh.dto.CustFavorDto">
+		<![CDATA[ 
+			DELETE FROM CustFavor
+			WHERE user_id = #{userId} AND cust_cd = #{custCd}
+		]]>
+	</delete>
 	
 	
 </mapper>
