@@ -320,7 +320,7 @@
                 <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.custNm}" type="text" class="form-control" id="cust-nm" name="cust-nm" disabled>
                 <label for="cust-nm">업체명</label>
             </div>
-            <div class="col-6 col-md-6 col-lg-3 form-floating">
+            <div class="col-6 col-md-6 col-lg-3 form-floating" style="display: none;">
                 <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.custCd}" type="text" class="form-control" id="cust-cd" name="cust-cd" disabled>                
                 <label for="cust-cd">업체코드</label>
             </div>
