@@ -28,18 +28,25 @@ public class DworldController {
 	
 	@RequestMapping("/")
 	public ModelAndView IndexPage(HttpServletRequest servletRequest) throws Exception{
-		ModelAndView mv = new ModelAndView("index");
-		String requestId = null;
+		ModelAndView mv = null;
 		
-		if(servletRequest.getSession().getAttribute("userId") != null) {
-			requestId = servletRequest.getSession().getAttribute("userId").toString();
-			PersetMemberDto persetMember = membersService.GetPersetMember(requestId);
-			mv.addObject("viewMode", persetMember.getViewMode());
-		}else {
-			mv.addObject("viewMode", "light");
-		}
+		if(servletRequest.getSession().getAttribute("userId") == null) {
+			mv = new ModelAndView("Members/login.html");
+			return mv;
+		}else{
+			mv = new ModelAndView("index");
+			String requestId = null;
 
-		return mv;
+			if(servletRequest.getSession().getAttribute("userId") != null) {
+				requestId = servletRequest.getSession().getAttribute("userId").toString();
+				PersetMemberDto persetMember = membersService.GetPersetMember(requestId);
+				mv.addObject("viewMode", persetMember.getViewMode());
+			}else {
+				mv.addObject("viewMode", "light");
+			}
+
+			return mv;
+		}
 	}
 	
 	@RequestMapping("/dworld/error")
