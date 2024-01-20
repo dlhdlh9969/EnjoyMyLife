@@ -6,6 +6,40 @@
 
     <link rel="stylesheet" href="/css/Customer.css">
     <script>
+        // 딜레이 타임 변수
+        let debounceTimer;
+        
+        // SearchCustNm Inputbox 자동 검색
+        function SearchCustNmdebounce() {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => searchCust(), 1500); // 1000 당 1초
+        }
+
+        //회사명 검색
+        function searchCust(){
+            clearTimeout(debounceTimer);
+            var searchCustNm = document.getElementById('searchCustNm').value;
+            var maxrow = $("#maxrow").val();
+            window.location.href= "/dworld/customer?SearchCustNm=" + encodeURIComponent(searchCustNm) 
+                                + "&maxrow=" + encodeURIComponent(maxrow);
+        };
+
+        // 업체 즐겨찾기 ajax
+        function custFavor(custCd){
+            var datas = {custCd};
+
+            $.ajax({
+                url: "/dworld/customer/custfavor",
+                type: "put",
+                data: datas,
+                success: function(data) {
+                    searchCust();
+                }, error: function() {
+                    Swal.fire("Error", "ajax 통신 오류 발생", "error");
+                }
+            });
+        }
+
         $(document).ready(function() {
             $("#btn-editOK").hide();
             $("#btn-insertOK").hide();
@@ -133,10 +167,7 @@
                             }
                         });
                     }
-                });
-                        
-                        
-                        
+                });      
             });
 
             // 등록 버튼
@@ -222,31 +253,6 @@
                 searchCust();
             });
         });
-        //ready(function()) 종료-------------------------------------------------------------
-
-        //검색 버튼
-        function searchCust(){
-            var searchCustNm = document.getElementById('searchCustNm').value;
-            var maxrow = $("#maxrow").val();
-            window.location.href= "/dworld/customer?SearchCustNm=" + encodeURIComponent(searchCustNm) 
-                                + "&maxrow=" + encodeURIComponent(maxrow);
-        };
-
-        // 업체 즐겨찾기 ajax
-        function custFavor(custCd){
-            var datas = {custCd};
-
-            $.ajax({
-                url: "/dworld/customer/custfavor",
-                type: "put",
-                data: datas,
-                success: function(data) {
-                    searchCust();
-                }, error: function() {
-                    Swal.fire("Error", "ajax 통신 오류 발생", "error");
-                }
-            });
-        }
     </script>
 </head>
 <body>
@@ -258,11 +264,12 @@
                     <label for=""><h1>Customer List</h1></label>
                 </div>
                 <div class="row gy-2 mx-auto">
+                    <!-- 
                     <div class="col-6 col-md-2 col-lg-auto order-2 order-lg-1 offset-lg-3">
                         <button type="button" class="col-12 btn btn-dark border-info text-nowrap" onclick="searchCust()">Search</button>
-                    </div>
+                    </div> -->
                     <div class="col-12 col-md-8 col-lg-4 mx-auto mx-lg-0 order-1 order-md-2 order-lg-2">
-                        <input type="text" class="form-control" list="custNmList" id="searchCustNm" name="searchCustNm" th:value="${SearchCustNm}" onkeyup="if(window.event.keyCode==13){searchCust()}" placeholder="회사명 검색" autocomplete="off">
+                        <input type="text" class="form-control" list="custNmList" id="searchCustNm" name="searchCustNm" th:value="${SearchCustNm}" oninput="SearchCustNmdebounce()" onkeyup="if(window.event.keyCode==13){searchCust()}" placeholder="회사명 검색" autocomplete="off">
                         <datalist id="custNmList">
                             <option th:each="list : ${CustNmList}" th:value="${list.custNm}"></option>
                         </datalist>

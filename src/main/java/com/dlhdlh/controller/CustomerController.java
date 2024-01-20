@@ -79,20 +79,16 @@ public class CustomerController {
 				for(i = 0; selectRowNum < custList.getList().get(i).getRowNum(); i++) {
 					selectCustInfo = custList.getList().get(i+1);
 				};
-			}else{
+			}else {
 				selectCustInfo = custList.getList().get(0);
 			}
 		}
 		selectCustInfo.setSearchCustNm(customerParam.getSearchCustNm());
 		
-		// 업체명을 리스트화
-		List<String> custNmList =  customerService.GetCustNmList();
-		
 		mv.addObject("PersetCust", persetCust);
 		mv.addObject("CustList", custList);
 		mv.addObject("SearchCustNm", customerParam.getSearchCustNm());
 		mv.addObject("SelectCust", selectCustInfo);
-		mv.addObject("CustNmList", custNmList);
 		return mv;
 	}
 	
