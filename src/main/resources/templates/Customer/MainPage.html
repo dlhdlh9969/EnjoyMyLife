@@ -269,8 +269,9 @@
                         <button type="button" class="col-12 btn btn-dark border-info text-nowrap" onclick="searchCust()">Search</button>
                     </div> -->
                     <div class="col-12 p-0">
-                        <div class="col-12 col-md-8 col-lg-4 mx-auto">
-                            <input type="text" class="form-control" list="custNmList" id="searchCustNm" name="searchCustNm" th:value="${SearchCustNm}" oninput="SearchCustNmdebounce()" onkeyup="if(window.event.keyCode==13){searchCust()}" placeholder="회사명 검색" autocomplete="off">
+                        <div class="col-12 col-md-8 col-lg-4 mx-auto form-floating ">
+                            <input type="text" class="form-control" list="custNmList" id="searchCustNm" name="searchCustNm" th:value="${SearchCustNm}" oninput="SearchCustNmdebounce()" onkeyup="if(window.event.keyCode==13){searchCust()}">
+                            <label>회사명 검색</label>
                         </div>
                     </div>
                     <div class="col-5 col-md-2 col-lg-2 ms-auto p-0">
