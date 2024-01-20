@@ -325,8 +325,8 @@
                 <label for="cust-cd">업체코드</label>
             </div>
             <div class="col-auto h-100">
-                <button type="button" class="h-100 btn btn-dark border-primary text-nowrap" id="btn-selectCust" data-bs-toggle="modal" data-bs-target="#selectCustModal">업체 선택</button>
-                <button type="button" class="h-100 btn btn-dark border-warning text-nowrap" id="btn-cancelCust" onclick="SelectCancel()">선택 취소</button>
+                <button type="button" class="h-100 btn btn-dark border-primary text-nowrap" id="btn-selectCust" data-bs-toggle="modal" data-bs-target="#selectCustModal">Select Customer</button>
+                <button type="button" class="h-100 btn btn-dark border-warning text-nowrap" id="btn-cancelCust" onclick="SelectCancel()">Cancel Selection</button>
             </div>
         </div>
         <!-- 업체 선택 modal -->
@@ -334,12 +334,14 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="staticBackdropLabel">업체 선택 팝업</h1>
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">PopUp For Select Customer</h1>
                         <button type="button" class="btn-close btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
+                        
                         <div class="d-flex">
-                            <button type="button" id="btn-insertCust" class="btn border-info ms-auto">업체 등록</button>
+                            <button type="button" class="btn border-info" onclick="custListAjax()">Search</button>
+                            <button type="button" id="btn-insertCust" class="btn border-warning ms-auto">Add Customer</button>
                         </div>
                         <input class="form-control my-2" type="text" list="custNmList" id="searchCustNm" name="searchCustNm" placeholder="업체명 검색" autocomplete="off">
                         <datalist id="custNmList">

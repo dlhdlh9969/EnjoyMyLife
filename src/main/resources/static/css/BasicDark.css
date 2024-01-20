@@ -53,7 +53,7 @@ body.dark .pagination {
 
 body.dark .active>.page-link{
     color: var(--text-color);
-    border-color: var(--toggle-color);
+    border-color: var(--primary-color);
 }
 
 body.dark .btn{

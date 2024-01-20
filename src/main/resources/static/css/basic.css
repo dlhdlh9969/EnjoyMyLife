@@ -293,7 +293,7 @@ button{
 
 .active>.page-link{
   color: var(--text-color);
-
+  border-color: var(--primary-color);
 }
 
 .form-control:disabled { 
