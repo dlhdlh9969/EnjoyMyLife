@@ -1,201 +1,16 @@
 <!DOCTYPE html>
 <html>
 <header th:include="header :: header"></header>
-
 <head>
     <title>D-world/업무일지</title>
     <link rel="stylesheet" href="/css/WorkLog.css">
     <script>
-        // 딜레이 타임 변수
-		let debounceTimer;
- 
-        // 자동 검색 debounce 컨트롤
-        function SearchCustListDebounce() {
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => custListAjax(), 1500); // 1000 당 1초
-        }
-
-        // 업체 즐겨찾기 ajax
-        function custFavor(custCd) {
-            var datas = { custCd };
-            $.ajax({
-                url: "/dworld/customer/custfavor",
-                type: "put",
-                data: datas,
-                success: function (data) {
-                    custListAjax()
-                }, error: function () {
-                    Swal.fire("Error", "ajax 통신 오류 발생", "error");
-                }
-            });
-        }
-
-        // 업체 선택 모달에 사용하는 데이터
-        function custListAjax() {
-            var searchCustNm = $("#searchCustNm").val();
-            var datas = { searchCustNm };
-            $.ajax({
-                url: "/dworld/customer/searchmodal",
-                type: "get",
-                data: datas,
-                success: function (data) {
-                    var listArea = $("#custListTable");
-                    var listStr = "";
-                    listArea.empty();
-
-                    if (data && data.length > 0) {
-                        $.each(data, function (index, item) {
-                            listStr += `<tr>`;
-                            listStr += `<td class="text-center">`;
-                            listStr += `<button type="button" style="border:none; background: none;" onclick="custFavor(` + item.custCd + `)">`;
-                            if (item.custFavor == 1) {
-                                listStr += `<i class="bx bxs-star custFavorIcon"></i>`;
-                            } else {
-                                listStr += `<i class="bx bx-star custFavorIcon"></i>`;
-                            };
-                            listStr += `</button></td>`;
-                            listStr += `<td onclick="SetCust('` + item.custCd + `', '` + item.custNm + `')" class='text-start text-truncate'>` + item.custNm + `</td>`
-                            listStr += `</tr>`;
-                        });
-                        listArea.append(listStr);
-                    } else {
-                        listStr += "<tr><td colspan='2' class='text-center'>검색 결과가 없습니다.</td></tr>";
-                        listArea.append(listStr);
-                    }
-                }, error: function () {
-                    Swal.fire("Error", "ajax 통신 오류 발생", "error");
-                }
-            });
-        };
-
-
-        //업체 선택 버튼 클릭 이벤트
-        function SetCust(custCd, custNm) {
-            $('#selectCustModal').modal('hide');
-            $("#cust-cd").val(custCd);
-            $("#cust-nm").val(custNm);
-            checkCust()
-        };
-
-        //업체 선택 취소
-        function SelectCancel() {
-            $("#cust-nm").val("");
-            $("#cust-cd").val("");
-            checkCust()
-        };
-
-        //삭제 버튼 이벤트
-        function DeleteWorkLog(idx) {
-            var datas = { idx };
-
-            Swal.fire({
-                title: "Delete Request"
-                , text: "삭제 하시겠습니까?"
-                , icon: "warning"
-                , showCancelButton: true
-                , confirmButtonColor: '#3085d6'
-                , cancelButtonColor: '#d33'
-                , confirmButtonText: 'OK! Delete.'
-                , cancelButtonText: 'Cancel',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: "/dworld/worklog/control",
-                        type: "delete",
-                        data: datas,
-                        success: function (data) {
-                            if (data == "OK") {
-                                Swal.fire("Success", "삭제 되었습니다.", "success")
-                                    .then((result) => {
-                                        if (result) {
-                                            location.href = "/dworld/worklog";
-                                        }
-                                    });
-
-                            } else {
-                                Swal.fire("Error", "접근이 잘못되었습니다.", "error");
-                            }
-                        }, error: function () {
-                            alert("ajax 통신 오류 발생");
-                        }
-                    });
-                }
-            })
-        };
-
-        // 업체 선택, 취소 버튼 컨트롤
-        function checkCust() {
-            if ($("#cust-cd").val() == "") {
-                $("#btn-selectCust").show();
-                $("#btn-cancelCust").hide();
-            } else {
-                $("#btn-selectCust").hide();
-                $("#btn-cancelCust").show();
-            }
-        };
-
-        //수정버튼 클릭 이벤트
-        function UpdateWorkLog(idx) {
-            Swal.fire({
-                title: "Update Request"
-                , text: "수정 하시겠습니까?"
-                , icon: "warning"
-                , showCancelButton: true
-                , confirmButtonColor: '#3085d6'
-                , cancelButtonColor: '#d33'
-                , confirmButtonText: 'OK! Save'
-                , cancelButtonText: 'Cancel',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    var custCd = $("#cust-cd").val();
-                    if (custCd == "") {
-                        custCd = 0;
-                    };
-                    var receiptDt = $("#receipt-dt").val();
-                    var dueDt = $("#due-dt").val();
-                    var complDt = $("#compl-dt").val();
-                    var complYn;
-                    if (complDt == "") {
-                        complYn = "N";
-                    } else {
-                        complYn = "Y";
-                    }
-                    var title = $("#title").val();
-                    var content = $("#content").val();
-                    var datas = { custCd, receiptDt, dueDt, complDt, complYn, title, content, idx };
-
-                    if (!title.trim()) {
-                        Swal.fire("Title Empty", "제목을 써주세요.", "warning");
-                    } else {
-                        if (!content.trim()) {
-                            Swal.fire("Content Empty", "내용을 써주세요.", "warning");
-                        } else {
-                            $.ajax({
-                                url: "/dworld/worklog/control",
-                                type: "put",
-                                data: datas,
-                                success: function (data) {
-                                    if (data == 'OK') {
-                                        Swal.fire("Success", "수정 되었습니다.", "success");
-                                    } else {
-                                        Swal.fire("Error", "접근이 잘못되었습니다.", "error");
-                                    }
-                                }, error: function () {
-                                    alert("ajax 통신 오류 발생");
-                                }
-                            });
-                        }
-                    }
-                }
-            })
-        };
-
-        $(document).ready(function () {
+        $(document).ready(function(){
             custListAjax();
             checkCust();
-
+            
             //업체 선택하지 않은 업무일지response 데이터 리턴시 대응
-            if ($("#cust-cd").val() == 0) {
+            if($("#cust-cd").val()==0){
                 $("#cust-cd").val("");
             };
 
@@ -206,154 +21,316 @@
             // });
 
             // 모달 > 업체 검색
-            $("#searchCustNm").on("keyup", function (key) {
-                if (key.keyCode == 13) {
+            $("#searchCustNm").on("keyup",function(key){
+                if(key.keyCode==13){
                     custListAjax();
                 };
             });
-
+            
             // 업체 등록 버튼
-            $("#btn-insertCust").on("click", function () {
+            $("#btn-insertCust").on("click", function(){
                 Swal.fire({
                     title: "업체 간편 등록"
-                    , text: "업체명을 입력해주세요."
-                    , input: "text"
-                    , icon: "info"
-                    , inputAttributes: {
-                        autocapitalize: "off"
-                    }
-                    , showCancelButton: true
-                    , confirmButtonText: "Add Customer"
-                    //   , showLoaderOnConfirm: true
-                    //   , allowOutsideClick: () => !Swal.isLoading()
+                  , text: "업체명을 입력해주세요."
+                  , input: "text"
+                  , icon: "info"
+                  , inputAttributes: {
+                        autocapitalize: "off"}
+                  , showCancelButton: true
+                  , confirmButtonText: "Add Customer"
+                //   , showLoaderOnConfirm: true
+                //   , allowOutsideClick: () => !Swal.isLoading()
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        var datas = { custNm: `${result.value}` }
+                        var datas = {custNm: `${result.value}`}
                         $.ajax({
                             url: "/dworld/customer/control",
                             type: "post",
                             data: datas,
-                            success: function (data) {
-                                if (data == "custNmEmpty") {
-                                    Swal.fire("", "업체명이 비어선 안됩니다.", "warning");
-                                } else {
-                                    if (data == "OK") {
-                                        Swal.fire("", "등록 되었습니다.", "success")
-                                            .then((result) => {
-                                                if (result) {
+                            success: function(data) {
+                                if(data == "custNmEmpty"){
+                                    Swal.fire("","업체명이 비어선 안됩니다.", "warning");
+                                } else{
+                                    if(data == "OK"){
+                                        Swal.fire("","등록 되었습니다.", "success")
+                                            .then((result)=>{
+                                                if(result){
                                                     location.reload();
                                                 }
                                             });
-                                    } else {
-                                        Swal.fire("", "접근이 잘못되었습니다.", "error");
-                                    }
+                                    }else{
+                                        Swal.fire("","접근이 잘못되었습니다.", "error");
+                                    } 
                                 }
-                            }, error: function () {
-                                Swal.fire("", "ajax 통신 오류 발생", "error");
+                            }, error: function() {
+                                Swal.fire("","ajax 통신 오류 발생", "error");
                             }
                         });
                     }
                 });
             });
-
+            
             //업무일지 등록
-            $("#btn-insert").on("click", function () {
+            $("#btn-insert").on("click", function() {
                 var custCd = $("#cust-cd").val();
-                if (custCd == "") {
+                if(custCd == ""){
                     custCd = 0;
                 };
-
+                
                 var receiptDt = $("#receipt-dt").val();
                 var dueDt = $("#due-dt").val();
                 var complDt = $("#compl-dt").val();
                 var complYn;
-                if (complDt == "") {
+                if(complDt == ""){
                     complYn = "N";
-                } else {
+                }else{
                     complYn = "Y";
                 }
-
+                
                 var title = $("#title").val();
                 var content = $("#content").val();
-                var datas = { custCd, receiptDt, dueDt, complDt, complYn, title, content };
+                var datas = {custCd, receiptDt, dueDt, complDt, complYn, title, content};
 
-                if (!title.trim()) {
+                if(!title.trim()){
                     Swal.fire("Title Empty", "제목을 써주세요.", "warning");
-                } else if (!content.trim()) {
+                }else if(!content.trim()){
                     Swal.fire("Content Empty", "내용을 써주세요.", "warning");
-                } else {
+                }else{
                     $.ajax({
                         url: "/dworld/worklog/control",
                         type: "post",
                         data: datas,
-                        success: function (data) {
-                            if (data == "OK") {
+                        success: function(data) {
+                            if(data == "OK"){
                                 Swal.fire("Success", "등록 되었습니다.", "success")
-                                    .then((result) => {
-                                        if (result) {
-                                            location.href = "/dworld/worklog";
-                                        }
-                                    });
-
-                            } else {
+                                .then((result)=>{
+                                    if(result){
+                                        location.href="/dworld/worklog";
+                                    }
+                                });
+                                
+                            }else{
                                 Swal.fire("Error", "접근이 잘못되었습니다.", "error");
                             }
-                        }, error: function () {
+                        }, error: function() {
                             alert("ajax 통신 오류 발생");
                         }
                     });
                 }
             });
-        });
+        }); // ready(function() 종료--------------------------------
+
+        // 업체 즐겨찾기 ajax
+        function custFavor(custCd){
+            var datas = {custCd};
+            $.ajax({
+                url: "/dworld/customer/custfavor",
+                type: "put",
+                data: datas,
+                success: function(data) {
+                    custListAjax()
+                }, error: function() {
+                    Swal.fire("Error", "ajax 통신 오류 발생", "error");
+                }
+            });
+        }
+
+        // 업체 선택 모달에 사용하는 데이터
+        function custListAjax(){
+            var searchCustNm = $("#searchCustNm").val();
+            var datas = {searchCustNm};
+            $.ajax({
+                url: "/dworld/customer/searchmodal",
+                type: "get",
+                data: datas,
+                success: function(data){
+                    var listArea =$("#custListTable");
+                    var listStr = "";
+                    listArea.empty();
+                    
+                    if (data && data.length > 0) {
+                        $.each(data, function(index, item){
+                            listStr += `<tr>`;
+                            listStr += `<td class="text-center">`;
+                            listStr += `<button type="button" style="border:none; background: none;" onclick="custFavor(`+item.custCd+`)">`;
+                            if(item.custFavor == 1){
+                                listStr += `<i class="bx bxs-star custFavorIcon"></i>`;
+                            }else{
+                                listStr += `<i class="bx bx-star custFavorIcon"></i>`;
+                            };
+                            listStr += `</button></td>`;
+                            listStr += `<td onclick="SetCust('`+item.custCd+`', '`+item.custNm +`')" class='text-start text-truncate'>`+item.custNm+`</td>`
+                            listStr += `</tr>`;
+                        });
+                        listArea.append(listStr);
+                    } else {
+                        listStr += "<tr><td colspan='2' class='text-center'>검색 결과가 없습니다.</td></tr>";
+                        listArea.append(listStr);
+                    }
+                }, error: function() {
+                    Swal.fire("Error", "ajax 통신 오류 발생", "error");
+                }
+            });
+        };
+
+
+        //업체 선택 버튼 클릭 이벤트
+        function SetCust(custCd, custNm){
+            $('#selectCustModal').modal('hide');
+            $("#cust-cd").val(custCd);
+            $("#cust-nm").val(custNm);
+            checkCust()
+        };
+        
+        //업체 선택 취소
+        function SelectCancel(){
+            $("#cust-nm").val("");
+            $("#cust-cd").val("");
+            checkCust()
+        };
+
+        //삭제 버튼 이벤트
+        function DeleteWorkLog(idx){
+            var datas = {idx};
+
+            Swal.fire({
+                title : "Delete Request"
+              , text : "삭제 하시겠습니까?"
+              , icon : "warning"
+              , showCancelButton: true
+              , confirmButtonColor: '#3085d6'
+              , cancelButtonColor: '#d33'
+              , confirmButtonText: 'OK! Delete.'
+              , cancelButtonText: 'Cancel', 
+            }).then((result)=>{
+                if(result.isConfirmed){
+                    $.ajax({
+                        url: "/dworld/worklog/control",
+                        type: "delete",
+                        data: datas,
+                        success: function(data) {
+                            if(data == "OK"){
+                                Swal.fire("Success", "삭제 되었습니다.", "success")
+                                .then((result)=>{
+                                    if(result){
+                                        location.href="/dworld/worklog";
+                                    }
+                                });
+                                
+                            }else{
+                                Swal.fire("Error", "접근이 잘못되었습니다.", "error");
+                            }
+                        }, error: function() {
+                            alert("ajax 통신 오류 발생");
+                        }
+                    });
+                }
+            })
+        };
+        
+        // 업체 선택, 취소 버튼 컨트롤
+        function checkCust(){
+            if($("#cust-cd").val() == ""){
+                $("#btn-selectCust").show();
+                $("#btn-cancelCust").hide();
+            }else {
+                $("#btn-selectCust").hide();
+                $("#btn-cancelCust").show();
+            }
+        };
+
+        //수정버튼 클릭 이벤트
+        function UpdateWorkLog(idx) {
+            Swal.fire({
+                title : "Update Request"
+              , text : "수정 하시겠습니까?"
+              , icon : "warning"
+              , showCancelButton: true
+              , confirmButtonColor: '#3085d6'
+              , cancelButtonColor: '#d33'
+              , confirmButtonText: 'OK! Save'
+              , cancelButtonText: 'Cancel', 
+            }).then((result)=>{
+                if(result.isConfirmed){
+                    var custCd = $("#cust-cd").val();
+                    if(custCd == ""){
+                        custCd = 0;
+                    };
+                    var receiptDt = $("#receipt-dt").val();
+                    var dueDt = $("#due-dt").val();
+                    var complDt = $("#compl-dt").val();
+                    var complYn;
+                    if(complDt == ""){
+                        complYn = "N";
+                    }else{
+                        complYn = "Y";
+                    }
+                    var title = $("#title").val();
+                    var content = $("#content").val();
+                    var datas = {custCd, receiptDt, dueDt, complDt, complYn, title, content, idx};
+
+                    if(!title.trim()){
+                        Swal.fire("Title Empty", "제목을 써주세요.", "warning");
+                    }else {
+                        if(!content.trim()){
+                        Swal.fire("Content Empty", "내용을 써주세요.", "warning");
+                        }else{
+                            $.ajax({
+                                url: "/dworld/worklog/control",
+                                type: "put",
+                                data: datas,
+                                success: function(data) {
+                                    if(data == 'OK'){
+                                        Swal.fire("Success", "수정 되었습니다.", "success");
+                                    }else{
+                                        Swal.fire("Error", "접근이 잘못되었습니다.", "error");
+                                    }
+                                }, error: function() {
+                                    alert("ajax 통신 오류 발생");
+                                }
+                            });
+                        }
+                    }
+                }
+            })
+        };
     </script>
 </head>
-
 <body>
     <div class="container">
         <div class="text-center webfont1 dlh-headstyle">
-            <label>
-                <h1 th:text="${MODE == 'new' ? 'Write New WorkLog' : 'WorkLog Detail'}"></h1>
-            </label>
+            <label><h1 th:text="${MODE == 'new' ? 'Write New WorkLog' : 'WorkLog Detail'}"></h1></label>
         </div>
         <div class="row g-2 col-md-6 ms-md-auto col-lg-3 my-3">
             <div th:if="${MODE} == 'new'" class="col">
-                <button type="button" class="col-12 btn btn-dark border-primary" id="btn-insert"
-                    name="btn-insert">Insert</button>
+                <button type="button" class="col-12 btn btn-dark border-primary" id="btn-insert" name="btn-insert">Insert</button>
             </div>
             <div th:if="${MODE} == 'detail'" class="col">
-                <button type="button" class="col-12 btn btn-dark border-secondary" id="btn-edit" name="btn-edit"
-                    th:onclick="|UpdateWorkLog(${WorkLogDetail.idx})|">Save</button>
+                <button type="button" class="col-12 btn btn-dark border-secondary" id="btn-edit" name="btn-edit" th:onclick="|UpdateWorkLog(${WorkLogDetail.idx})|">Save</button>
             </div>
             <div th:if="${MODE} == 'detail'" class="col">
-                <button type="button" class="col-12 btn btn-dark border-danger" id="btn-delete" name="btn-delete"
-                    th:onclick="|DeleteWorkLog(${WorkLogDetail.idx})|">Delete</button>
+                <button type="button" class="col-12 btn btn-dark border-danger" id="btn-delete" name="btn-delete" th:onclick="|DeleteWorkLog(${WorkLogDetail.idx})|">Delete</button>
             </div>
             <div class="col">
-                <button type="button" class="col-12 btn btn-dark border-success" id="btn-back" name="btn-back"
-                    th:onclick="|location.href='@{${prevPage}}'|">Back</button>
+                <button type="button" class="col-12 btn btn-dark border-success" id="btn-back" name="btn-back" th:onclick="|location.href='@{${prevPage}}'|">Back</button> 
             </div>
         </div>
         <div class="row g-2 mt-1">
             <div class="col-6 col-md-6 col-lg-3 form-floating">
-                <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.custNm}" type="text" class="form-control"
-                    id="cust-nm" name="cust-nm" disabled>
+                <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.custNm}" type="text" class="form-control" id="cust-nm" name="cust-nm" disabled>
                 <label for="cust-nm">업체명</label>
             </div>
             <div class="col-6 col-md-6 col-lg-3 form-floating" style="display: none;">
-                <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.custCd}" type="text" class="form-control"
-                    id="cust-cd" name="cust-cd" disabled>
+                <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.custCd}" type="text" class="form-control" id="cust-cd" name="cust-cd" disabled>                
                 <label for="cust-cd">업체코드</label>
             </div>
             <div class="col-auto h-100">
-                <button type="button" class="h-100 btn btn-dark border-primary text-nowrap" id="btn-selectCust"
-                    data-bs-toggle="modal" data-bs-target="#selectCustModal">Select Customer</button>
-                <button type="button" class="h-100 btn btn-dark border-warning text-nowrap" id="btn-cancelCust"
-                    onclick="SelectCancel()">Cancel Selection</button>
+                <button type="button" class="h-100 btn btn-dark border-primary text-nowrap" id="btn-selectCust" data-bs-toggle="modal" data-bs-target="#selectCustModal">Select Customer</button>
+                <button type="button" class="h-100 btn btn-dark border-warning text-nowrap" id="btn-cancelCust" onclick="SelectCancel()">Cancel Selection</button>
             </div>
         </div>
-        <!-------------------- 업체 선택 modal ------------------>
-        <div class="modal fade" id="selectCustModal" tabindex="-1" aria-labelledby="staticBackdropLabel"
-            aria-hidden="true">
+        <!-- 업체 선택 modal -->
+        <div class="modal fade" id="selectCustModal" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -361,14 +338,12 @@
                         <button type="button" class="btn-close btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
+                        
                         <div class="d-flex">
-                            <!-- 검색 버튼 삭제 2024.10.20 김동환
-                            <button type="button" class="btn border-info" onclick="custListAjax()">Search</button> -->
-                            <button type="button" id="btn-insertCust" class="btn border-warning ms-auto">Add
-                                Customer</button>
+                            <button type="button" class="btn border-info" onclick="custListAjax()">Search</button>
+                            <button type="button" id="btn-insertCust" class="btn border-warning ms-auto">Add Customer</button>
                         </div>
-                        <input class="form-control my-2" type="text" list="custNmList" id="searchCustNm"
-                            name="searchCustNm" placeholder="업체명 검색" autocomplete="off" oninput="SearchCustListDebounce()">
+                        <input class="form-control my-2" type="text" list="custNmList" id="searchCustNm" name="searchCustNm" placeholder="업체명 검색" autocomplete="off">
                         <datalist id="custNmList">
                             <option th:each="list : ${CustNmList}" th:value="${list.custNm}"></option>
                         </datalist>
@@ -397,36 +372,30 @@
 
         <div class="row g-2 mt-1">
             <div class="col-6 col-lg-3 form-floating">
-                <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.insertDt}" type="datetime-local"
-                    class="form-control" id="insert-dt" name="insert-dt" disabled>
+                <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.insertDt}" type="datetime-local" class="form-control" id="insert-dt" name="insert-dt" disabled>
                 <label for="insert-dt" class="mx-1">작성일</label>
             </div>
             <div class="col-6 col-lg-3 form-floating">
-                <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.receiptDt}" type="datetime-local"
-                    class="form-control" id="receipt-dt" name="receipt-dt">
+                <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.receiptDt}" type="datetime-local" class="form-control" id="receipt-dt" name="receipt-dt">
                 <label for="receipt-dt" class="mx-1">접수일</label>
             </div>
             <div class="col-6 col-lg-3 form-floating">
-                <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.dueDt}" type="datetime-local"
-                    class="form-control" id="due-dt" name="due-dt">
+                <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.dueDt}" type="datetime-local" class="form-control" id="due-dt" name="due-dt">
                 <label for="due-dt" class="mx-1">마감예정일</label>
             </div>
             <div class="col-6 col-lg-3 form-floating">
-                <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.complDt}" type="datetime-local"
-                    class="form-control" id="compl-dt" name="compl-dt">
+                <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.complDt}" type="datetime-local" class="form-control" id="compl-dt" name="compl-dt">
                 <label for="compl-dt" class="mx-1">완료일</label>
             </div>
         </div>
         <div class="form-floating my-2">
-            <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.title}" type="text" class="form-control"
-                id="title" name="title">
+            <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.title}" type="text" class="form-control" id="title" name="title">
             <label for="title" class="mx-1">제목</label>
         </div>
         <div class="form-floating">
-            <textarea th:text="${MODE == 'detail'} ? ${WorkLogDetail.content}" type="text" class="form-control"
-                style="height: 500px;" id="content" name="content"></textarea>
+            <textarea th:text="${MODE == 'detail'} ? ${WorkLogDetail.content}" type="text" class="form-control" style="height: 500px;" id="content" name="content"></textarea>
             <label for="content" class="mx-1">내용</label>
-            <div>
-        </div>
+        <div>
+    </div>
 </body>
 </html>
