@@ -258,23 +258,22 @@
 <body>
     <div class="container">
         <form id="input-form">
-            <!-- 마스터 -->
+            <!------------------ 마스터 ------------------------>
             <div class="row gy-2 gx-1">
-                <div class="text-center webfont1 dlh-headstyle">
+                <div class="text-center dlh-headstyle">
                     <label for=""><h1>Customer List</h1></label>
                 </div>
-                <div class="row gy-2 mx-auto">
-                    <!-- 
+                <div class="row m-0 p-0 gy-2">
+                    <!-- 검색 버튼 삭제함 2024.01.20 김동환
                     <div class="col-6 col-md-2 col-lg-auto order-2 order-lg-1 offset-lg-3">
                         <button type="button" class="col-12 btn btn-dark border-info text-nowrap" onclick="searchCust()">Search</button>
                     </div> -->
-                    <div class="col-12 col-md-8 col-lg-4 mx-auto mx-lg-0 order-1 order-md-2 order-lg-2">
-                        <input type="text" class="form-control" list="custNmList" id="searchCustNm" name="searchCustNm" th:value="${SearchCustNm}" oninput="SearchCustNmdebounce()" onkeyup="if(window.event.keyCode==13){searchCust()}" placeholder="회사명 검색" autocomplete="off">
-                        <datalist id="custNmList">
-                            <option th:each="list : ${CustNmList}" th:value="${list.custNm}"></option>
-                        </datalist>
+                    <div class="col-12 p-0">
+                        <div class="col-12 col-md-8 col-lg-4 mx-auto">
+                            <input type="text" class="form-control" list="custNmList" id="searchCustNm" name="searchCustNm" th:value="${SearchCustNm}" oninput="SearchCustNmdebounce()" onkeyup="if(window.event.keyCode==13){searchCust()}" placeholder="회사명 검색" autocomplete="off">
+                        </div>
                     </div>
-                    <div class="col-6 col-md-2 col-lg-2 order-3 ms-auto">
+                    <div class="col-5 col-md-2 col-lg-2 ms-auto p-0">
                         <select class="form-select" id="maxrow">
                             <option value="5" th:attr="selected=${PersetCust.maxrow == 5} ? 'selected'">5줄씩 보기</option>
                             <option value="10" th:attr="selected=${PersetCust.maxrow == 10} ? 'selected'">10줄씩 보기</option>
@@ -282,6 +281,7 @@
                             <option value="20" th:attr="selected=${PersetCust.maxrow == 20} ? 'selected'">20줄씩 보기</option>
                         </select>
                     </div>
+                    
                 </div>
                 <div style="overflow: auto;">
                     <table class="table table-striped" style="min-width:1100px; table-layout:fixed;">
@@ -343,11 +343,11 @@
                     </li>
                 </ul>
             </div>
-            <!-- 디테일 -->
+            <!------------ 디테일 --------------------------->
             <hr>
             <div class="row gy-2">
                 <div class="text-center dlh-headstyle">
-                    <label for=""><h1 id="detail-head" class="webfont1">Detail Area</h1></label>
+                    <label for=""><h1 id="detail-head">Detail Area</h1></label>
                 </div>
                 <div class="text-lg-end text-center">
                     <button class="col-3 col-lg-1 btn btn-dark border-primary" type="button" id="btn-insert" name="btn-insert">New</button>
