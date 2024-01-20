@@ -31,7 +31,7 @@ public class DworldController {
 		ModelAndView mv = null;
 		
 		if(servletRequest.getSession().getAttribute("userId") == null) {
-			mv = new ModelAndView("Members/login.html");
+			mv = new ModelAndView("Members/login");
 			return mv;
 		}else{
 			mv = new ModelAndView("index");
