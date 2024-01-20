@@ -40,6 +40,11 @@ body{
   margin: 0;
 }
 
+.container{
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
 .sidebar{
   position: fixed;
   top: 0;
@@ -51,12 +56,6 @@ body{
   transition: var(--tran-03);
   white-space: nowrap;
   z-index: 100;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-.hr-line {
-  color: var(--text-color);
 }
 
 .sidebar ul{
