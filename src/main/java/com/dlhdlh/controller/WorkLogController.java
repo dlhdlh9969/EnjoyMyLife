@@ -194,12 +194,8 @@ public class WorkLogController {
 		// 현재 페이지 주소 저장
 		dworldController.SetPrevPage(servletRequest, "WorkLog");
 		
-		// 업체명을 리스트화
-		List<String> custNmList =  customerService.GetCustNmList();
-		
 		mv.addObject("PersetWorkLog", persetWorkLog);
 		mv.addObject("WorkLogList", workLogList);
-		mv.addObject("CustNmList", custNmList);
 		return mv;		
 	}
 	
