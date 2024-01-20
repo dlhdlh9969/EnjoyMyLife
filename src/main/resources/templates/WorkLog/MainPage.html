@@ -7,7 +7,7 @@
 	<script>
 		// 딜레이 타임 변수
 		let debounceTimer;
-
+ 
 		// 자동 검색 debounce 컨트롤
 		function SearchWorkLogDebounce() {
 			clearTimeout(debounceTimer);
@@ -106,14 +106,14 @@
 				</div>
 				<div class="col-6 col-md-4 form-floating">
 					<input type="text" class="form-control" id="searchTitle" name="searchTitle"
-						th:value="${PersetWorkLog.title}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}"
-						oninput="SearchWorkLogDebounce()" />
+						th:value="${PersetWorkLog.title}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}" 
+						oninput="SearchWorkLogDebounce()"/>
 					<label for="searchTitle">제목 검색</label>
 				</div>
 				<div class="col-6 col-md-4 form-floating">
 					<input type="text" class="form-control" id="searchContent" name="searchContent"
-						th:value="${PersetWorkLog.content}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}"
-						oninput="SearchWorkLogDebounce()" />
+						th:value="${PersetWorkLog.content}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}" 
+						oninput="SearchWorkLogDebounce()"/>
 					<label for="searchContent">내용 검색</label>
 				</div>
 			</div>
@@ -221,12 +221,12 @@
 						<tr th:each="list : ${WorkLogList.getList()}" class="text-wrap"
 							th:onclick="|location.href='/dworld/worklog/detail?idx=${list.idx}'|"
 							style="cursor: pointer">
-							<td class="text-truncate" th:text="${list.rowNum}" />
-							<td class="text-truncate" th:text="${list.custNm}" />
-							<td class="text-truncate" th:text="${list.title}" />
-							<td class="text-center" th:text="${list.insertDt}" />
-							<td class="text-center" th:text="${list.receiptDt}" />
-							<td class="text-center" th:text="${list.complYn}" />
+							<td class="text-truncate" th:text="${list.rowNum}"></td>
+							<td class="text-truncate" th:text="${list.custNm}"></td>
+							<td class="text-truncate" th:text="${list.title}"></td>
+							<td class="text-center" th:text="${list.insertDt}"></td>
+							<td class="text-center" th:text="${list.receiptDt}"></td>
+							<td class="text-center" th:text="${list.complYn}"></td>
 						</tr>
 						<tr th:unless="${#lists.size(WorkLogList.getList())} > 0">
 							<td colspan="6" class="text-center">내용이 없습니다.</td>
