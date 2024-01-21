@@ -27,6 +27,7 @@
 			var searchStartDt = $("#searchStartDt").val();
 			var searchEndDt = $("#searchEndDt").val();
 			var orderby1 = $("#orderby1").val();
+			var documentType = $("#documentType").val();
 
 			if (searchStartDt > searchEndDt) {
 				if (searchEndDt == "") {
@@ -52,7 +53,8 @@
 					+ "&maxrow=" + encodeURIComponent(maxrow)
 					+ "&startDt=" + encodeURIComponent(searchStartDt)
 					+ "&endDt=" + encodeURIComponent(searchEndDt)
-					+ "&orderby1=" + encodeURIComponent(orderby1);
+					+ "&orderby1=" + encodeURIComponent(orderby1)
+					+ "&documentType=" + encodeURIComponent(documentType);
 			}
 		}
 
@@ -70,6 +72,9 @@
 				searchWorkLog();
 			});
 			$("#searchEndDt").on("change", function () {
+				searchWorkLog();
+			});
+			$("#documentType").on("change", function () {
 				searchWorkLog();
 			});
 
@@ -123,23 +128,34 @@
 			<!-- 검색 input 영역 -->
 			<div class="col-12">
 				<div class="row gx-2">
-					<div class="col-6 col-md-4 form-floating">
+					<div class="col-6 col-md-3 form-floating">
 						<input type="text" class="form-control" list="custNmList" id="searchCustNm" name="searchCustNm"
 							th:value="${persetWorkLog.custNm}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}"
 							oninput="SearchWorkLogDebounce()" />
 						<label for="searchCustNm">회사명 검색</label>
 					</div>
-					<div class="col-6 col-md-4 form-floating">
+					<div class="col-6 col-md-3 form-floating">
 						<input type="text" class="form-control" id="searchTitle" name="searchTitle"
 							th:value="${persetWorkLog.title}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}"
 							oninput="SearchWorkLogDebounce()" />
 						<label for="searchTitle">제목 검색</label>
 					</div>
-					<div class="col-6 col-md-4 form-floating">
+					<div class="col-6 col-md-3 form-floating">
 						<input type="text" class="form-control" id="searchContent" name="searchContent"
 							th:value="${persetWorkLog.content}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}"
 							oninput="SearchWorkLogDebounce()" />
 						<label for="searchContent">내용 검색</label>
+					</div>
+					<div class="col-6 col-md-3 form-floating">
+						<select class="form-select" id="documentType" name="documentType">
+							<option value="">선택 안함</option>
+							<div th:each="docList : ${documentType}">
+								<option th:value="${docList.value}" th:text="${docList.text}" 
+									th:attr="selected=${docList.value == persetWorkLog.documentType}? 'selected'">
+								</option>
+							</div>
+						</select>
+						<label for="searchContent">문서 종류</label>
 					</div>
 				</div>
 			</div>
@@ -222,7 +238,7 @@
 			<!--------------- 조회 일자 ------------------>
 			<div class="col-12 ">
 				<div class="row gx-2">
-					<div class="col-6 col-md-3 col-lg-3 form-floating ">
+					<div class="col-6 col-md-3 col-lg-3 order-1 order-md-0 form-floating ">
 						<select class="form-select h-100" id="orderby1" name="orderby1">
 							<option value="insert_dt" th:attr="selected=${persetWorkLog.orderby1 == 'insert_dt'}? 'selected'">
 								작성일
@@ -239,14 +255,14 @@
 						</select>
 						<label>일자 검색 대상</label>
 					</div>
-					<div class="col-6 col-md-6 col-lg-3">
+					<div class="col-6 col-md-3 col-lg-3 ">
 						<div class="col form-floating">
 							<input type="date" th:value="${persetWorkLog.startDt}" class="form-control" id="searchStartDt"
 								name="searchStartDt" />
 							<label for="searchStartDt" class="mx-1">검색 시작 일자</label>
 						</div>
 					</div>
-					<div class="col-6 col-md-6 col-lg-3">
+					<div class="col-6 col-md-3 col-lg-3 col-order-2">
 						<div class="col form-floating">
 							<input type="date" th:value="${persetWorkLog.endDt}" class="form-control" id="searchEndDt"
 								name="searchEndDt" />
@@ -317,8 +333,10 @@
 														, complYn=${persetWorkLog.complYn}
 														, order1=${persetWorkLog.order1}
 														, order2=${persetWorkLog.order2}
+														, orderby1=${persetWorkLog.orderby1}
 														, startDt=${persetWorkLog.startDt}
 														, endDt=${persetWorkLog.endDt}
+														, documentType=${persetWorkLog.documentType}
 														, maxrow=${persetWorkLog.maxrow})}">Prev</a>
 						</li>
 						<li class="page-item"
@@ -331,8 +349,10 @@
 														, complYn=${persetWorkLog.complYn}
 														, order1=${persetWorkLog.order1}
 														, order2=${persetWorkLog.order2}
+														, orderby1=${persetWorkLog.orderby1}
 														, startDt=${persetWorkLog.startDt}
 														, endDt=${persetWorkLog.endDt}
+														, documentType=${persetWorkLog.documentType}
 														, maxrow=${persetWorkLog.maxrow})}"></a>
 						</li>
 						<li class="page-item" th:classappend="${workLogList.getNextPage() == 0} ? 'disabled'">
@@ -343,8 +363,10 @@
 																	, complYn=${persetWorkLog.complYn}
 																	, order1=${persetWorkLog.order1}
 																	, order2=${persetWorkLog.order2}
+																	, orderby1=${persetWorkLog.orderby1}
 																	, searchStartDt=${persetWorkLog.startDt}
 																	, endDt=${persetWorkLog.endDt}
+																	, documentType=${persetWorkLog.documentType}
 																	, maxrow=${persetWorkLog.maxrow})}">Next</a>
 						</li>
 					</ul>

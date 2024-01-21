@@ -49,7 +49,7 @@ public class WorkLogController {
 								, @RequestParam(required=false, defaultValue = "0") int entrance) throws Exception {
 		ModelAndView mv = new ModelAndView("WorkLog/mainPage");
 		String requestId = null;
-		
+		System.out.println("worklogParam doc:"+worklogParam.getDocumentType());
 		if(servletRequest.getSession().getAttribute("userId") != null) {
 			requestId = servletRequest.getSession().getAttribute("userId").toString();
 			PersetMemberDto persetMember = membersService.GetPersetMember(requestId);
@@ -108,7 +108,6 @@ public class WorkLogController {
 		if(worklogParam.getDocumentType() == null) {
 			worklogParam.setDocumentType("");
 		}
-		
 		//일자 검색 대상 구분 컨트롤
 		if(worklogParam.getOrderby1() == null) {
 			worklogParam.setOrderby1("insert_dt");
@@ -138,7 +137,7 @@ public class WorkLogController {
 			worklogParam.setOrder2(persetWorkLog.getOrder2());
 			worklogParam.setOrderby1(persetWorkLog.getOrderby1());
 			worklogParam.setComplYn(persetWorkLog.getComplYn());
-			}else if(entrance == 0) {
+			}else {
 				persetWorkLog.setTitle(worklogParam.getTitle());
 				persetWorkLog.setContent(worklogParam.getContent());
 				persetWorkLog.setDocumentType(worklogParam.getDocumentType());
@@ -150,8 +149,9 @@ public class WorkLogController {
 				persetWorkLog.setOrderby1(worklogParam.getOrderby1());
 				persetWorkLog.setComplYn(worklogParam.getComplYn());
 				persetWorkLog.setMaxrow(worklogParam.getMaxrow());
+				System.out.println("persetWorkLog doc:"+persetWorkLog.getDocumentType());
 				worklogService.UpdatePersetWorkLog(persetWorkLog);
-		}
+			}
 
 		// 업무일지 리스트 
 		int maxPaging = 5;//페이징 최대 갯수
@@ -177,11 +177,6 @@ public class WorkLogController {
 		dworldController.SetPrevPage(servletRequest);
 // prevPage 저장 방식을 session으로 변경함 2024.01.21 김동환
 //		dworldController.SetPrevPage(servletRequest, "WorkLog");
-		System.out.println("---------------------------------------------");
-		System.out.println("getOrderby1: "+persetWorkLog.getOrderby1());
-		System.out.println("getStartDt: "+persetWorkLog.getStartDt());
-		System.out.println("getEndDt: "+persetWorkLog.getEndDt());
-		System.out.println("---------------------------------------------");
 		mv.addObject("persetWorkLog", persetWorkLog);
 		mv.addObject("documentType", documentType);
 		mv.addObject("workLogList", workLogList);
