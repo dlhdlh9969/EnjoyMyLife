@@ -4,7 +4,7 @@
 	<!-- 업무일지 리스트-->
 	<select id="GetWorkLogList" parameterType="com.dlhdlh.dto.WorkLogDto" resultType="com.dlhdlh.dto.WorkLogDto">
 		<![CDATA[ 
-			SELECT if(#{order2} = 'desc', row_number() OVER (ORDER BY w.${order1} asc), row_number() OVER (ORDER BY w.${order1} desc)) as row_num
+			SELECT if(#{order2} = 'desc', row_number() OVER (ORDER BY ${order1} asc), row_number() OVER (ORDER BY ${order1} desc)) as row_num
 				, w.idx
 				, w.title
 				, w.content
