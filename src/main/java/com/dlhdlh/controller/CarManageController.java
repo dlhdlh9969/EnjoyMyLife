@@ -8,6 +8,6 @@ public class CarManageController {
 	
 	@RequestMapping("/dworld/carmanage")
 	public String CarManagePage(){
-		return "CarManage/MainPage";
+		return "CarManage/mainPage";
 	}
 }

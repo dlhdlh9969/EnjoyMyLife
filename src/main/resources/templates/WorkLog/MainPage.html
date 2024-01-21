@@ -101,19 +101,19 @@
 			<div class="row g-2">
 				<div class="col-6 col-md-4 form-floating">
 					<input type="text" class="form-control" list="custNmList" id="searchCustNm" name="searchCustNm"
-						th:value="${PersetWorkLog.custNm}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}"
+						th:value="${persetWorkLog.custNm}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}"
 						oninput="SearchWorkLogDebounce()" />
 					<label for="searchCustNm">회사명 검색</label>
 				</div>
 				<div class="col-6 col-md-4 form-floating">
 					<input type="text" class="form-control" id="searchTitle" name="searchTitle"
-						th:value="${PersetWorkLog.title}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}"
+						th:value="${persetWorkLog.title}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}"
 						oninput="SearchWorkLogDebounce()" />
 					<label for="searchTitle">제목 검색</label>
 				</div>
 				<div class="col-6 col-md-4 form-floating">
 					<input type="text" class="form-control" id="searchContent" name="searchContent"
-						th:value="${PersetWorkLog.content}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}"
+						th:value="${persetWorkLog.content}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}"
 						oninput="SearchWorkLogDebounce()" />
 					<label for="searchContent">내용 검색</label>
 				</div>
@@ -122,28 +122,28 @@
 			<div class="row g-2">
 				<div class="col-6 col-md-6 col-lg-2 ms-lg-auto">
 					<div class="col form-floating">
-						<input type="date" th:value="${PersetWorkLog.startDt}" class="form-control" id="searchStartDt"
+						<input type="date" th:value="${persetWorkLog.startDt}" class="form-control" id="searchStartDt"
 							name="searchStartDt" />
 						<label for="searchStartDt" class="mx-1">검색 시작일</label>
 					</div>
 				</div>
 				<div class="col-6 col-md-6 col-lg-2">
 					<div class="col form-floating">
-						<input type="date" th:value="${PersetWorkLog.endDt}" class="form-control" id="searchEndDt"
+						<input type="date" th:value="${persetWorkLog.endDt}" class="form-control" id="searchEndDt"
 							name="searchEndDt" />
 						<label for="searchEndDt" class="mx-1">검색 종료일</label>
 					</div>
 				</div>
 				<div class="col-6 order-6 col-md-3 col-lg-2 form-floating">
 					<select class="form-select h-100" id="order1" name="order1">
-						<option value="cust_nm" th:attr="selected=${PersetWorkLog.order1 == 'cust_nm'}? 'selected'">
+						<option value="cust_nm" th:attr="selected=${persetWorkLog.order1 == 'cust_nm'}? 'selected'">
 							회사명
 						</option>
-						<option value="idx" th:attr="selected=${PersetWorkLog.order1 == 'idx'}? 'selected'">
+						<option value="idx" th:attr="selected=${persetWorkLog.order1 == 'idx'}? 'selected'">
 							작성일
 						</option>
 						<option value="receipt_dt"
-							th:attr="selected=${PersetWorkLog.order1 == 'receipt_dt'}? 'selected'">
+							th:attr="selected=${persetWorkLog.order1 == 'receipt_dt'}? 'selected'">
 							접수일
 						</option>
 					</select>
@@ -151,10 +151,10 @@
 				</div>
 				<div class="col-6 order-7 col-md-3 col-lg-2 form-floating ">
 					<select class="form-select h-100" id="order2" name="order2">
-						<option value="desc" th:attr="selected=${PersetWorkLog.order2 == 'desc'}? 'selected'">
+						<option value="desc" th:attr="selected=${persetWorkLog.order2 == 'desc'}? 'selected'">
 							내림차순
 						</option>
-						<option value="asc" th:attr="selected=${PersetWorkLog.order2 == 'asc'}? 'selected'">
+						<option value="asc" th:attr="selected=${persetWorkLog.order2 == 'asc'}? 'selected'">
 							오름차순
 						</option>
 					</select>
@@ -162,13 +162,13 @@
 				</div>
 				<div class="col-6 col-md-3 col-lg-2 form-floating ">
 					<select class="form-select h-100" id="compl-yn" name="compl-yn">
-						<option value="N" th:attr="selected=${PersetWorkLog.complYn == 'N'}? 'selected'">
+						<option value="N" th:attr="selected=${persetWorkLog.complYn == 'N'}? 'selected'">
 							미완료
 						</option>
-						<option value="Y" th:attr="selected=${PersetWorkLog.complYn == 'Y'}? 'selected'">
+						<option value="Y" th:attr="selected=${persetWorkLog.complYn == 'Y'}? 'selected'">
 							완료
 						</option>
-						<option value="A" th:attr="selected=${PersetWorkLog.complYn == 'A'}? 'selected'">
+						<option value="A" th:attr="selected=${persetWorkLog.complYn == 'A'}? 'selected'">
 							완료여부 전체
 						</option>
 					</select>
@@ -176,22 +176,22 @@
 				</div>
 				<div class="col-6 order-8 col-md-3 col-lg-2 me-lg-auto form-floating ">
 					<select class="form-select h-100" id="maxrow" name="maxrow">
-						<option value="5" th:attr="selected=${PersetWorkLog.maxrow == 5} ? 'selected'">
+						<option value="5" th:attr="selected=${persetWorkLog.maxrow == 5} ? 'selected'">
 							5줄씩 보기
 						</option>
-						<option value="10" th:attr="selected=${PersetWorkLog.maxrow == 10} ? 'selected'">
+						<option value="10" th:attr="selected=${persetWorkLog.maxrow == 10} ? 'selected'">
 							10줄씩 보기
 						</option>
-						<option value="15" th:attr="selected=${PersetWorkLog.maxrow == 15} ? 'selected'">
+						<option value="15" th:attr="selected=${persetWorkLog.maxrow == 15} ? 'selected'">
 							15줄씩 보기
 						</option>
-						<option value="20" th:attr="selected=${PersetWorkLog.maxrow == 20} ? 'selected'">
+						<option value="20" th:attr="selected=${persetWorkLog.maxrow == 20} ? 'selected'">
 							20줄씩 보기
 						</option>
-						<option value="25" th:attr="selected=${PersetWorkLog.maxrow == 25} ? 'selected'">
+						<option value="25" th:attr="selected=${persetWorkLog.maxrow == 25} ? 'selected'">
 							25줄씩 보기
 						</option>
-						<option value="30" th:attr="selected=${PersetWorkLog.maxrow == 30} ? 'selected'">
+						<option value="30" th:attr="selected=${persetWorkLog.maxrow == 30} ? 'selected'">
 							30줄씩 보기
 						</option>
 					</select>
@@ -220,7 +220,7 @@
 						<th class="text-center">완료</th>
 					</thead>
 					<tbody>
-						<tr th:each="list : ${WorkLogList.getList()}" class="text-wrap"
+						<tr th:each="list : ${workLogList.getList()}" class="text-wrap"
 							th:onclick="|location.href='/dworld/worklog/detail?idx=${list.idx}'|"
 							style="cursor: pointer">
 							<td class="text-truncate" th:text="${list.rowNum}"></td>
@@ -230,26 +230,26 @@
 							<td class="text-center" th:text="${list.receiptDt}"></td>
 							<td class="text-center" th:text="${list.complYn}"></td>
 						</tr>
-						<tr th:unless="${#lists.size(WorkLogList.getList())} > 0">
+						<tr th:unless="${#lists.size(workLogList.getList())} > 0">
 							<td colspan="6" class="text-center">내용이 없습니다.</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
 			<ul class="pagination justify-content-center pt-4">
-				<li class="page-item" th:classappend="${WorkLogList.getPrePage() == 0} ? 'disabled'">
+				<li class="page-item" th:classappend="${workLogList.getPrePage() == 0} ? 'disabled'">
 					<a class="page-link"
-						th:href="@{/dworld/worklog(pageNum=${WorkLogList.getPrePage()}, title=${PersetWorkLog.title}, custNm=${PersetWorkLog.custNm}, complYn=${PersetWorkLog.complYn}, order1=${PersetWorkLog.order1}, order2=${PersetWorkLog.order2}, startDt=${PersetWorkLog.startDt}, endDt=${PersetWorkLog.endDt}, maxrow=${PersetWorkLog.maxrow})}">Prev</a>
+						th:href="@{/dworld/worklog(pageNum=${workLogList.getPrePage()}, title=${persetWorkLog.title}, custNm=${persetWorkLog.custNm}, complYn=${persetWorkLog.complYn}, order1=${persetWorkLog.order1}, order2=${persetWorkLog.order2}, startDt=${persetWorkLog.startDt}, endDt=${persetWorkLog.endDt}, maxrow=${persetWorkLog.maxrow})}">Prev</a>
 				</li>
 				<li class="page-item"
-					th:each="page: ${#numbers.sequence(WorkLogList.getNavigateFirstPage(), WorkLogList.getNavigateLastPage())}"
-					th:classappend="${page == WorkLogList.getPageNum()} ? 'active'">
+					th:each="page: ${#numbers.sequence(workLogList.getNavigateFirstPage(), workLogList.getNavigateLastPage())}"
+					th:classappend="${page == workLogList.getPageNum()} ? 'active'">
 					<a class="page-link" th:text="${page}"
-						th:href="@{/dworld/worklog(pageNum=${page}, title=${PersetWorkLog.title}, custNm=${PersetWorkLog.custNm}, complYn=${PersetWorkLog.complYn}, order1=${PersetWorkLog.order1}, order2=${PersetWorkLog.order2}, startDt=${PersetWorkLog.startDt}, endDt=${PersetWorkLog.endDt}, maxrow=${PersetWorkLog.maxrow})}"></a>
+						th:href="@{/dworld/worklog(pageNum=${page}, title=${persetWorkLog.title}, custNm=${persetWorkLog.custNm}, complYn=${persetWorkLog.complYn}, order1=${persetWorkLog.order1}, order2=${persetWorkLog.order2}, startDt=${persetWorkLog.startDt}, endDt=${persetWorkLog.endDt}, maxrow=${persetWorkLog.maxrow})}"></a>
 				</li>
-				<li class="page-item" th:classappend="${WorkLogList.getNextPage() == 0} ? 'disabled'">
+				<li class="page-item" th:classappend="${workLogList.getNextPage() == 0} ? 'disabled'">
 					<a class="page-link"
-						th:href="@{/dworld/worklog(pageNum=${WorkLogList.getNextPage()}, title=${PersetWorkLog.title}, custNm=${PersetWorkLog.custNm}, complYn=${PersetWorkLog.complYn}, order1=${PersetWorkLog.order1}, order2=${PersetWorkLog.order2}, searchStartDt=${PersetWorkLog.startDt}, endDt=${PersetWorkLog.endDt}, maxrow=${PersetWorkLog.maxrow})}">Next</a>
+						th:href="@{/dworld/worklog(pageNum=${workLogList.getNextPage()}, title=${persetWorkLog.title}, custNm=${persetWorkLog.custNm}, complYn=${persetWorkLog.complYn}, order1=${persetWorkLog.order1}, order2=${persetWorkLog.order2}, searchStartDt=${persetWorkLog.startDt}, endDt=${persetWorkLog.endDt}, maxrow=${persetWorkLog.maxrow})}">Next</a>
 				</li>
 			</ul>
 		</div>

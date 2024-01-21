@@ -9,7 +9,7 @@
         // 딜레이 타임 변수
         let debounceTimer;
         
-        // SearchCustNm Inputbox 자동 검색
+        // searchCustNm Inputbox 자동 검색
         function SearchCustNmdebounce() {
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(() => searchCust(), 1500); // 1000 당 1초
@@ -20,7 +20,7 @@
             clearTimeout(debounceTimer);
             var searchCustNm = document.getElementById('searchCustNm').value;
             var maxrow = $("#maxrow").val();
-            window.location.href= "/dworld/customer?SearchCustNm=" + encodeURIComponent(searchCustNm) 
+            window.location.href= "/dworld/customer?searchCustNm=" + encodeURIComponent(searchCustNm) 
                                 + "&maxrow=" + encodeURIComponent(maxrow);
         };
 
@@ -270,16 +270,16 @@
                     </div> -->
                     <div class="col-12 p-0">
                         <div class="col-12 col-md-8 col-lg-4 mx-auto form-floating ">
-                            <input type="text" class="form-control" list="custNmList" id="searchCustNm" name="searchCustNm" th:value="${SearchCustNm}" oninput="SearchCustNmdebounce()" onkeyup="if(window.event.keyCode==13){searchCust()}">
+                            <input type="text" class="form-control" list="custNmList" id="searchCustNm" name="searchCustNm" th:value="${searchCustNm}" oninput="SearchCustNmdebounce()" onkeyup="if(window.event.keyCode==13){searchCust()}">
                             <label>회사명 검색</label>
                         </div>
                     </div>
                     <div class="col-5 col-md-2 col-lg-2 ms-auto p-0">
                         <select class="form-select" id="maxrow">
-                            <option value="5" th:attr="selected=${PersetCust.maxrow == 5} ? 'selected'">5줄씩 보기</option>
-                            <option value="10" th:attr="selected=${PersetCust.maxrow == 10} ? 'selected'">10줄씩 보기</option>
-                            <option value="15" th:attr="selected=${PersetCust.maxrow == 15} ? 'selected'">15줄씩 보기</option>
-                            <option value="20" th:attr="selected=${PersetCust.maxrow == 20} ? 'selected'">20줄씩 보기</option>
+                            <option value="5" th:attr="selected=${persetCust.maxrow == 5} ? 'selected'">5줄씩 보기</option>
+                            <option value="10" th:attr="selected=${persetCust.maxrow == 10} ? 'selected'">10줄씩 보기</option>
+                            <option value="15" th:attr="selected=${persetCust.maxrow == 15} ? 'selected'">15줄씩 보기</option>
+                            <option value="20" th:attr="selected=${persetCust.maxrow == 20} ? 'selected'">20줄씩 보기</option>
                         </select>
                     </div>
                     
@@ -307,7 +307,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="list : ${CustList.getList()}" class="text-wrap">
+                            <tr th:each="list : ${custList.getList()}" class="text-wrap">
                                 <td th:text='${list.rowNum}'></td>
                                 <td class="ps-3">
                                     <button type="button" style="border:none; background: none;" th:onclick="|custFavor(${list.custCd})|">
@@ -315,7 +315,7 @@
                                     </button>
                                 </td>
                                 <td>
-                                    <a th:href="@{/dworld/customer(pageNum=${CustList.PageNum}, selectRowNum=${list.rowNum},searchCustNm=${SearchCustNm})}">
+                                    <a th:href="@{/dworld/customer(pageNum=${custList.PageNum}, selectRowNum=${list.rowNum},searchCustNm=${searchCustNm})}">
                                         <div class="text-truncate" th:text='${list.custNm}'></div>
                                     </a>
                                 </td>
@@ -325,22 +325,22 @@
                                 <td th:text='${list.custCeonum}'></td>
                             </tr>
                             
-                            <tr th:unless="${#lists.size(CustList.getList())} > 0">
+                            <tr th:unless="${#lists.size(custList.getList())} > 0">
                                 <td colspan="6" class="text-center"><h3>검색 결과가 없습니다.</h3></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 <ul class="pagination justify-content-center">
-                    <li class="page-item" th:classappend="${CustList.getPrePage() == 0} ? 'disabled'">
-                    <a class="page-link" th:href="@{/dworld/customer(pageNum=${CustList.getPrePage()}, searchCustNm=${SearchCustNm})}">Prev</a>
+                    <li class="page-item" th:classappend="${custList.getPrePage() == 0} ? 'disabled'">
+                    <a class="page-link" th:href="@{/dworld/customer(pageNum=${custList.getPrePage()}, searchCustNm=${searchCustNm})}">Prev</a>
                     </li>
-                    <li class="page-item" th:each="page: ${#numbers.sequence(CustList.getNavigateFirstPage(), CustList.getNavigateLastPage())}" th:classappend="${page == CustList.getPageNum()} ? 'active'">
-                    <a class="page-link" th:text="${page}" th:href="@{/dworld/customer(pageNum=${page}, searchCustNm=${SearchCustNm})}"></a>
+                    <li class="page-item" th:each="page: ${#numbers.sequence(custList.getNavigateFirstPage(), custList.getNavigateLastPage())}" th:classappend="${page == custList.getPageNum()} ? 'active'">
+                    <a class="page-link" th:text="${page}" th:href="@{/dworld/customer(pageNum=${page}, searchCustNm=${searchCustNm})}"></a>
                     
                     </li>
-                    <li class="page-item" th:classappend="${CustList.getNextPage() == 0} ? 'disabled'">
-                    <a class="page-link"  th:href="@{/dworld/customer(pageNum=${CustList.getNextPage()}, searchCustNm=${SearchCustNm})}">Next</a>
+                    <li class="page-item" th:classappend="${custList.getNextPage() == 0} ? 'disabled'">
+                    <a class="page-link"  th:href="@{/dworld/customer(pageNum=${custList.getNextPage()}, searchCustNm=${searchCustNm})}">Next</a>
                     </li>
                 </ul>
             </div>
@@ -360,43 +360,43 @@
                 </div>
                 <div class="row mx-auto gy-2 gx-2">
                     <div class="col-6 col-md-4 col-lg-3 form-floating" style="display: none;">
-                        <input type="text" th:value="${SelectCust.custCd}" class="form-control" disabled id="input-custCd" name="input-custCd">
+                        <input type="text" th:value="${selectCust.custCd}" class="form-control" disabled id="input-custCd" name="input-custCd">
                         <label for="input-custCd">업체 코드</label>
                     </div>
                     <div class="col-6 col-md-4 col-lg-3 form-floating">
-                        <input type="text" th:value="${SelectCust.custNm}" class="form-control" readonly id="input-custNm" name="input-custNm">
+                        <input type="text" th:value="${selectCust.custNm}" class="form-control" readonly id="input-custNm" name="input-custNm">
                         <label for="input-custNm">회사명</label>
                     </div>
                     <div class="col-6 col-md-4 col-lg-3 form-floating">
-                        <input type="text" th:value="${SelectCust.custBusnum}" class="form-control" readonly id="input-custBusnum" name="input-custBusnum">
+                        <input type="text" th:value="${selectCust.custBusnum}" class="form-control" readonly id="input-custBusnum" name="input-custBusnum">
                         <label for="input-custBusnum">사업자 번호</label>
                     </div>
                     <div class="col-6 col-md-4 col-lg-3 form-floating">
-                        <input type="text" th:value="${SelectCust.custNum}" class="form-control" readonly id="input-custNum" name="input-custNum">
+                        <input type="text" th:value="${selectCust.custNum}" class="form-control" readonly id="input-custNum" name="input-custNum">
                         <label for="input-custNum">전화 번호</label>
                     </div>
                     <div class="col-6 col-md-4 col-lg-3 form-floating">
-                        <input type="text" th:value="${SelectCust.custCeonm}" class="form-control" readonly id="input-custCeonm" name="input-custCeonm">
+                        <input type="text" th:value="${selectCust.custCeonm}" class="form-control" readonly id="input-custCeonm" name="input-custCeonm">
                         <label for="input-custCeonm">대표명</label>
                     </div>
                     <div class="col-6 col-md-4 col-lg-3 form-floating">
-                        <input type="text" th:value="${SelectCust.custCeonum}" class="form-control" readonly id="input-custCeonum" name="input-custCeonum">
+                        <input type="text" th:value="${selectCust.custCeonum}" class="form-control" readonly id="input-custCeonum" name="input-custCeonum">
                         <label for="input-custCeonum">대표 번호</label>
                     </div>
                     <div class="col-6 col-md-4 col-lg-3 form-floating">
-                        <input type="text" th:value="${SelectCust.custFax}" class="form-control" readonly id="input-custFax" name="input-custFax">
+                        <input type="text" th:value="${selectCust.custFax}" class="form-control" readonly id="input-custFax" name="input-custFax">
                         <label for="input-custFax">Fax</label>
                     </div>
                     <div class="col-6 col-md-4 col-lg-3 form-floating">
-                        <input type="text" th:value="${SelectCust.custEmail}" class="form-control" readonly id="input-custEmail" name="input-custEmail">
+                        <input type="text" th:value="${selectCust.custEmail}" class="form-control" readonly id="input-custEmail" name="input-custEmail">
                         <label for="input-custEmail">E-mail</label>
                     </div>
                     <div class="col-12 form-floating">
-                        <input type="text" th:value="${SelectCust.custAddr}" class="form-control" readonly id="input-custAddr" name="input-custAddr">
+                        <input type="text" th:value="${selectCust.custAddr}" class="form-control" readonly id="input-custAddr" name="input-custAddr">
                         <label for="input-custAddr">주 소</label>
                     </div>
                     <div class="col-12 form-floating">
-                        <textarea class="form-control" style="height: 200px;" th:text="${SelectCust.custRemark}" readonly id="input-custRemark" name="input-custRemark"></textarea>
+                        <textarea class="form-control" style="height: 200px;" th:text="${selectCust.custRemark}" readonly id="input-custRemark" name="input-custRemark"></textarea>
                         <label for="input-custRemark">비 고</label>
                     </div>
                 </div>

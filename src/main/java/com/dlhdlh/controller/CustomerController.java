@@ -36,7 +36,7 @@ public class CustomerController {
 			, HttpServletRequest servletRequest
 			, CustomerDto customerParam
 			, PersetCustDto persetCustParam) throws Exception{
-		ModelAndView mv = new ModelAndView("Customer/MainPage");		
+		ModelAndView mv = new ModelAndView("Customer/mainPage");		
 		String requestId = null;
 		
 		if(servletRequest.getSession().getAttribute("userId") != null) {
@@ -85,10 +85,10 @@ public class CustomerController {
 		}
 		selectCustInfo.setSearchCustNm(customerParam.getSearchCustNm());
 		
-		mv.addObject("PersetCust", persetCust);
-		mv.addObject("CustList", custList);
-		mv.addObject("SearchCustNm", customerParam.getSearchCustNm());
-		mv.addObject("SelectCust", selectCustInfo);
+		mv.addObject("persetCust", persetCust);
+		mv.addObject("custList", custList);
+		mv.addObject("searchCustNm", customerParam.getSearchCustNm());
+		mv.addObject("selectCust", selectCustInfo);
 		return mv;
 	}
 	

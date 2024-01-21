@@ -1,7 +1,6 @@
 package com.dlhdlh.controller;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -46,7 +45,7 @@ public class WorkLogController {
 								, HttpServletRequest servletRequest
 								, WorkLogDto worklogParam
 								, @RequestParam(required=false, defaultValue = "0") int entrance) throws Exception {
-		ModelAndView mv = new ModelAndView("WorkLog/MainPage");
+		ModelAndView mv = new ModelAndView("WorkLog/mainPage");
 		String requestId = null;
 		
 		if(servletRequest.getSession().getAttribute("userId") != null) {
@@ -196,15 +195,15 @@ public class WorkLogController {
 // prevPage 저장 방식을 session으로 변경함 2024.01.21 김동환
 //		dworldController.SetPrevPage(servletRequest, "WorkLog");
 		
-		mv.addObject("PersetWorkLog", persetWorkLog);
-		mv.addObject("WorkLogList", workLogList);
+		mv.addObject("persetWorkLog", persetWorkLog);
+		mv.addObject("workLogList", workLogList);
 		return mv;		
 	}
 	
 	//디테일 페이지 컨트롤
 	@RequestMapping(value = "/dworld/worklog/detail")
 	public ModelAndView WorkLogWrite(HttpServletRequest servletRequest, WorkLogDto worklogParam) throws Exception{
-		ModelAndView mv = new ModelAndView("WorkLog/DetailPage");
+		ModelAndView mv = new ModelAndView("WorkLog/detailPage");
 		String requestId = null;
 		if(servletRequest.getSession().getAttribute("userId") != null) {
 			requestId = servletRequest.getSession().getAttribute("userId").toString();
@@ -225,12 +224,7 @@ public class WorkLogController {
 		}
 		
 		//이전페이지 주소 조회
-		String prevPage = servletRequest.getSession().getAttribute("prevPage").toString();
-		
-		// 업체명을 리스트화
-		List<String> custNmList =  customerService.GetCustNmList();
-		
-		mv.addObject("CustNmList", custNmList);
+		String prevPage = servletRequest.getSession().getAttribute("prevPage").toString();	
 		mv.addObject("prevPage", prevPage);	
 		return mv;
 	}
