@@ -15,6 +15,8 @@
 				, ifnull(c.cust_nm, '') as cust_nm
 				, DATE_FORMAT(w.receipt_dt, '%Y-%m-%d') as receipt_dt
 				, DATE_FORMAT(w.due_dt, '%Y-%m-%d') as due_dt
+				, if(compl_yn = 'Y', null, TIMESTAMPDIFF(DAY,NOW(), w.due_dt)) AS int_Dday
+				, if(compl_yn = 'Y', null, TIMESTAMPDIFF(DAY,NOW(), w.due_dt)) AS str_Dday
 				, DATE_FORMAT(w.compl_dt, '%Y-%m-%d') as compl_dt 
 				, compl_yn 
 			FROM WorkLog w 

@@ -49,7 +49,7 @@ public class WorkLogController {
 								, @RequestParam(required=false, defaultValue = "0") int entrance) throws Exception {
 		ModelAndView mv = new ModelAndView("WorkLog/mainPage");
 		String requestId = null;
-		System.out.println("worklogParam doc:"+worklogParam.getDocumentType());
+		
 		if(servletRequest.getSession().getAttribute("userId") != null) {
 			requestId = servletRequest.getSession().getAttribute("userId").toString();
 			PersetMemberDto persetMember = membersService.GetPersetMember(requestId);
@@ -149,7 +149,6 @@ public class WorkLogController {
 				persetWorkLog.setOrderby1(worklogParam.getOrderby1());
 				persetWorkLog.setComplYn(worklogParam.getComplYn());
 				persetWorkLog.setMaxrow(worklogParam.getMaxrow());
-				System.out.println("persetWorkLog doc:"+persetWorkLog.getDocumentType());
 				worklogService.UpdatePersetWorkLog(persetWorkLog);
 			}
 

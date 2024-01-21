@@ -91,8 +91,6 @@
 				$("#compl-yn").prop("disabled", true);
 			}
 
-
-
 			//maxrow 5줄씩 보기 컨트롤
 			$("#maxrow").change(function () {
 				searchWorkLog();
@@ -274,7 +272,7 @@
 			<!------------------ 테이블 영역 --------------->
 			<div class="col-12">
 				<div style="overflow: auto">
-					<table class="table table-striped" style="min-width: 1000px; table-layout: fixed">
+					<table class="table table-striped" style="min-width: 1200px; table-layout: fixed">
 						<colgroup>
 							<col width="5%" />
 							<col width="10%" />
@@ -283,6 +281,7 @@
 							<col width="8%" />
 							<col width="8%" />
 							<col width="8%" />
+							<col width="6%" />
 							<col width="8%" />
 							<col width="4%" />
 						</colgroup>
@@ -294,6 +293,7 @@
 							<th class="text-center">작성일</th>
 							<th class="text-center">접수(시작)일</th>
 							<th class="text-center">완료예정일</th>
+							<th class="text-center">D-day</th>
 							<th class="text-center">완료(종료)일</th>
 							<th class="text-center">완료</th>
 						</thead>
@@ -313,6 +313,8 @@
 								<td class="text-center" th:text="${list.insertDt}"></td>
 								<td class="text-center" th:text="${list.receiptDt}"></td>
 								<td class="text-center" th:text="${list.dueDt}"></td>
+								<td class="text-center" th:text="${list.strDday != null } ? |${list.strDday}일|" 
+									th:classappend="${list.intDday < 4 } ? 'text-danger' : (${list.intDday > 3 && list.intDday < 8 }? 'text-primary' : 'text-success')"></td>
 								<td class="text-center" th:text="${list.complDt}"></td>
 								<td class="text-center" th:text="${list.complYn}"></td>
 							</tr>

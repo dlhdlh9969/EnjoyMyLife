@@ -298,6 +298,29 @@
                     });
                 }
             });
+
+            // 문서 구분 회의록은 일자 관리가 의미가 없으므로 visable
+            // 문서 코드 A:개인업무 / B:팀 협업 / C:회의록 / D:CS / Z:기타
+            $("#documentType").on("change", function () {
+                if($("#documentType").val() == 'C'){
+                    $("#receipt-dt").prop("disabled", true);
+                    $("#receipt-dt").val("");
+                    $("#due-dt").prop("disabled", true);
+                    $("#due-dt").val("");
+                    $("#compl-dt").prop("disabled", true);
+                    $("#compl-dt").val("");
+                }else{
+                    $("#receipt-dt").prop("disabled", false);
+                    $("#due-dt").prop("disabled", false);
+                    $("#compl-dt").prop("disabled", false);
+                }
+            });
+
+            if($("#documentType").val() == 'C'){
+                $("#receipt-dt").prop("disabled", true);
+                $("#due-dt").prop("disabled", true);
+                $("#compl-dt").prop("disabled", true);
+            }
         });
     </script>
 </head>
