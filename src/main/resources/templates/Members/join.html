@@ -6,15 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>D-world/회원가입</title>
     <script>
-        $(document).ready(function(){
-            $("#btn-cancel").on("click", function(){
-                history.back();
-            })
-            $("#btn-submit").on("click", function() {
-                JoinAjax();
-            });
-        });
-
         function JoinAjax(){
             var userId = $("#userId").val();
             var userPw = $("#userPw").val();
@@ -57,11 +48,20 @@
             });
             }
         }
+
+        $(document).ready(function(){
+            $("#btn-cancel").on("click", function(){
+                history.back();
+            })
+            $("#btn-submit").on("click", function() {
+                JoinAjax();
+            });
+        });
     </script>
 </head>
 <body>
     <div class="container ">
-        <form class="col-10 col-md-6 col-lg-4 mx-auto py-5 row gy-3">
+        <form class="col-10 col-md-6 col-lg-4 mx-auto row gy-3 align-content-center " style="height: 80vh;">
             <div class="text-center dlh-headstyle">
                 <label for=""><h2 class="dlh-headfont1 ">Join Members</h2></label>
             </div>

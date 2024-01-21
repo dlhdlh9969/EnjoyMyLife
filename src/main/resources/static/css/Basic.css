@@ -40,11 +40,6 @@ body{
   margin: 0;
 }
 
-.container{
-  padding-top: 3rem;
-  padding-bottom: 3rem;
-}
-
 .sidebar{
   position: fixed;
   top: 0;

@@ -7,7 +7,7 @@
 	<script>
 		// 딜레이 타임 변수
 		let debounceTimer;
- 
+
 		// 자동 검색 debounce 컨트롤
 		function SearchWorkLogDebounce() {
 			clearTimeout(debounceTimer);
@@ -80,14 +80,15 @@
 </head>
 
 <body>
-	<div class="container px-1">
-		<div class="row px-2 justify-content-center">
-			<div class="text-center dlh-headstyle">
+	<div class="container px-1 pt-2">
+		<!-- 상단  -->
+		<div class="row p-0 m-0 justify-content-center ">
+			<div class="col text-center dlh-headstyle">
 				<label>
 					<h1>WorkLog List</h1>
 				</label>
 			</div>
-			<!-- 검색 영역 -->
+			<!-- input 검색 영역 -->
 			<div class="row p-0">
 				<div class="col-6 col-md-3 col-lg-1 me-auto" style="min-width: 8rem;">
 					<button type="button" class="w-100 btn btn-dark border-danger"
@@ -106,17 +107,18 @@
 				</div>
 				<div class="col-6 col-md-4 form-floating">
 					<input type="text" class="form-control" id="searchTitle" name="searchTitle"
-						th:value="${PersetWorkLog.title}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}" 
-						oninput="SearchWorkLogDebounce()"/>
+						th:value="${PersetWorkLog.title}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}"
+						oninput="SearchWorkLogDebounce()" />
 					<label for="searchTitle">제목 검색</label>
 				</div>
 				<div class="col-6 col-md-4 form-floating">
 					<input type="text" class="form-control" id="searchContent" name="searchContent"
-						th:value="${PersetWorkLog.content}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}" 
-						oninput="SearchWorkLogDebounce()"/>
+						th:value="${PersetWorkLog.content}" onkeyup="if(window.event.keyCode==13){searchWorkLog()}"
+						oninput="SearchWorkLogDebounce()" />
 					<label for="searchContent">내용 검색</label>
 				</div>
 			</div>
+			<!-- 조회일자 및 정렬-->
 			<div class="row g-2">
 				<div class="col-6 col-md-6 col-lg-2 ms-lg-auto">
 					<div class="col form-floating">
@@ -198,7 +200,7 @@
 			</div>
 		</div>
 		<!-- 테이블 영역 -->
-		<div class="pt-2 pb-5">
+		<div class="pt-2 pb-5 px-0">
 			<div style="overflow: auto">
 				<table class="table table-striped" style="min-width: 1000px; table-layout: fixed">
 					<colgroup>
