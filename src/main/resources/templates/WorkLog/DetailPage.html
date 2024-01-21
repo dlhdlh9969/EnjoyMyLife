@@ -382,7 +382,7 @@
                 </div>
                 <div class="col-6 col-lg-3 form-floating">
                     <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.receiptDt}" type="datetime-local" class="form-control" id="receipt-dt" name="receipt-dt">
-                    <label for="receipt-dt">접수일(시작일)</label>
+                    <label for="receipt-dt">접수(시작)일</label>
                 </div>
                 <div class="col-6 col-lg-3 form-floating">
                     <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.dueDt}" type="datetime-local" class="form-control" id="due-dt" name="due-dt">
@@ -390,7 +390,7 @@
                 </div>
                 <div class="col-6 col-lg-3 form-floating">
                     <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.complDt}" type="datetime-local" class="form-control" id="compl-dt" name="compl-dt">
-                    <label for="compl-dt">완료일(종료일)</label>
+                    <label for="compl-dt">완료(종료)일</label>
                 </div>
             </div>
             <div class="row g-2">

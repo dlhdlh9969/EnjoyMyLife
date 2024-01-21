@@ -109,6 +109,11 @@ public class WorkLogController {
 			worklogParam.setDocumentType("");
 		}
 		
+		//일자 검색 대상 구분 컨트롤
+		if(worklogParam.getOrderby1() == null) {
+			worklogParam.setOrderby1("insert_dt");
+		}
+		
 		// maxrow 컨트롤
 		if(worklogParam.getMaxrow() == 0) {
 			worklogParam.setMaxrow(10);
@@ -131,6 +136,7 @@ public class WorkLogController {
 			worklogParam.setEndDt(persetWorkLog.getEndDt());
 			worklogParam.setOrder1(persetWorkLog.getOrder1());
 			worklogParam.setOrder2(persetWorkLog.getOrder2());
+			worklogParam.setOrderby1(persetWorkLog.getOrderby1());
 			worklogParam.setComplYn(persetWorkLog.getComplYn());
 			}else if(entrance == 0) {
 				persetWorkLog.setTitle(worklogParam.getTitle());
@@ -141,6 +147,7 @@ public class WorkLogController {
 				persetWorkLog.setEndDt(worklogParam.getEndDt());
 				persetWorkLog.setOrder1(worklogParam.getOrder1());
 				persetWorkLog.setOrder2(worklogParam.getOrder2());
+				persetWorkLog.setOrderby1(worklogParam.getOrderby1());
 				persetWorkLog.setComplYn(worklogParam.getComplYn());
 				persetWorkLog.setMaxrow(worklogParam.getMaxrow());
 				worklogService.UpdatePersetWorkLog(persetWorkLog);
@@ -170,7 +177,11 @@ public class WorkLogController {
 		dworldController.SetPrevPage(servletRequest);
 // prevPage 저장 방식을 session으로 변경함 2024.01.21 김동환
 //		dworldController.SetPrevPage(servletRequest, "WorkLog");
-		
+		System.out.println("---------------------------------------------");
+		System.out.println("getOrderby1: "+persetWorkLog.getOrderby1());
+		System.out.println("getStartDt: "+persetWorkLog.getStartDt());
+		System.out.println("getEndDt: "+persetWorkLog.getEndDt());
+		System.out.println("---------------------------------------------");
 		mv.addObject("persetWorkLog", persetWorkLog);
 		mv.addObject("documentType", documentType);
 		mv.addObject("workLogList", workLogList);
@@ -223,7 +234,6 @@ public class WorkLogController {
 		String getReceiptDt = worklogParam.getReceiptDt();
 		String getDueDt = worklogParam.getDueDt();
 		String getComplDt = worklogParam.getComplDt();
-		String getDocumentType = worklogParam.getDocumentType();
 
 		if(getReceiptDt.equals("")) {
 			worklogParam.setReceiptDt(null);

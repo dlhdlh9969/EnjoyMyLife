@@ -4,7 +4,7 @@
 	<!-- 업무일지 리스트-->
 	<select id="GetWorkLogList" parameterType="com.dlhdlh.dto.WorkLogDto" resultType="com.dlhdlh.dto.WorkLogDto">
 		<![CDATA[ 
-			SELECT if(#{order2} = 'desc', row_number() OVER (ORDER BY ${order1} asc), row_number() OVER (ORDER BY ${order1} desc)) as row_num
+			SELECT if(#{order2} = 'desc', row_number() OVER (ORDER BY w.${order1} asc), row_number() OVER (ORDER BY w.${order1} desc)) as row_num
 				, w.idx
 				, w.title
 				, w.content
@@ -27,8 +27,8 @@
 				AND w.title like concat('%', #{title}, '%') 
 				AND w.content like concat('%', #{content}, '%')
 				AND COALESCE(c.cust_nm, '') like concat('%', #{custNm}, '%')
-				AND w.insert_dt >= DATE_FORMAT(#{startDt}, '%Y-%m-%d') 
-				AND w.insert_dt <= DATE_FORMAT(#{endDt}, '%Y-%m-%d')
+				AND w.${orderby1} >= DATE_FORMAT(#{startDt}, '%Y-%m-%d')
+				AND w.${orderby1} <= DATE_FORMAT(#{endDt}, '%Y-%m-%d')
 			ORDER BY row_num desc
 		]]>
 	</select>
@@ -127,6 +127,7 @@
 				, compl_yn = #{complYn}
 				, order1 = #{order1}
 				, order2 = #{order2}
+				, orderby1 = #{orderby1}
 			WHERE user_id = #{userId}
 		]]>
 	</update>
