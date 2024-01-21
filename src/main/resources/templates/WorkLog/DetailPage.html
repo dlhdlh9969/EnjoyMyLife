@@ -152,7 +152,8 @@
                     }
                     var title = $("#title").val();
                     var content = $("#content").val();
-                    var datas = {custCd, receiptDt, dueDt, complDt, complYn, title, content, idx};
+                    var documentType = $("#documentType").val();
+                    var datas = {custCd, receiptDt, dueDt, complDt, complYn, title, content, documentType, idx};
 
                     if(!title.trim()){
                         Swal.fire("Title Empty", "제목을 써주세요.", "warning");
@@ -206,7 +207,7 @@
             $("#btn-insertCust").on("click", function(){
                 Swal.fire({
                     title: "업체 간편 등록"
-                  , text: "업체명을 입력해주세요."
+                  , text: "'업체명'을 입력해주세요."
                   , input: "text"
                   , icon: "info"
                   , inputAttributes: {
@@ -224,7 +225,7 @@
                             data: datas,
                             success: function(data) {
                                 if(data == "custNmEmpty"){
-                                    Swal.fire("","업체명이 비어선 안됩니다.", "warning");
+                                    Swal.fire("Customer Empty","'업체명'이 비어선 안됩니다.", "warning");
                                 } else{
                                     if(data == "OK"){
                                         Swal.fire("","등록 되었습니다.", "success")
@@ -234,11 +235,11 @@
                                                 }
                                             });
                                     }else{
-                                        Swal.fire("","접근이 잘못되었습니다.", "error");
+                                        Swal.fire("Error","접근이 잘못되었습니다.", "error");
                                     } 
                                 }
                             }, error: function() {
-                                Swal.fire("","ajax 통신 오류 발생", "error");
+                                Swal.fire("Error","ajax 통신 오류 발생", "error");
                             }
                         });
                     }
@@ -265,12 +266,15 @@
                 var title = $("#title").val();
                 var content = $("#content").val();
                 var documentType = $("#documentType").val();
+
                 var datas = {custCd, receiptDt, dueDt, complDt, complYn, title, content, documentType};
 
                 if(!title.trim()){
-                    Swal.fire("Title Empty", "제목을 써주세요.", "warning");
+                    Swal.fire("Title Empty", "'제목'을 써주세요.", "warning");
                 }else if(!content.trim()){
-                    Swal.fire("Content Empty", "내용을 써주세요.", "warning");
+                    Swal.fire("Content Empty", "'내용'을 써주세요.", "warning");
+                }else if(documentType == ""){
+                    Swal.fire("Document Type Empty","'문서 구분'을 선택해 주세요.", "warning");
                 }else{
                     $.ajax({
                         url: "/dworld/worklog/control",
@@ -378,15 +382,15 @@
                 </div>
                 <div class="col-6 col-lg-3 form-floating">
                     <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.receiptDt}" type="datetime-local" class="form-control" id="receipt-dt" name="receipt-dt">
-                    <label for="receipt-dt">접수일</label>
+                    <label for="receipt-dt">접수일(시작일)</label>
                 </div>
                 <div class="col-6 col-lg-3 form-floating">
                     <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.dueDt}" type="datetime-local" class="form-control" id="due-dt" name="due-dt">
-                    <label for="due-dt">마감예정일</label>
+                    <label for="due-dt">완료예정일</label>
                 </div>
                 <div class="col-6 col-lg-3 form-floating">
                     <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.complDt}" type="datetime-local" class="form-control" id="compl-dt" name="compl-dt">
-                    <label for="compl-dt">완료일</label>
+                    <label for="compl-dt">완료일(종료일)</label>
                 </div>
             </div>
             <div class="row g-2">
@@ -395,10 +399,13 @@
                     <label for="title">제목</label>
                 </div>
                 <div class="col-6 col-lg-3 form-floating">
-                    <select class="form-control" id="documentType" name="documentType">
-                        <option value="">선택해주세요</option>
+                    <select class="form-select" id="documentType" name="documentType">
+                        <option th:if="${MODE == 'new'}" value="">선택 해주세요</option>
+                        <div th:each="docList : ${documentType}">
+                            <option th:value="${docList.value}" th:text="${docList.text}" th:attr="selected=${MODE == 'detail' && docList.value == WorkLogDetail.documentType}? 'selected'"></option>
+                        </div>
                     </select>
-                    <label for="receipt-dt">문서 구분</label>
+                    <label for="documentType">문서 구분</label>
                 </div>
             </div> 
             <div class="form-floating ps-1 pt-2">

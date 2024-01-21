@@ -163,7 +163,7 @@ public class WorkLogController {
 		}
 		PageInfo<WorkLogDto> workLogList = new PageInfo<>(worklogService.GetWorkLogList(pageNum, maxRow, worklogParam), maxPaging);
 		
-		// 업무일지 구분값
+		// 업무일지 문서 종류 구분값
 		List<DworldValuesDto> documentType = dworldService.GetDocumentType();
 		
 		// 현재 페이지 주소 저장
@@ -192,7 +192,7 @@ public class WorkLogController {
 		
 		worklogParam.setUserId(requestId);
 		WorkLogDto worklogDetail= worklogService.GetWorkLogDetail(worklogParam);
-		mv.addObject("WorkLogDetail",worklogDetail);
+		
 		//신규 등록과 기존 디테일과 구분
 		if(worklogParam.getIdx() == 0) {
 			mv.addObject("MODE", "new");
@@ -200,8 +200,14 @@ public class WorkLogController {
 			mv.addObject("MODE", "detail");	
 		}
 		
+		// 업무일지 문서 종류 구분값
+		List<DworldValuesDto> documentType = dworldService.GetDocumentType();
+		
 		//이전페이지 주소 조회
-		String prevPage = servletRequest.getSession().getAttribute("prevPage").toString();	
+		String prevPage = servletRequest.getSession().getAttribute("prevPage").toString();
+		
+		mv.addObject("WorkLogDetail",worklogDetail);
+		mv.addObject("documentType", documentType);
 		mv.addObject("prevPage", prevPage);	
 		return mv;
 	}

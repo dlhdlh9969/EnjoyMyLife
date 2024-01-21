@@ -88,6 +88,6 @@ body.dark #selectCustModal .modal-header {
     color: var(--text-Reverse-color);
 }
 
-body.dark table a *{
+body.dark table *{
     color: var(--text-Reverse-color);
 }

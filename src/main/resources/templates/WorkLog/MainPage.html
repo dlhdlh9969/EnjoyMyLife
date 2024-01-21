@@ -142,8 +142,7 @@
 						<option value="idx" th:attr="selected=${persetWorkLog.order1 == 'idx'}? 'selected'">
 							작성일
 						</option>
-						<option value="receipt_dt"
-							th:attr="selected=${persetWorkLog.order1 == 'receipt_dt'}? 'selected'">
+						<option value="receipt_dt" th:attr="selected=${persetWorkLog.order1 == 'receipt_dt'}? 'selected'">
 							접수일
 						</option>
 					</select>
@@ -210,6 +209,8 @@
 						<col width="8%" />
 						<col width="8%" />
 						<col width="8%" />
+						<col width="8%" />
+						<col width="8%" />
 						<col width="4%" />
 					</colgroup>
 					<thead>
@@ -218,7 +219,9 @@
 						<th>제목</th>
 						<th>문서 종류</th>
 						<th class="text-center">작성일</th>
-						<th class="text-center">접수일(발생일)</th>
+						<th class="text-center">접수일(시작일)</th>
+						<th class="text-center">완료예정일</th>
+						<th class="text-center">완료일(종료일)</th>
 						<th class="text-center">완료</th>
 					</thead>
 					<tbody>
@@ -229,12 +232,15 @@
 							<td class="text-truncate" th:text="${list.custNm}"></td>
 							<td class="text-truncate" th:text="${list.title}"></td>
 							<td>
-								<div th:each="doclist : ${documentType}">
-									<span th:if="${doclist.value == list.documentType}" th:text="${doclist.text}" style="color: black;"></span>
+								<div th:each="docList : ${documentType}">
+									<span th:if="${docList.value == list.documentType}" 
+										th:text="${docList.text}"></span>
 								</div>
 							</td>
 							<td class="text-center" th:text="${list.insertDt}"></td>
 							<td class="text-center" th:text="${list.receiptDt}"></td>
+							<td class="text-center" th:text="${list.dueDt}"></td>
+							<td class="text-center" th:text="${list.complDt}"></td>
 							<td class="text-center" th:text="${list.complYn}"></td>
 						</tr>
 						<tr th:unless="${#lists.size(workLogList.getList())} > 0">
@@ -246,17 +252,41 @@
 			<ul class="pagination justify-content-center pt-4">
 				<li class="page-item" th:classappend="${workLogList.getPrePage() == 0} ? 'disabled'">
 					<a class="page-link"
-						th:href="@{/dworld/worklog(pageNum=${workLogList.getPrePage()}, title=${persetWorkLog.title}, custNm=${persetWorkLog.custNm}, complYn=${persetWorkLog.complYn}, order1=${persetWorkLog.order1}, order2=${persetWorkLog.order2}, startDt=${persetWorkLog.startDt}, endDt=${persetWorkLog.endDt}, maxrow=${persetWorkLog.maxrow})}">Prev</a>
+						th:href="@{/dworld/worklog(pageNum=${workLogList.getPrePage()}
+												, title=${persetWorkLog.title}
+												, custNm=${persetWorkLog.custNm}
+												, complYn=${persetWorkLog.complYn}
+												, order1=${persetWorkLog.order1}
+												, order2=${persetWorkLog.order2}
+												, startDt=${persetWorkLog.startDt}
+												, endDt=${persetWorkLog.endDt}
+												, maxrow=${persetWorkLog.maxrow})}">Prev</a>
 				</li>
 				<li class="page-item"
 					th:each="page: ${#numbers.sequence(workLogList.getNavigateFirstPage(), workLogList.getNavigateLastPage())}"
 					th:classappend="${page == workLogList.getPageNum()} ? 'active'">
 					<a class="page-link" th:text="${page}"
-						th:href="@{/dworld/worklog(pageNum=${page}, title=${persetWorkLog.title}, custNm=${persetWorkLog.custNm}, complYn=${persetWorkLog.complYn}, order1=${persetWorkLog.order1}, order2=${persetWorkLog.order2}, startDt=${persetWorkLog.startDt}, endDt=${persetWorkLog.endDt}, maxrow=${persetWorkLog.maxrow})}"></a>
+						th:href="@{/dworld/worklog(pageNum=${page}
+												, title=${persetWorkLog.title}
+												, custNm=${persetWorkLog.custNm}
+												, complYn=${persetWorkLog.complYn}
+												, order1=${persetWorkLog.order1}
+												, order2=${persetWorkLog.order2}
+												, startDt=${persetWorkLog.startDt}
+												, endDt=${persetWorkLog.endDt}
+												, maxrow=${persetWorkLog.maxrow})}"></a>
 				</li>
 				<li class="page-item" th:classappend="${workLogList.getNextPage() == 0} ? 'disabled'">
 					<a class="page-link"
-						th:href="@{/dworld/worklog(pageNum=${workLogList.getNextPage()}, title=${persetWorkLog.title}, custNm=${persetWorkLog.custNm}, complYn=${persetWorkLog.complYn}, order1=${persetWorkLog.order1}, order2=${persetWorkLog.order2}, searchStartDt=${persetWorkLog.startDt}, endDt=${persetWorkLog.endDt}, maxrow=${persetWorkLog.maxrow})}">Next</a>
+						th:href="@{/dworld/worklog(pageNum=${workLogList.getNextPage()}
+															, title=${persetWorkLog.title}
+															, custNm=${persetWorkLog.custNm}
+															, complYn=${persetWorkLog.complYn}
+															, order1=${persetWorkLog.order1}
+															, order2=${persetWorkLog.order2}
+															, searchStartDt=${persetWorkLog.startDt}
+															, endDt=${persetWorkLog.endDt}
+															, maxrow=${persetWorkLog.maxrow})}">Next</a>
 				</li>
 			</ul>
 		</div>
