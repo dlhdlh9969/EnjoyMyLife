@@ -1,5 +1,7 @@
 package com.dlhdlh.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,5 +31,10 @@ public class DworldServiceImpl implements DworldService {
 //	public String SelectPrevPage(PrevPageDto prevPageDto) throws Exception {
 //		return dworldMapper.SelectPrevPage(prevPageDto);
 //	}
+
+	@Override
+	public List<DworldValuesDto> GetDocumentType() throws Exception {
+		return dworldMapper.GetDocumentType();
+	}
 
 }

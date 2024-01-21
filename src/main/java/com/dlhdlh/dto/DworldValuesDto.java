@@ -7,5 +7,6 @@ public class DworldValuesDto {
 	int num;
 	String varName;
 	String value;
+	String text;
 	
 }

@@ -28,5 +28,6 @@ public class WorkLogDto {
 	String startDt;
 	String endDt;
 	int maxrow;
+	String documentType;
 
 }

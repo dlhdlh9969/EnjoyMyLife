@@ -209,12 +209,14 @@
 						<col width="20%" />
 						<col width="8%" />
 						<col width="8%" />
+						<col width="8%" />
 						<col width="4%" />
 					</colgroup>
 					<thead>
 						<th>Num</th>
 						<th>회사명</th>
 						<th>제목</th>
+						<th>문서 종류</th>
 						<th class="text-center">작성일</th>
 						<th class="text-center">접수일(발생일)</th>
 						<th class="text-center">완료</th>
@@ -226,6 +228,11 @@
 							<td class="text-truncate" th:text="${list.rowNum}"></td>
 							<td class="text-truncate" th:text="${list.custNm}"></td>
 							<td class="text-truncate" th:text="${list.title}"></td>
+							<td>
+								<div th:each="doclist : ${documentType}">
+									<span th:if="${doclist.value == list.documentType}" th:text="${doclist.text}" style="color: black;"></span>
+								</div>
+							</td>
 							<td class="text-center" th:text="${list.insertDt}"></td>
 							<td class="text-center" th:text="${list.receiptDt}"></td>
 							<td class="text-center" th:text="${list.complYn}"></td>

@@ -264,7 +264,8 @@
                 
                 var title = $("#title").val();
                 var content = $("#content").val();
-                var datas = {custCd, receiptDt, dueDt, complDt, complYn, title, content};
+                var documentType = $("#documentType").val();
+                var datas = {custCd, receiptDt, dueDt, complDt, complYn, title, content, documentType};
 
                 if(!title.trim()){
                     Swal.fire("Title Empty", "제목을 써주세요.", "warning");
@@ -298,104 +299,113 @@
 </head>
 <body>
     <div class="container">
-        <div class="text-center webfont1 dlh-headstyle">
-            <label><h1 th:text="${MODE == 'new' ? 'Write New WorkLog' : 'WorkLog Detail'}"></h1></label>
-        </div>
-        <div class="row g-2 col-md-6 ms-md-auto col-lg-3 my-3">
-            <div th:if="${MODE} == 'new'" class="col">
-                <button type="button" class="col-12 btn btn-dark border-primary" id="btn-insert" name="btn-insert">Insert</button>
+        <div class="row p-0 m-0 gy-2">
+            <div class="text-center webfont1 dlh-headstyle">
+                <label><h1 th:text="${MODE == 'new' ? 'Write New WorkLog' : 'WorkLog Detail'}"></h1></label>
             </div>
-            <div th:if="${MODE} == 'detail'" class="col">
-                <button type="button" class="col-12 btn btn-dark border-secondary" id="btn-edit" name="btn-edit" th:onclick="|UpdateWorkLog(${WorkLogDetail.idx})|">Save</button>
-            </div>
-            <div th:if="${MODE} == 'detail'" class="col">
-                <button type="button" class="col-12 btn btn-dark border-danger" id="btn-delete" name="btn-delete" th:onclick="|DeleteWorkLog(${WorkLogDetail.idx})|">Delete</button>
-            </div>
-            <div class="col">
-                <button type="button" class="col-12 btn btn-dark border-success" id="btn-back" name="btn-back" th:onclick="|location.href='@{${prevPage}}'|">Back</button> 
-            </div>
-        </div>
-        <div class="row g-2 mt-1">
-            <div class="col-6 col-md-6 col-lg-3 form-floating">
-                <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.custNm}" type="text" class="form-control" id="cust-nm" name="cust-nm" disabled>
-                <label for="cust-nm">업체명</label>
-            </div>
-            <div class="col-6 col-md-6 col-lg-3 form-floating" style="display: none;">
-                <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.custCd}" type="text" class="form-control" id="cust-cd" name="cust-cd" disabled>                
-                <label for="cust-cd">업체코드</label>
-            </div>
-            <div class="col-auto h-100">
-                <button type="button" class="h-100 btn btn-dark border-primary text-nowrap" id="btn-selectCust" data-bs-toggle="modal" data-bs-target="#selectCustModal">Select Customer</button>
-                <button type="button" class="h-100 btn btn-dark border-warning text-nowrap" id="btn-cancelCust" onclick="SelectCancel()">Cancel Selection</button>
-            </div>
-        </div>
-        <!-- 업체 선택 modal -->
-        <div class="modal fade" id="selectCustModal" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="staticBackdropLabel">PopUp For Select Customer</h1>
-                        <button type="button" class="btn-close btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        
-                        <div class="d-flex">
-                            <button type="button" class="btn border-info" onclick="custListAjax()">Search</button>
-                            <button type="button" id="btn-insertCust" class="btn border-warning ms-auto">Add Customer</button>
-                        </div>
-                        <input class="form-control my-2" type="text" list="custNmList" id="searchCustNm" name="searchCustNm" placeholder="업체명 검색" autocomplete="off">
-                        <datalist id="custNmList">
-                            <option th:each="list : ${CustNmList}" th:value="${list.custNm}"></option>
-                        </datalist>
-                        <div style="max-height: 400px; overflow:auto" id="custListDiv" name="custListDiv">
-                            <table class="table table-striped" style="table-layout:fixed; cursor:pointer;">
-                                <colgroup>
-                                    <col width="20%">
-                                    <col width="80%">
-                                </colgroup>
-                                <thead>
-                                    <th class="text-center">Favor</th>
-                                    <th>업체명</th>
-                                </thead>
-                                <tbody id="custListTable" name="custListTable">
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <!-- <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div> -->
+            <div class="row g-2 col-md-6 ms-md-auto col-lg-3">
+                <div th:if="${MODE} == 'new'" class="col">
+                    <button type="button" class="col-12 btn btn-dark border-primary" id="btn-insert" name="btn-insert">Insert</button>
+                </div>
+                <div th:if="${MODE} == 'detail'" class="col">
+                    <button type="button" class="col-12 btn btn-dark border-secondary" id="btn-edit" name="btn-edit" th:onclick="|UpdateWorkLog(${WorkLogDetail.idx})|">Save</button>
+                </div>
+                <div th:if="${MODE} == 'detail'" class="col">
+                    <button type="button" class="col-12 btn btn-dark border-danger" id="btn-delete" name="btn-delete" th:onclick="|DeleteWorkLog(${WorkLogDetail.idx})|">Delete</button>
+                </div>
+                <div class="col">
+                    <button type="button" class="col-12 btn btn-dark border-success" id="btn-back" name="btn-back" th:onclick="|location.href='@{${prevPage}}'|">Back</button> 
                 </div>
             </div>
+            <div class="row g-2">
+                <div class="col-6 col-md-6 col-lg-3 form-floating">
+                    <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.custNm}" type="text" class="form-control" id="cust-nm" name="cust-nm" disabled>
+                    <label for="cust-nm">업체명</label>
+                </div>
+                <div class="col-6 col-md-6 col-lg-3 form-floating" style="display: none;">
+                    <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.custCd}" type="text" class="form-control" id="cust-cd" name="cust-cd" disabled>                
+                    <label for="cust-cd">업체코드</label>
+                </div>
+                <div class="col-6 col-md-6 col-lg-3 h-100 pb-2">
+                    <button type="button" class="w-100 h-100 btn btn-dark border-info text-nowrap" id="btn-selectCust" data-bs-toggle="modal" data-bs-target="#selectCustModal">Select Customer</button>
+                    <button type="button" class="w-100 h-100 btn btn-dark border-warning text-nowrap" id="btn-cancelCust" onclick="SelectCancel()">Cancel Selection</button>
+                </div>
+            </div>
+            <!-- 업체 선택 modal -->
+            <div class="modal fade" id="selectCustModal" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">PopUp For Select Customer</h1>
+                            <button type="button" class="btn-close btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            
+                            <div class="d-flex">
+                                <button type="button" class="btn border-info" onclick="custListAjax()">Search</button>
+                                <button type="button" id="btn-insertCust" class="btn border-warning ms-auto">Add Customer</button>
+                            </div>
+                            <input class="form-control my-2" type="text" list="custNmList" id="searchCustNm" name="searchCustNm" placeholder="업체명 검색" autocomplete="off">
+                            <datalist id="custNmList">
+                                <option th:each="list : ${CustNmList}" th:value="${list.custNm}"></option>
+                            </datalist>
+                            <div style="max-height: 400px; overflow:auto" id="custListDiv" name="custListDiv">
+                                <table class="table table-striped" style="table-layout:fixed; cursor:pointer;">
+                                    <colgroup>
+                                        <col width="20%">
+                                        <col width="80%">
+                                    </colgroup>
+                                    <thead>
+                                        <th class="text-center">Favor</th>
+                                        <th>업체명</th>
+                                    </thead>
+                                    <tbody id="custListTable" name="custListTable">
+    
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+            <div class="row g-2">
+                <div class="col-6 col-lg-3 form-floating">
+                    <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.insertDt}" type="datetime-local" class="form-control" id="insert-dt" name="insert-dt" disabled>
+                    <label for="insert-dt">작성일</label>
+                </div>
+                <div class="col-6 col-lg-3 form-floating">
+                    <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.receiptDt}" type="datetime-local" class="form-control" id="receipt-dt" name="receipt-dt">
+                    <label for="receipt-dt">접수일</label>
+                </div>
+                <div class="col-6 col-lg-3 form-floating">
+                    <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.dueDt}" type="datetime-local" class="form-control" id="due-dt" name="due-dt">
+                    <label for="due-dt">마감예정일</label>
+                </div>
+                <div class="col-6 col-lg-3 form-floating">
+                    <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.complDt}" type="datetime-local" class="form-control" id="compl-dt" name="compl-dt">
+                    <label for="compl-dt">완료일</label>
+                </div>
+            </div>
+            <div class="row g-2">
+                <div class="col-6 col-lg-9 form-floating">
+                    <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.title}" type="text" class="form-control" id="title" name="title">
+                    <label for="title">제목</label>
+                </div>
+                <div class="col-6 col-lg-3 form-floating">
+                    <select class="form-control" id="documentType" name="documentType">
+                        <option value="">선택해주세요</option>
+                    </select>
+                    <label for="receipt-dt">문서 구분</label>
+                </div>
+            </div> 
+            <div class="form-floating ps-1 pt-2">
+                <textarea th:text="${MODE == 'detail'} ? ${WorkLogDetail.content}" type="text" class="form-control" style="height: 500px;" id="content" name="content"></textarea>
+                <label for="content">내용</label>
+            <div>
         </div>
-
-        <div class="row g-2 mt-1">
-            <div class="col-6 col-lg-3 form-floating">
-                <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.insertDt}" type="datetime-local" class="form-control" id="insert-dt" name="insert-dt" disabled>
-                <label for="insert-dt" class="mx-1">작성일</label>
-            </div>
-            <div class="col-6 col-lg-3 form-floating">
-                <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.receiptDt}" type="datetime-local" class="form-control" id="receipt-dt" name="receipt-dt">
-                <label for="receipt-dt" class="mx-1">접수일</label>
-            </div>
-            <div class="col-6 col-lg-3 form-floating">
-                <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.dueDt}" type="datetime-local" class="form-control" id="due-dt" name="due-dt">
-                <label for="due-dt" class="mx-1">마감예정일</label>
-            </div>
-            <div class="col-6 col-lg-3 form-floating">
-                <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.complDt}" type="datetime-local" class="form-control" id="compl-dt" name="compl-dt">
-                <label for="compl-dt" class="mx-1">완료일</label>
-            </div>
-        </div>
-        <div class="form-floating my-2">
-            <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.title}" type="text" class="form-control" id="title" name="title">
-            <label for="title" class="mx-1">제목</label>
-        </div>
-        <div class="form-floating">
-            <textarea th:text="${MODE == 'detail'} ? ${WorkLogDetail.content}" type="text" class="form-control" style="height: 500px;" id="content" name="content"></textarea>
-            <label for="content" class="mx-1">내용</label>
-        <div>
     </div>
 </body>
 </html>

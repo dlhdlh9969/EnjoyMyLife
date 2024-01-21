@@ -9,6 +9,7 @@ public class PersetWorkLogDto {
 	String custNm;
 	String title;
 	String content;
+	String documentType;
 	String startDt;
 	String endDt;
 	String complYn;

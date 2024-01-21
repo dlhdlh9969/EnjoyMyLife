@@ -8,6 +8,7 @@
 				, w.idx
 				, w.title
 				, w.content
+				, w.document_type
 				, DATE_FORMAT(w.insert_dt, '%Y-%m-%d') as insert_dt
 				, w.insert_user
 				, w.cust_cd
@@ -22,6 +23,7 @@
 			WHERE w.deleted_yn = 'N' 
 				AND w.insert_user = #{userId} 
 				AND w.compl_yn like concat('%', #{complYn}, '%') 
+				AND w.document_type like concat('%', #{documentType}, '%') 
 				AND w.title like concat('%', #{title}, '%') 
 				AND w.content like concat('%', #{content}, '%')
 				AND COALESCE(c.cust_nm, '') like concat('%', #{custNm}, '%')
@@ -36,6 +38,7 @@
 			INSERT INTO WorkLog 
 				(title
 				, content
+				, document_type
 				, insert_dt
 				, insert_user
 				, cust_cd
@@ -45,6 +48,7 @@
 				, compl_yn) 
 			VALUES(#{title}
 				, #{content}
+				, #{documentType}
 				, now()
 				, #{userId}
 				, #{custCd}
@@ -60,6 +64,7 @@
 			SELECT w.idx
 				, w.title
 				, w.content
+				, w.document_type
 				, w.insert_dt
 				, w.insert_user
 				, w.cust_cd
@@ -91,6 +96,7 @@
 			SET update_dt = now()
 				, update_user = #{userId}
 				, cust_cd = #{custCd}
+				, document_type = #{documentType}
 				, receipt_dt = #{receiptDt} 
 				, due_dt = #{dueDt}
 				, compl_dt = #{complDt}

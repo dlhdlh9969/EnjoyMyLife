@@ -9,13 +9,14 @@
 			WHERE var_name = #{varName}
 		]]>
 	</select>
-	<!-- PrevPage 수정 -->
-	<select id="UpdatePrevUrl" parameterType="com.dlhdlh.dto.PrevPageDto" resultType="com.dlhdlh.dto.PrevPageDto">
+
+	<!-- documentType 조회 -->
+	<select id="GetDocumentType" resultType="com.dlhdlh.dto.DworldValuesDto">
 		<![CDATA[ 
-			UPDATE PrevPage
-			SET url = #{url}
-			WHERE user_id = #{userId} 
-				AND menu = #{menu}
+			SELECT value, text
+			FROM DworldValues
+			WHERE var_name = "documentType"
+			ORDER BY  value
 		]]>
 	</select>
 	
@@ -42,4 +43,15 @@
 		]]>
 	</select>
 	 -->
+
+	<!-- PrevPage 수정 -->
+	<!--
+	<select id="UpdatePrevUrl" parameterType="com.dlhdlh.dto.PrevPageDto" resultType="com.dlhdlh.dto.PrevPageDto">
+		<![CDATA[ 
+			UPDATE PrevPage
+			SET url = #{url}
+			WHERE user_id = #{userId} 
+				AND menu = #{menu}
+		]]>
+	</select> -->
 </mapper>

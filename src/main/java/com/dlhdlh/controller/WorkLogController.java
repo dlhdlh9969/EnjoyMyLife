@@ -1,6 +1,7 @@
 package com.dlhdlh.controller;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.dlhdlh.dto.DworldValuesDto;
 import com.dlhdlh.dto.PersetMemberDto;
 import com.dlhdlh.dto.PersetWorkLogDto;
 import com.dlhdlh.dto.WorkLogDto;
@@ -76,42 +78,16 @@ public class WorkLogController {
 		//완료 여부 컨트롤
 		if(worklogParam.getComplYn() == null) {
 			worklogParam.setComplYn("N");
-		}else {
-			if(worklogParam.getComplYn().equals("A")) {
-				worklogParam.setComplYn("A");
-			}else {
-				if(worklogParam.getComplYn().equals("Y")) {
-					worklogParam.setComplYn("Y");
-				}else {
-					worklogParam.setComplYn("N");
-				}
-			}
 		}
 		
 		//order by 컬럼명 컨트롤
 		if(worklogParam.getOrder1() == null) {
 			worklogParam.setOrder1("idx");
-		}else {
-			if(worklogParam.getOrder1().equals("cust_nm")) {
-				worklogParam.setOrder1("cust_nm");
-			}else {
-				if(worklogParam.getOrder1().equals("receipt_dt")) {
-					worklogParam.setOrder1("receipt_dt");
-				}else {
-					worklogParam.setOrder1("idx");
-				}
-			}
 		}
 		
 		// 내림, 오름차순 컨트롤
 		if(worklogParam.getOrder2() == null) {
 			worklogParam.setOrder2("desc");
-		}else {
-			if(worklogParam.getOrder2().equals("asc")) {
-				worklogParam.setOrder2("asc");
-			}else {
-				worklogParam.setOrder2("desc");
-			}
 		}
 		
 		//업체명 검색 컨트롤
@@ -128,6 +104,10 @@ public class WorkLogController {
 		if(worklogParam.getContent() == null) {
 			worklogParam.setContent("");
 		}
+		//문서 구분 검색 컨트롤
+		if(worklogParam.getDocumentType() == null) {
+			worklogParam.setDocumentType("");
+		}
 		
 		// maxrow 컨트롤
 		if(worklogParam.getMaxrow() == 0) {
@@ -139,21 +119,13 @@ public class WorkLogController {
 		if(persetWorkLog == null) {
 			worklogService.SetNewMember(requestId);
 			persetWorkLog = worklogService.GetPersetWorkLog(requestId);
-			persetWorkLog.setComplYn("N");
-			persetWorkLog.setCustNm("");
-			persetWorkLog.setStartDt("");
-			persetWorkLog.setEndDt("");
-			persetWorkLog.setOrder1("idx");
-			persetWorkLog.setOrder2("desc");
-			persetWorkLog.setTitle("");
-			persetWorkLog.setContent("");
-			worklogService.UpdatePersetWorkLog(persetWorkLog);
 		}
 		
 		// 개인별 게시판 설정값 업데이트 여부
 		if(entrance == 1) {
 			worklogParam.setTitle(persetWorkLog.getTitle());
 			worklogParam.setContent(persetWorkLog.getContent());
+			worklogParam.setDocumentType(persetWorkLog.getDocumentType());
 			worklogParam.setCustNm(persetWorkLog.getCustNm());
 			worklogParam.setStartDt(persetWorkLog.getStartDt());
 			worklogParam.setEndDt(persetWorkLog.getEndDt());
@@ -163,6 +135,7 @@ public class WorkLogController {
 			}else if(entrance == 0) {
 				persetWorkLog.setTitle(worklogParam.getTitle());
 				persetWorkLog.setContent(worklogParam.getContent());
+				persetWorkLog.setDocumentType(worklogParam.getDocumentType());
 				persetWorkLog.setCustNm(worklogParam.getCustNm());
 				persetWorkLog.setStartDt(worklogParam.getStartDt());
 				persetWorkLog.setEndDt(worklogParam.getEndDt());
@@ -190,12 +163,16 @@ public class WorkLogController {
 		}
 		PageInfo<WorkLogDto> workLogList = new PageInfo<>(worklogService.GetWorkLogList(pageNum, maxRow, worklogParam), maxPaging);
 		
+		// 업무일지 구분값
+		List<DworldValuesDto> documentType = dworldService.GetDocumentType();
+		
 		// 현재 페이지 주소 저장
 		dworldController.SetPrevPage(servletRequest);
 // prevPage 저장 방식을 session으로 변경함 2024.01.21 김동환
 //		dworldController.SetPrevPage(servletRequest, "WorkLog");
 		
 		mv.addObject("persetWorkLog", persetWorkLog);
+		mv.addObject("documentType", documentType);
 		mv.addObject("workLogList", workLogList);
 		return mv;		
 	}
@@ -240,6 +217,7 @@ public class WorkLogController {
 		String getReceiptDt = worklogParam.getReceiptDt();
 		String getDueDt = worklogParam.getDueDt();
 		String getComplDt = worklogParam.getComplDt();
+		String getDocumentType = worklogParam.getDocumentType();
 
 		if(getReceiptDt.equals("")) {
 			worklogParam.setReceiptDt(null);
@@ -287,7 +265,10 @@ public class WorkLogController {
 		} 
 		if(worklogParam.getComplDt().equals("")) {
 			worklogParam.setComplDt(null);
-		}		
+		}
+		if(worklogParam.getDocumentType() == null) {
+			worklogParam.setDocumentType("");
+		}
 
 		try {
 			worklogService.UpdateWorkLog(worklogParam);
