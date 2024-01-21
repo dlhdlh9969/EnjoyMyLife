@@ -417,9 +417,14 @@
                 </div>
             </div>
             <div class="row g-2">
-                <div class="col-6 col-lg-9 form-floating">
+                <div class="col-12 col-lg-6 order-1 order-lg-0 form-floating">
                     <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.title}" type="text" class="form-control" id="title" name="title">
                     <label for="title">제목</label>
+                </div>
+                <div class="col-6 col-lg-3 form-floating d-day">
+                    <input type="text" class="form-control" readonly th:value="${WorkLogDetail.strDday != null } ? |${WorkLogDetail.strDday}일|" 
+                        th:classappend="${WorkLogDetail.intDday < 4 } ? 'text-danger' : (${WorkLogDetail.intDday > 3 && WorkLogDetail.intDday < 8 }? 'text-primary' : 'text-success')">
+                    <label for="title" th:classappend="${WorkLogDetail.intDday < 4 } ? 'text-danger' : (${WorkLogDetail.intDday > 3 && WorkLogDetail.intDday < 8 }? 'text-primary' : 'text-success')">D-day</label>
                 </div>
                 <div class="col-6 col-lg-3 form-floating">
                     <select class="form-select" id="documentType" name="documentType">

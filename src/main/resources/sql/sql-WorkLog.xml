@@ -73,6 +73,8 @@
 				, c.cust_nm
 				, w.receipt_dt
 				, due_dt
+				, if(compl_yn = 'Y', null, TIMESTAMPDIFF(DAY,NOW(), w.due_dt)) AS int_Dday
+				, if(compl_yn = 'Y', null, TIMESTAMPDIFF(DAY,NOW(), w.due_dt)) AS str_Dday
 				, compl_dt  
 			FROM WorkLog w 
 			LEFT OUTER JOIN Customer c 
