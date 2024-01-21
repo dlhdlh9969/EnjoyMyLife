@@ -192,7 +192,9 @@ public class WorkLogController {
 		PageInfo<WorkLogDto> workLogList = new PageInfo<>(worklogService.GetWorkLogList(pageNum, maxRow, worklogParam), maxPaging);
 		
 		// 현재 페이지 주소 저장
-		dworldController.SetPrevPage(servletRequest, "WorkLog");
+		dworldController.SetPrevPage(servletRequest);
+// prevPage 저장 방식을 session으로 변경함 2024.01.21 김동환
+//		dworldController.SetPrevPage(servletRequest, "WorkLog");
 		
 		mv.addObject("PersetWorkLog", persetWorkLog);
 		mv.addObject("WorkLogList", workLogList);
@@ -223,7 +225,7 @@ public class WorkLogController {
 		}
 		
 		//이전페이지 주소 조회
-		String prevPage = dworldController.GetPrevPage(servletRequest, "WorkLog");
+		String prevPage = servletRequest.getSession().getAttribute("prevPage").toString();
 		
 		// 업체명을 리스트화
 		List<String> custNmList =  customerService.GetCustNmList();

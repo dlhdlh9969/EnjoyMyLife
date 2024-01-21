@@ -18,7 +18,10 @@
 				AND menu = #{menu}
 		]]>
 	</select>
+	
+	<!-- prevPage 저장 방식을 session으로 변경함 2024.01.21 김동환 -->
 	<!-- PrevPage 저장 -->
+	<!--
 	<select id="InsertPrevUrl" parameterType="com.dlhdlh.dto.PrevPageDto" resultType="com.dlhdlh.dto.PrevPageDto">
 		<![CDATA[ 
 			INSERT INTO PrevPage
@@ -27,7 +30,9 @@
 				, #{menu})
 		]]>
 	</select>
+	 -->
 	<!-- PrevPage 조회 -->
+	<!--
 	<select id="SelectPrevPage" parameterType="com.dlhdlh.dto.PrevPageDto" resultType="String">
 		<![CDATA[ 
 			SELECT url
@@ -36,4 +41,5 @@
 				AND menu = #{menu}
 		]]>
 	</select>
+	 -->
 </mapper>

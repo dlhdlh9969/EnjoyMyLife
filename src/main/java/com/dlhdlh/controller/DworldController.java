@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.dlhdlh.dto.PersetMemberDto;
-import com.dlhdlh.dto.PrevPageDto;
 import com.dlhdlh.service.DworldService;
 import com.dlhdlh.service.MembersService;
 
@@ -69,30 +68,21 @@ public class DworldController {
 	}
 	
 	// 현재 페이지 주소 저장
-	public void SetPrevPage(HttpServletRequest servletRequest, String menu) throws Exception {
-		String url = PrevPage(servletRequest);
-		String userId = servletRequest.getSession().getAttribute("userId").toString();
-		PrevPageDto prevPageDto = new PrevPageDto();
-		prevPageDto.setUserId(userId);
-		prevPageDto.setUrl(url);
-		prevPageDto.setMenu(menu);
-		
-		try {
-			dworldService.InsertPrevUrl(prevPageDto);
-		} catch (Exception e) {
-			dworldService.UpdatePrevUrl(prevPageDto);
-		}
+	public void SetPrevPage(HttpServletRequest servletRequest) throws Exception {
+		String prevPage = PrevPage(servletRequest);
+		servletRequest.getSession().setAttribute("prevPage", prevPage);
 	}
 	
 	// 이전 페이지 주소 조회
-	public String GetPrevPage(HttpServletRequest servletRequest, String menu) throws Exception {
-		String userId = servletRequest.getSession().getAttribute("userId").toString();
-		PrevPageDto prevPageDto = new PrevPageDto();
-		prevPageDto.setUserId(userId);
-		prevPageDto.setMenu(menu);
-		String prevPage = dworldService.SelectPrevPage(prevPageDto);
-		return prevPage;
-	}
+// prevPage 저장 방식을 session으로 변경함 2024.01.21 김동환
+//	public String GetPrevPage(HttpServletRequest servletRequest, String menu) throws Exception {
+//		String userId = servletRequest.getSession().getAttribute("userId").toString();
+//		PrevPageDto prevPageDto = new PrevPageDto();
+//		prevPageDto.setUserId(userId);
+//		prevPageDto.setMenu(menu);
+//		String prevPage = dworldService.SelectPrevPage(prevPageDto);
+//		return prevPage;
+//	}
 	
 	//ViewMode 컨트롤
 	@ResponseBody
