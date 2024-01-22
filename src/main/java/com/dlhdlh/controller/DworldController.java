@@ -54,10 +54,10 @@ public class DworldController {
 	}
 	
 	//현재 페이지를 저장하여 이전 페이지로 돌아가기 위한 경로에 사용
-	public String PrevPage(HttpServletRequest servletRequest) {
-		StringBuilder stringBuilder = new StringBuilder(servletRequest.getRequestURI().toString());
-	    String requestURL = stringBuilder.toString();  //현재 URL 문자로 변환
-	    String result = requestURL+"?";
+	public String GetPrevPage(HttpServletRequest servletRequest) {
+		StringBuilder getStringBuilder = new StringBuilder(servletRequest.getRequestURI().toString());
+	    String getRequestURL = getStringBuilder.toString();  //현재 URL 문자로 변환
+	    String result = getRequestURL+"?";
 	    Enumeration<String> parameterNames = servletRequest.getParameterNames();
         while (parameterNames.hasMoreElements()) {
             String paramName = parameterNames.nextElement();
@@ -69,8 +69,8 @@ public class DworldController {
 	
 	// 현재 페이지 주소 저장
 	public void SetPrevPage(HttpServletRequest servletRequest) throws Exception {
-		String prevPage = PrevPage(servletRequest);
-		servletRequest.getSession().setAttribute("prevPage", prevPage);
+		String getPrevPage = GetPrevPage(servletRequest);
+		servletRequest.getSession().setAttribute("prevPage", getPrevPage);
 	}
 	
 	// 이전 페이지 주소 조회

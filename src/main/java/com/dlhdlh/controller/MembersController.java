@@ -113,8 +113,8 @@ public class MembersController {
 			mv.addObject("viewMode", "light");
 		}
 		
-		String searchUserId = membersParam.getUserId();
-		String searchUserName = membersParam.getUserName();
+		String getSearchUserId = membersParam.getUserId();
+		String getSearchUserName = membersParam.getUserName();
 		
 		if(membersParam.getUserId() == null) {
 			membersParam.setUserId("");
@@ -122,11 +122,11 @@ public class MembersController {
 		if(membersParam.getUserName() == null) {
 			membersParam.setUserName("");
 		}
-		List<MembersDto> userList = membersService.UserList(membersParam);
+		List<MembersDto> getUserList = membersService.UserList(membersParam);
 		
-		mv.addObject("searchUserId", searchUserId);
-		mv.addObject("searchUserName", searchUserName);
-		mv.addObject("UserList", userList);
+		mv.addObject("searchUserId", getSearchUserId);
+		mv.addObject("searchUserName", getSearchUserName);
+		mv.addObject("userList", getUserList);
 		return mv;
 	}
 	

@@ -104,7 +104,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <div th:each="list : ${UserList}">
+                    <div th:each="list : ${userList}">
                         <tr class="text-wrap">
                             <td th:text="${list.userId}" th:id="|userId-${listStat.count}|" class="text-truncate"></td>
                             <td><input type="text" th:id="|userName-${listStat.count}|" class="form-control" th:value='${list.userName}'></td>
@@ -113,7 +113,7 @@
                             <td><button type="button" th:id="'btnEdit-'+${listStat.count}" class="btn btn-warning" th:onclick="|EditMembers(${listStat.count})|">수정</button></td>
                         </tr>
                     </div>
-                    <tr th:unless="${#lists.size(UserList)} > 0">
+                    <tr th:unless="${#lists.size(userList)} > 0">
                         <td colspan="5" class="text-center"><h3>검색 결과가 없습니다.</h3></td>
                     </tr>
                 </tbody>

@@ -41,8 +41,8 @@ public class CustomerController {
 		
 		if(servletRequest.getSession().getAttribute("userId") != null) {
 			requestId = servletRequest.getSession().getAttribute("userId").toString();
-			PersetMemberDto persetMember = membersService.GetPersetMember(requestId);
-			mv.addObject("viewMode", persetMember.getViewMode());
+			PersetMemberDto getPersetMember = membersService.GetPersetMember(requestId);
+			mv.addObject("viewMode", getPersetMember.getViewMode());
 		}else {
 			mv.addObject("viewMode", "light");
 		}
@@ -52,13 +52,13 @@ public class CustomerController {
 		if(persetCustParam.getMaxrow() != 0) {
 			customerService.UpdatePersetCust(persetCustParam);
 		}
-		PersetCustDto persetCust = customerService.GetPersetCust(requestId);
-		if(persetCust == null) {
+		PersetCustDto getPersetCust = customerService.GetPersetCust(requestId);
+		if(getPersetCust == null) {
 			customerService.SetNewMember(requestId);
-			persetCust = customerService.GetPersetCust(requestId);
+			getPersetCust = customerService.GetPersetCust(requestId);
 		}
 		int maxPaging = 5;//페이징 최대 갯수
-		int maxRow = persetCust.getMaxrow(); //페이지당 최대 로우 갯수
+		int getMaxRow = getPersetCust.getMaxrow(); //페이지당 최대 로우 갯수
 		
 		//업체명 검색 input이 null로 왔을 경우 where절에 like를 할 수 없으므로 빈값을 넣어줌!
 		if(customerParam.getSearchCustNm() == null) {
@@ -67,28 +67,28 @@ public class CustomerController {
 		
 		//업체 리스트 조회(검색 기능 포함)
 		customerParam.setUserId(requestId);
-		PageInfo<CustomerDto> custList = new PageInfo<>(customerService.GetCustList(pageNum, maxRow, customerParam), maxPaging);
+		PageInfo<CustomerDto> getCustList = new PageInfo<>(customerService.GetCustList(pageNum, getMaxRow, customerParam), maxPaging);
 		
 		//선택한 업체 정보를 분리하여 디테일 영역에 뿌려줄 데이터
-		CustomerDto selectCustInfo = new CustomerDto();
-		if(custList.getSize() != 0) {	
+		CustomerDto getSelectCustInfo = new CustomerDto();
+		if(getCustList.getSize() != 0) {	
 			if(selectRowNum != 0){
 				int i = 0;
-				selectCustInfo = custList.getList().get(i);
+				getSelectCustInfo = getCustList.getList().get(i);
 				
-				for(i = 0; selectRowNum < custList.getList().get(i).getRowNum(); i++) {
-					selectCustInfo = custList.getList().get(i+1);
+				for(i = 0; selectRowNum < getCustList.getList().get(i).getRowNum(); i++) {
+					getSelectCustInfo = getCustList.getList().get(i+1);
 				};
 			}else {
-				selectCustInfo = custList.getList().get(0);
+				getSelectCustInfo = getCustList.getList().get(0);
 			}
 		}
-		selectCustInfo.setSearchCustNm(customerParam.getSearchCustNm());
+		getSelectCustInfo.setSearchCustNm(customerParam.getSearchCustNm());
 		
-		mv.addObject("persetCust", persetCust);
-		mv.addObject("custList", custList);
+		mv.addObject("persetCust", getPersetCust);
+		mv.addObject("custList", getCustList);
 		mv.addObject("searchCustNm", customerParam.getSearchCustNm());
-		mv.addObject("selectCust", selectCustInfo);
+		mv.addObject("selectCust", getSelectCustInfo);
 		return mv;
 	}
 	
