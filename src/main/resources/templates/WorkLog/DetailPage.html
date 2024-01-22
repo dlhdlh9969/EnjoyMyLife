@@ -167,7 +167,12 @@
                                 data: datas,
                                 success: function(data) {
                                     if(data == 'OK'){
-                                        Swal.fire("Success", "수정 되었습니다.", "success");
+                                        Swal.fire("Success", "수정 되었습니다.", "success")
+                                        .then((result)=>{
+                                            if(result){
+                                                location.reload();
+                                            }
+                                        });;
                                     }else{
                                         Swal.fire("Error", "접근이 잘못되었습니다.", "error");
                                     }
@@ -335,10 +340,10 @@
                     <button type="button" class="col-12 btn btn-dark border-primary" id="btn-insert" name="btn-insert">Insert</button>
                 </div>
                 <div th:if="${MODE} == 'detail'" class="col">
-                    <button type="button" class="col-12 btn btn-dark border-secondary" id="btn-edit" name="btn-edit" th:onclick="|UpdateWorkLog(${WorkLogDetail.idx})|">Save</button>
+                    <button type="button" class="col-12 btn btn-dark border-secondary" id="btn-edit" name="btn-edit" th:onclick="|UpdateWorkLog(${workLogDetail.idx})|">Save</button>
                 </div>
                 <div th:if="${MODE} == 'detail'" class="col">
-                    <button type="button" class="col-12 btn btn-dark border-danger" id="btn-delete" name="btn-delete" th:onclick="|DeleteWorkLog(${WorkLogDetail.idx})|">Delete</button>
+                    <button type="button" class="col-12 btn btn-dark border-danger" id="btn-delete" name="btn-delete" th:onclick="|DeleteWorkLog(${workLogDetail.idx})|">Delete</button>
                 </div>
                 <div class="col">
                     <button type="button" class="col-12 btn btn-dark border-success" id="btn-back" name="btn-back" th:onclick="|location.href='@{${prevPage}}'|">Back</button> 
@@ -346,11 +351,11 @@
             </div>
             <div class="row g-2">
                 <div class="col-6 col-md-6 col-lg-3 form-floating">
-                    <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.custNm}" type="text" class="form-control" id="cust-nm" name="cust-nm" disabled>
+                    <input th:attr="value=${MODE == 'detail'} ? ${workLogDetail.custNm}" type="text" class="form-control" id="cust-nm" name="cust-nm" disabled>
                     <label for="cust-nm">업체명</label>
                 </div>
                 <div class="col-6 col-md-6 col-lg-3 form-floating" style="display: none;">
-                    <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.custCd}" type="text" class="form-control" id="cust-cd" name="cust-cd" disabled>                
+                    <input th:attr="value=${MODE == 'detail'} ? ${workLogDetail.custCd}" type="text" class="form-control" id="cust-cd" name="cust-cd" disabled>                
                     <label for="cust-cd">업체코드</label>
                 </div>
                 <div class="col-6 col-md-6 col-lg-3 h-100 pb-2">
@@ -400,44 +405,44 @@
             </div>
             <div class="row g-2">
                 <div class="col-6 col-lg-3 form-floating">
-                    <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.insertDt}" type="datetime-local" class="form-control" id="insert-dt" name="insert-dt" disabled>
+                    <input th:attr="value=${MODE == 'detail'} ? ${workLogDetail.insertDt}" type="datetime-local" class="form-control" id="insert-dt" name="insert-dt" disabled>
                     <label for="insert-dt">작성일</label>
                 </div>
                 <div class="col-6 col-lg-3 form-floating">
-                    <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.receiptDt}" type="datetime-local" class="form-control" id="receipt-dt" name="receipt-dt">
+                    <input th:attr="value=${MODE == 'detail'} ? ${workLogDetail.receiptDt}" type="datetime-local" class="form-control" id="receipt-dt" name="receipt-dt">
                     <label for="receipt-dt">접수(시작)일</label>
                 </div>
                 <div class="col-6 col-lg-3 form-floating">
-                    <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.dueDt}" type="datetime-local" class="form-control" id="due-dt" name="due-dt">
+                    <input th:attr="value=${MODE == 'detail'} ? ${workLogDetail.dueDt}" type="datetime-local" class="form-control" id="due-dt" name="due-dt">
                     <label for="due-dt">완료예정일</label>
                 </div>
                 <div class="col-6 col-lg-3 form-floating">
-                    <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.complDt}" type="datetime-local" class="form-control" id="compl-dt" name="compl-dt">
+                    <input th:attr="value=${MODE == 'detail'} ? ${workLogDetail.complDt}" type="datetime-local" class="form-control" id="compl-dt" name="compl-dt">
                     <label for="compl-dt">완료(종료)일</label>
                 </div>
             </div>
             <div class="row g-2">
                 <div class="col-12 col-lg-6 order-1 order-lg-0 form-floating">
-                    <input th:attr="value=${MODE == 'detail'} ? ${WorkLogDetail.title}" type="text" class="form-control" id="title" name="title">
+                    <input th:attr="value=${MODE == 'detail'} ? ${workLogDetail.title}" type="text" class="form-control" id="title" name="title">
                     <label for="title">제목</label>
                 </div>
                 <div class="col-6 col-lg-3 form-floating d-day">
-                    <input type="text" class="form-control" readonly th:value="${WorkLogDetail.strDday != null } ? |${WorkLogDetail.strDday}일|" 
-                        th:classappend="${WorkLogDetail.intDday < 4 } ? 'text-danger' : (${WorkLogDetail.intDday > 3 && WorkLogDetail.intDday < 8 }? 'text-primary' : 'text-success')">
-                    <label for="title" th:classappend="${WorkLogDetail.intDday < 4 } ? 'text-danger' : (${WorkLogDetail.intDday > 3 && WorkLogDetail.intDday < 8 }? 'text-primary' : 'text-success')">D-day</label>
+                    <input type="text" class="form-control" readonly th:attr="value=${MODE == 'detail'} ? (${workLogDetail.strDday != null } ? |${workLogDetail.strDday}일|)" 
+                        th:classappend="${MODE == 'detail'} ? (${workLogDetail.intDday < dDayValues.get('1') } ? 'text-danger' : (${workLogDetail.intDday >= dDayValues.get('1') && workLogDetail.intDday <= dDayValues.get('2') }? 'text-primary' : 'text-success'))">
+                    <label for="title" th:classappend="${MODE == 'detail'} ? (${workLogDetail.intDday < dDayValues.get('1') } ? 'text-danger' : (${workLogDetail.intDday >= dDayValues.get('1') && workLogDetail.intDday <= dDayValues.get('2') }? 'text-primary' : 'text-success'))">D-day</label>
                 </div>
                 <div class="col-6 col-lg-3 form-floating">
                     <select class="form-select" id="documentType" name="documentType">
                         <option th:if="${MODE == 'new'}" value="">선택 해주세요</option>
                         <div th:each="docList : ${documentType}">
-                            <option th:value="${docList.value}" th:text="${docList.text}" th:attr="selected=${MODE == 'detail' && docList.value == WorkLogDetail.documentType}? 'selected'"></option>
+                            <option th:value="${docList.value}" th:text="${docList.text}" th:attr="selected=${MODE == 'detail' && docList.value == workLogDetail.documentType}? 'selected'"></option>
                         </div>
                     </select>
                     <label for="documentType">문서 구분</label>
                 </div>
             </div> 
             <div class="form-floating ps-1 pt-2">
-                <textarea th:text="${MODE == 'detail'} ? ${WorkLogDetail.content}" type="text" class="form-control" style="height: 500px;" id="content" name="content"></textarea>
+                <textarea th:text="${MODE == 'detail'} ? ${workLogDetail.content}" type="text" class="form-control" style="height: 500px;" id="content" name="content"></textarea>
                 <label for="content">내용</label>
             <div>
         </div>

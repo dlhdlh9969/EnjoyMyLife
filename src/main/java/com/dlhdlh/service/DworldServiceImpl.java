@@ -33,8 +33,8 @@ public class DworldServiceImpl implements DworldService {
 //	}
 
 	@Override
-	public List<DworldValuesDto> GetDocumentType() throws Exception {
-		return dworldMapper.GetDocumentType();
+	public List<DworldValuesDto> ListDworldValues(String varName) throws Exception {
+		return dworldMapper.ListDworldValues(varName);
 	}
 
 }

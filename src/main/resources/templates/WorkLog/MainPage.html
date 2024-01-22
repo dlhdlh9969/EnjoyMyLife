@@ -314,7 +314,7 @@
 								<td class="text-center" th:text="${list.receiptDt}"></td>
 								<td class="text-center" th:text="${list.dueDt}"></td>
 								<td class="text-center" th:text="${list.strDday != null } ? |${list.strDday}일|" 
-									th:classappend="${list.intDday < 4 } ? 'text-danger' : (${list.intDday > 3 && list.intDday < 8 }? 'text-primary' : 'text-success')"></td>
+									th:classappend="${list.intDday < dDayValues.get('1') } ? 'text-danger' : (${list.intDday >= dDayValues.get('1') && list.intDday <= dDayValues.get('2') }? 'text-primary' : 'text-success')"></td>
 								<td class="text-center" th:text="${list.complDt}"></td>
 								<td class="text-center" th:text="${list.complYn}"></td>
 							</tr>

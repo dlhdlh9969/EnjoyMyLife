@@ -1,6 +1,7 @@
 package com.dlhdlh.controller;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -119,42 +120,42 @@ public class WorkLogController {
 		}
 		
 		// 개인별 게시판 설정값 조회
-		PersetWorkLogDto persetWorkLog = worklogService.GetPersetWorkLog(requestId);
-		if(persetWorkLog == null) {
+		PersetWorkLogDto gwtPersetWorkLog = worklogService.GetPersetWorkLog(requestId);
+		if(gwtPersetWorkLog == null) {
 			worklogService.SetNewMember(requestId);
-			persetWorkLog = worklogService.GetPersetWorkLog(requestId);
+			gwtPersetWorkLog = worklogService.GetPersetWorkLog(requestId);
 		}
 		
 		// 개인별 게시판 설정값 업데이트 여부
 		if(entrance == 1) {
-			worklogParam.setTitle(persetWorkLog.getTitle());
-			worklogParam.setContent(persetWorkLog.getContent());
-			worklogParam.setDocumentType(persetWorkLog.getDocumentType());
-			worklogParam.setCustNm(persetWorkLog.getCustNm());
-			worklogParam.setStartDt(persetWorkLog.getStartDt());
-			worklogParam.setEndDt(persetWorkLog.getEndDt());
-			worklogParam.setOrder1(persetWorkLog.getOrder1());
-			worklogParam.setOrder2(persetWorkLog.getOrder2());
-			worklogParam.setOrderby1(persetWorkLog.getOrderby1());
-			worklogParam.setComplYn(persetWorkLog.getComplYn());
+			worklogParam.setTitle(gwtPersetWorkLog.getTitle());
+			worklogParam.setContent(gwtPersetWorkLog.getContent());
+			worklogParam.setDocumentType(gwtPersetWorkLog.getDocumentType());
+			worklogParam.setCustNm(gwtPersetWorkLog.getCustNm());
+			worklogParam.setStartDt(gwtPersetWorkLog.getStartDt());
+			worklogParam.setEndDt(gwtPersetWorkLog.getEndDt());
+			worklogParam.setOrder1(gwtPersetWorkLog.getOrder1());
+			worklogParam.setOrder2(gwtPersetWorkLog.getOrder2());
+			worklogParam.setOrderby1(gwtPersetWorkLog.getOrderby1());
+			worklogParam.setComplYn(gwtPersetWorkLog.getComplYn());
 			}else {
-				persetWorkLog.setTitle(worklogParam.getTitle());
-				persetWorkLog.setContent(worklogParam.getContent());
-				persetWorkLog.setDocumentType(worklogParam.getDocumentType());
-				persetWorkLog.setCustNm(worklogParam.getCustNm());
-				persetWorkLog.setStartDt(worklogParam.getStartDt());
-				persetWorkLog.setEndDt(worklogParam.getEndDt());
-				persetWorkLog.setOrder1(worklogParam.getOrder1());
-				persetWorkLog.setOrder2(worklogParam.getOrder2());
-				persetWorkLog.setOrderby1(worklogParam.getOrderby1());
-				persetWorkLog.setComplYn(worklogParam.getComplYn());
-				persetWorkLog.setMaxrow(worklogParam.getMaxrow());
-				worklogService.UpdatePersetWorkLog(persetWorkLog);
+				gwtPersetWorkLog.setTitle(worklogParam.getTitle());
+				gwtPersetWorkLog.setContent(worklogParam.getContent());
+				gwtPersetWorkLog.setDocumentType(worklogParam.getDocumentType());
+				gwtPersetWorkLog.setCustNm(worklogParam.getCustNm());
+				gwtPersetWorkLog.setStartDt(worklogParam.getStartDt());
+				gwtPersetWorkLog.setEndDt(worklogParam.getEndDt());
+				gwtPersetWorkLog.setOrder1(worklogParam.getOrder1());
+				gwtPersetWorkLog.setOrder2(worklogParam.getOrder2());
+				gwtPersetWorkLog.setOrderby1(worklogParam.getOrderby1());
+				gwtPersetWorkLog.setComplYn(worklogParam.getComplYn());
+				gwtPersetWorkLog.setMaxrow(worklogParam.getMaxrow());
+				worklogService.UpdatePersetWorkLog(gwtPersetWorkLog);
 			}
 
 		// 업무일지 리스트 
 		int maxPaging = 5;//페이징 최대 갯수
-		int maxRow = persetWorkLog.getMaxrow(); //페이지당 최대 로우 갯수
+		int maxRow = gwtPersetWorkLog.getMaxrow(); //페이지당 최대 로우 갯수
 		worklogParam.setUserId(requestId);
 		if(worklogParam.getComplYn().equals("A")) {
 			worklogParam.setComplYn("");
@@ -167,18 +168,27 @@ public class WorkLogController {
 		}else {
 			worklogParam.setEndDt(endDt.toString());
 		}
-		PageInfo<WorkLogDto> workLogList = new PageInfo<>(worklogService.GetWorkLogList(pageNum, maxRow, worklogParam), maxPaging);
+		PageInfo<WorkLogDto> getWorkLogList = new PageInfo<>(worklogService.GetWorkLogList(pageNum, maxRow, worklogParam), maxPaging);
 		
 		// 업무일지 문서 종류 구분값
-		List<DworldValuesDto> documentType = dworldService.GetDocumentType();
+		List<DworldValuesDto> getDocumentType = dworldService.ListDworldValues("documentType");
 		
 		// 현재 페이지 주소 저장
 		dworldController.SetPrevPage(servletRequest);
+		
+		// Dday 안전일 기준값
+		List<DworldValuesDto> getDdayValues = dworldService.ListDworldValues("Dday");
+		HashMap<String, Integer> dDayValues= new HashMap<String, Integer>();
+		dDayValues.put("1", Integer.parseInt(getDdayValues.get(0).getValue())); //위험
+		dDayValues.put("2", Integer.parseInt(getDdayValues.get(1).getValue())); //주의
+		
+				
 // prevPage 저장 방식을 session으로 변경함 2024.01.21 김동환
 //		dworldController.SetPrevPage(servletRequest, "WorkLog");
-		mv.addObject("persetWorkLog", persetWorkLog);
-		mv.addObject("documentType", documentType);
-		mv.addObject("workLogList", workLogList);
+		mv.addObject("persetWorkLog", gwtPersetWorkLog);
+		mv.addObject("documentType", getDocumentType);
+		mv.addObject("dDayValues", dDayValues);
+		mv.addObject("workLogList", getWorkLogList);
 		return mv;		
 	}
 	
@@ -189,14 +199,14 @@ public class WorkLogController {
 		String requestId = null;
 		if(servletRequest.getSession().getAttribute("userId") != null) {
 			requestId = servletRequest.getSession().getAttribute("userId").toString();
-			PersetMemberDto persetMember = membersService.GetPersetMember(requestId);
-			mv.addObject("viewMode", persetMember.getViewMode());
+			PersetMemberDto getPersetMember = membersService.GetPersetMember(requestId);
+			mv.addObject("viewMode", getPersetMember.getViewMode());
 		}else {
 			mv.addObject("viewMode", "light");
 		}
 		
 		worklogParam.setUserId(requestId);
-		WorkLogDto worklogDetail= worklogService.GetWorkLogDetail(worklogParam);
+		WorkLogDto getWorklogDetail= worklogService.GetWorkLogDetail(worklogParam);
 		
 		//신규 등록과 기존 디테일과 구분
 		if(worklogParam.getIdx() == 0) {
@@ -206,14 +216,20 @@ public class WorkLogController {
 		}
 		
 		// 업무일지 문서 종류 구분값
-		List<DworldValuesDto> documentType = dworldService.GetDocumentType();
+		List<DworldValuesDto> getDocumentType = dworldService.ListDworldValues("documentType");
+		// Dday 안전일 기준값
+		List<DworldValuesDto> getDdayValues = dworldService.ListDworldValues("Dday");
+		HashMap<String, Integer> dDayValues= new HashMap<String, Integer>();
+		dDayValues.put("1", Integer.parseInt(getDdayValues.get(0).getValue())); 
+		dDayValues.put("2", Integer.parseInt(getDdayValues.get(1).getValue())); 
 		
 		//이전페이지 주소 조회
-		String prevPage = servletRequest.getSession().getAttribute("prevPage").toString();
+		String getPrevPage = servletRequest.getSession().getAttribute("prevPage").toString();
 		
-		mv.addObject("WorkLogDetail",worklogDetail);
-		mv.addObject("documentType", documentType);
-		mv.addObject("prevPage", prevPage);	
+		mv.addObject("workLogDetail",getWorklogDetail);
+		mv.addObject("documentType", getDocumentType);
+		mv.addObject("dDayValues", dDayValues);
+		mv.addObject("prevPage", getPrevPage);	
 		return mv;
 	}
 	
