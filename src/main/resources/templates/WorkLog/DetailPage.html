@@ -428,8 +428,8 @@
                 </div>
                 <div class="col-6 col-lg-3 form-floating d-day">
                     <input type="text" class="form-control" readonly th:attr="value=${MODE == 'detail'} ? (${workLogDetail.strDday != null } ? |${workLogDetail.strDday}일|)" 
-                        th:classappend="${MODE == 'detail'} ? (${workLogDetail.intDday < dDayValues.get('1') } ? 'text-danger' : (${workLogDetail.intDday >= dDayValues.get('1') && workLogDetail.intDday <= dDayValues.get('2') }? 'text-primary' : 'text-success'))">
-                    <label for="title" th:classappend="${MODE == 'detail'} ? (${workLogDetail.intDday < dDayValues.get('1') } ? 'text-danger' : (${workLogDetail.intDday >= dDayValues.get('1') && workLogDetail.intDday <= dDayValues.get('2') }? 'text-primary' : 'text-success'))">D-day</label>
+                        th:classappend="${MODE == 'detail'} ? (${workLogDetail.intDday < dDayValues.get('danger') } ? 'text-danger' : (${workLogDetail.intDday >= dDayValues.get('danger') && workLogDetail.intDday <= dDayValues.get('safe') }? 'text-primary' : 'text-success'))">
+                    <label for="title" th:classappend="${MODE == 'detail'} ? (${workLogDetail.intDday < dDayValues.get('danger') } ? 'text-danger' : (${workLogDetail.intDday >= dDayValues.get('danger') && workLogDetail.intDday <= dDayValues.get('safe') }? 'text-primary' : 'text-success'))">D-day</label>
                 </div>
                 <div class="col-6 col-lg-3 form-floating">
                     <select class="form-select" id="documentType" name="documentType">

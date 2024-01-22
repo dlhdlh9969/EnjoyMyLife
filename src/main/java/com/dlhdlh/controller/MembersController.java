@@ -42,8 +42,8 @@ public class MembersController {
 	@ResponseBody 
 	@RequestMapping(value = "members/loginAjax", method = RequestMethod.POST)
 	public String LoginProcessAjax(MembersDto membersParam, HttpServletRequest servletRequest) throws Exception{
-		String getUserPw = dworldService.PasswordSHA256(membersParam.getUserPw());
-		membersParam.setUserPw(getUserPw);
+		String convertUserPw = dworldService.PasswordSHA256(membersParam.getUserPw());
+		membersParam.setUserPw(convertUserPw);
 		MembersDto getLoginUser = membersService.LoginMemberInfo(membersParam);
 		
 		DworldValuesDto dworldValues =  dworldService.DworldValues("SessionInterval");
@@ -67,34 +67,31 @@ public class MembersController {
 		return "redirect:/";
 	}
 
-	// 회원가입 submit 프로세스
+	// 회원가입 submit ajax통신
 	@ResponseBody 
 	@RequestMapping(value = "member/joinAjax", method = RequestMethod.POST)
 	public String JoinProcess(MembersDto membersParam, HttpServletRequest servletRequest) throws Exception{
 		String getUserId = membersParam.getUserId().trim();
 		String getUserPw = membersParam.getUserPw().trim();
-		String getUserName = membersParam.getUserName().trim();
+		String getUserName = membersParam.getUserName().trim();		
 		
-		if(getUserId == "") {
+		if(getUserId.isEmpty()) {
 			return "userIdEmpty";
-		}else {
-			if(getUserPw == "") {
-				return "userPwEmpty";
-			}else {
-				if(getUserName == "") {
-					return "userNameEmpty";
-				}else {
-					try {
-						getUserPw = dworldService.PasswordSHA256(getUserPw);
-						membersParam.setUserPw(getUserPw);
-						membersService.InsertMember(membersParam);
-						return "OK"; 
-					} catch (Exception e) {
-						e.printStackTrace();
-			 			return "notOK";
-					}
-				}
-			}
+		}
+		if(getUserPw.isEmpty()) {
+			return "userPwEmpty";
+		}
+		if(getUserName.isEmpty()) {
+			return "userNameEmpty";
+		}
+		try {
+			getUserPw = dworldService.PasswordSHA256(getUserPw);
+			membersParam.setUserPw(getUserPw);
+			membersService.InsertMember(membersParam);
+			return "OK"; 
+		} catch (Exception e) {
+			e.printStackTrace();
+ 			return "notOK";
 		}
 	}
 	
@@ -145,20 +142,19 @@ public class MembersController {
 		membersParam.setUserName(getUserName);
 		membersParam.setUserPw(getUserPw);
 		
-		if(getUserName == "") {
+		if(getUserName.isEmpty()) {
 			return "userIdEmpty";
-		}else {
-			if(getUserPw != "") {
-				getUserPw = dworldService.PasswordSHA256(getUserPw);
-				membersParam.setUserPw(getUserPw);
-			}
-			try {
-				membersService.UpdateMembers(membersParam);
-				return "OK";
-			} catch (Exception e) {
-				e.printStackTrace();
-				return "notOK";
-			}
+		}
+		if(getUserPw.isEmpty()) {
+			getUserPw = dworldService.PasswordSHA256(getUserPw);
+			membersParam.setUserPw(getUserPw);
+		}
+		try {
+			membersService.UpdateMembers(membersParam);
+			return "OK";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "notOK";
 		}
 	}
 }

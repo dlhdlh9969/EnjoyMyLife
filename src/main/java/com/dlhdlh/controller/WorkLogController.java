@@ -49,16 +49,10 @@ public class WorkLogController {
 								, WorkLogDto worklogParam
 								, @RequestParam(required=false, defaultValue = "0") int entrance) throws Exception {
 		ModelAndView mv = new ModelAndView("WorkLog/mainPage");
-		String requestId = null;
+		String requestId = servletRequest.getSession().getAttribute("userId").toString();
+		PersetMemberDto persetMember = membersService.GetPersetMember(requestId);
+		mv.addObject("viewMode", persetMember.getViewMode());
 		
-		if(servletRequest.getSession().getAttribute("userId") != null) {
-			requestId = servletRequest.getSession().getAttribute("userId").toString();
-			PersetMemberDto persetMember = membersService.GetPersetMember(requestId);
-			mv.addObject("viewMode", persetMember.getViewMode());
-		}else {
-			mv.addObject("viewMode", "light");
-		}
-
 		//검색 시작-종료일 초기값
 		LocalDate endDt = null;
 		if(worklogParam.getStartDt() == null) {
@@ -71,7 +65,7 @@ public class WorkLogController {
 			worklogParam.setEndDt("");
 		}else {
 			worklogParam.setEndDt(worklogParam.getEndDt());
-			if(!worklogParam.getEndDt().equals("")) {
+			if(!worklogParam.getEndDt().isEmpty()) {
 				endDt = LocalDate.parse(worklogParam.getEndDt()).plusDays(1);
 			}
 		}
@@ -157,17 +151,20 @@ public class WorkLogController {
 		int maxPaging = 5;//페이징 최대 갯수
 		int maxRow = gwtPersetWorkLog.getMaxrow(); //페이지당 최대 로우 갯수
 		worklogParam.setUserId(requestId);
+		
+		// gwtPersetWorkLog 저장되고나서 DB에 보낼 값으로 변환
 		if(worklogParam.getComplYn().equals("A")) {
 			worklogParam.setComplYn("");
 		}
-		if(worklogParam.getStartDt().equals("")) {
+		if(worklogParam.getStartDt().isEmpty()) {
 			worklogParam.setStartDt("0001-01-01");
 		}
-		if(worklogParam.getEndDt().equals("")) {
+		if(worklogParam.getEndDt().isEmpty()) {
 			worklogParam.setEndDt("9999-01-01");
 		}else {
 			worklogParam.setEndDt(endDt.toString());
 		}
+		
 		PageInfo<WorkLogDto> getWorkLogList = new PageInfo<>(worklogService.GetWorkLogList(pageNum, maxRow, worklogParam), maxPaging);
 		
 		// 업무일지 문서 종류 구분값
@@ -178,9 +175,10 @@ public class WorkLogController {
 		
 		// Dday 안전일 기준값
 		List<DworldValuesDto> getDdayValues = dworldService.ListDworldValues("Dday");
+		
 		HashMap<String, Integer> dDayValues= new HashMap<String, Integer>();
-		dDayValues.put("1", Integer.parseInt(getDdayValues.get(0).getValue())); //위험
-		dDayValues.put("2", Integer.parseInt(getDdayValues.get(1).getValue())); //주의
+		dDayValues.put("danger", Integer.parseInt(getDdayValues.get(0).getValue())); //위험
+		dDayValues.put("safe", Integer.parseInt(getDdayValues.get(1).getValue())); //주의
 		
 				
 // prevPage 저장 방식을 session으로 변경함 2024.01.21 김동환
@@ -196,20 +194,15 @@ public class WorkLogController {
 	@RequestMapping(value = "/dworld/worklog/detail")
 	public ModelAndView WorkLogWrite(HttpServletRequest servletRequest, WorkLogDto worklogParam) throws Exception{
 		ModelAndView mv = new ModelAndView("WorkLog/detailPage");
-		String requestId = null;
-		if(servletRequest.getSession().getAttribute("userId") != null) {
-			requestId = servletRequest.getSession().getAttribute("userId").toString();
-			PersetMemberDto getPersetMember = membersService.GetPersetMember(requestId);
-			mv.addObject("viewMode", getPersetMember.getViewMode());
-		}else {
-			mv.addObject("viewMode", "light");
-		}
+		String requestId = servletRequest.getSession().getAttribute("userId").toString();
+		PersetMemberDto getPersetMember = membersService.GetPersetMember(requestId);
+		mv.addObject("viewMode", getPersetMember.getViewMode());
 		
 		worklogParam.setUserId(requestId);
 		WorkLogDto getWorklogDetail= worklogService.GetWorkLogDetail(worklogParam);
 		
 		//신규 등록과 기존 디테일과 구분
-		if(worklogParam.getIdx() == 0) {
+		if(getWorklogDetail == null) {
 			mv.addObject("MODE", "new");
 		}else {
 			mv.addObject("MODE", "detail");	
