@@ -56,7 +56,7 @@ public class DworldServiceImpl implements DworldService {
         while (parameterNames.hasMoreElements()) {
             String paramName = parameterNames.nextElement();
             String paramValue = servletRequest.getParameter(paramName);
-            result = result+paramName+"="+paramValue+"&";
+            result += paramName+"="+paramValue+"&";
         }
 		return result;
 	}
@@ -68,9 +68,11 @@ public class DworldServiceImpl implements DworldService {
 			md.update(planText.getBytes());
 			byte byteData[] = md.digest();
 			StringBuffer sb = new StringBuffer();
+			
 			for (int i = 0; i < byteData.length; i++) {
 				sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
 			}
+			
 			StringBuffer hexString = new StringBuffer();
 			for (int i = 0; i < byteData.length; i++) {
 				String hex = Integer.toHexString(0xff & byteData[i]);
