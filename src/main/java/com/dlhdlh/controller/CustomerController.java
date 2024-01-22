@@ -49,14 +49,18 @@ public class CustomerController {
 		
 		persetCustParam.setUserId(requestId);
 		
-		if(persetCustParam.getMaxrow() != 0) {
-			customerService.UpdatePersetCust(persetCustParam);
-		}
+		
 		PersetCustDto getPersetCust = customerService.GetPersetCust(requestId);
 		if(getPersetCust == null) {
 			customerService.SetNewMember(requestId);
 			getPersetCust = customerService.GetPersetCust(requestId);
 		}
+		
+		if(persetCustParam.getMaxrow() != 0) {
+			customerService.UpdatePersetCust(persetCustParam);
+		}
+		
+		
 		int maxPaging = 5;//페이징 최대 갯수
 		int getMaxRow = getPersetCust.getMaxrow(); //페이지당 최대 로우 갯수
 		
