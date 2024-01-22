@@ -38,14 +38,31 @@ public class DworldController {
 
 			if(servletRequest.getSession().getAttribute("userId") != null) {
 				requestId = servletRequest.getSession().getAttribute("userId").toString();
-				PersetMemberDto persetMember = membersService.GetPersetMember(requestId);
-				mv.addObject("viewMode", persetMember.getViewMode());
+				PersetMemberDto getPersetMember = membersService.GetPersetMember(requestId);
+				mv.addObject("viewMode", getPersetMember.getViewMode());
 			}else {
 				mv.addObject("viewMode", "light");
 			}
 
 			return mv;
 		}
+	}
+	
+	// test페이지
+	@RequestMapping("/test")
+	public ModelAndView LoginPage2(HttpServletRequest servletRequest) throws Exception {
+		ModelAndView mv = new ModelAndView("test");
+		String requestId = null;
+
+		if(servletRequest.getSession().getAttribute("userId") != null) {
+			requestId = servletRequest.getSession().getAttribute("userId").toString();
+			PersetMemberDto getPersetMember = membersService.GetPersetMember(requestId);
+			mv.addObject("viewMode", getPersetMember.getViewMode());
+		}else {
+			mv.addObject("viewMode", "light");
+		}
+
+		return mv;
 	}
 	
 	@RequestMapping("/dworld/error")

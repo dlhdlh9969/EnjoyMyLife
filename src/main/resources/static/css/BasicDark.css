@@ -91,3 +91,7 @@ body.dark #selectCustModal .modal-header {
 body.dark table *{
     color: var(--text-Reverse-color);
 }
+
+body.dark .custFavorIcon{
+    color: var(--primary-color);
+  }
