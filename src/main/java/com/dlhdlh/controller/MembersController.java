@@ -1,6 +1,5 @@
 package com.dlhdlh.controller;
 
-import java.security.MessageDigest;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,7 +42,7 @@ public class MembersController {
 	@ResponseBody 
 	@RequestMapping(value = "members/loginAjax", method = RequestMethod.POST)
 	public String LoginProcessAjax(MembersDto membersParam, HttpServletRequest servletRequest) throws Exception{
-		String getUserPw = PasswordSHA256(membersParam.getUserPw());
+		String getUserPw = dworldService.PasswordSHA256(membersParam.getUserPw());
 		membersParam.setUserPw(getUserPw);
 		MembersDto getLoginUser = membersService.LoginMemberInfo(membersParam);
 		
@@ -86,7 +85,8 @@ public class MembersController {
 					return "userNameEmpty";
 				}else {
 					try {
-						membersParam.setUserPw(PasswordSHA256(getUserPw));
+						getUserPw = dworldService.PasswordSHA256(getUserPw);
+						membersParam.setUserPw(getUserPw);
 						membersService.InsertMember(membersParam);
 						return "OK"; 
 					} catch (Exception e) {
@@ -149,7 +149,8 @@ public class MembersController {
 			return "userIdEmpty";
 		}else {
 			if(getUserPw != "") {
-				membersParam.setUserPw(PasswordSHA256(getUserPw));
+				getUserPw = dworldService.PasswordSHA256(getUserPw);
+				membersParam.setUserPw(getUserPw);
 			}
 			try {
 				membersService.UpdateMembers(membersParam);
@@ -158,31 +159,6 @@ public class MembersController {
 				e.printStackTrace();
 				return "notOK";
 			}
-		}
-	}
-	
-	// SHA-256 암호화를 위한 메서드
-	public String PasswordSHA256(String planText) {
-		try {
-			MessageDigest md = MessageDigest.getInstance("SHA-256");
-			md.update(planText.getBytes());
-			byte byteData[] = md.digest();
-			StringBuffer sb = new StringBuffer();
-			for (int i = 0; i < byteData.length; i++) {
-				sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
-			}
-			StringBuffer hexString = new StringBuffer();
-			for (int i = 0; i < byteData.length; i++) {
-				String hex = Integer.toHexString(0xff & byteData[i]);
-				if (hex.length() == 1) {
-					hexString.append('0');
-				}
-				hexString.append(hex);
-			}
-			return hexString.toString();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException();
 		}
 	}
 }

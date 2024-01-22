@@ -174,7 +174,7 @@ public class WorkLogController {
 		List<DworldValuesDto> getDocumentType = dworldService.ListDworldValues("documentType");
 		
 		// 현재 페이지 주소 저장
-		dworldController.SetPrevPage(servletRequest);
+		dworldService.SetPrevPage(servletRequest);
 		
 		// Dday 안전일 기준값
 		List<DworldValuesDto> getDdayValues = dworldService.ListDworldValues("Dday");
