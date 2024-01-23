@@ -31,13 +31,13 @@
                         userIdValues.push(checkbox.id);
                     });
 
-                    var val = "김동환1";
-
+                    var datas = {userIds : userIdValues};
 
                     $.ajax({
                         url: "/dworld/auth/memberscontrol",
                         type: "DELETE",
-                        data: {val : val},
+                        data: datas,
+                        dataType: "json",
                         success: function(data) {
                             if(data == "OK"){
                                 Swal.fire("Success","삭제 되었습니다.", "success")

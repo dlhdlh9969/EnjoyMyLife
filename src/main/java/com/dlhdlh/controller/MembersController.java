@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -166,11 +167,13 @@ public class MembersController {
 		}
 	}
 	
+	
+	
 	@ResponseBody
 	@RequestMapping(value = "/dworld/auth/memberscontrol", method = RequestMethod.DELETE)
-	public String DeleteMembers(HttpServletRequest servletRequest, String val ) throws Exception {
+	public String DeleteMembers(HttpServletRequest servletRequest,@RequestParam(value ="userIds[]" ) List<String> userIds ) throws Exception {
 		
-		System.out.println("params:"+ val);
+		System.out.println("params:"+ userIds);
 		return "OK";
 	}
 }
