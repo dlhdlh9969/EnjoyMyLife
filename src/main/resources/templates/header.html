@@ -66,11 +66,19 @@
 
                 toggle.addEventListener("click", ()=>{
                     sidebar.classList.toggle("close");
-                })
+                });
 
                 document.addEventListener('keydown', function(event){
-                    if (event.key === 'Escape'){
-                        $('#offcanvasbody').offcanvas('hide');
+                    if (event.key == 'Escape'){
+                        sidebar.classList.add("close");
+                    }
+                });
+
+                document.addEventListener("click", function(event){
+                    var sidebarSector = sidebar.contains(event.target);
+
+                    if(!sidebarSector){
+                        sidebar.classList.add("close");
                     }
                 });
             });
