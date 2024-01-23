@@ -5,8 +5,47 @@
     <title>D-world.Members</title>
     <script>
         $(document).ready(function(){
-
+            $('input[name="checkDelete"]').addClass('d-none');
+            $('button[name="btnEdit"]').addClass('d-none');
+            $("#btnDelete").hide();
+            $("#btnDelCancel").hide();
+            
         });
+
+        function BtnDelete(){
+            var checkboxes = document.querySelectorAll('input[name="checkDelete"]:checked');
+            var list= "";
+            checkboxes.forEach(function(checkbox) {
+                list += checkbox.id + ", "
+            });
+            alert("체크된 체크박스 : " + list );
+        }
+
+        function BtnSelectRow(){
+            $("#btnSelectRow").hide();
+            $("#btnDelete").show();
+            $("#btnDelCancel").show();
+            $('input[name="checkDelete"]').removeClass('d-none');
+        }
+
+        function BtnDelCancel(){
+            $("#btnSelectRow").show();
+            $("#btnDelete").hide();
+            $("#btnDelCancel").hide();
+            $('input[name="checkDelete"]').addClass('d-none');
+            $('input[name="checkDelete"]').prop('checked', false);
+        }
+
+        function ChangedInput(num){
+            $(`button[id="btnEdit-`+num+`"]`).removeClass('d-none');
+        }
+
+        // Inputbox 자동 검색
+        let debounceTimer;
+        function SearchDebounce() {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => searchUser(), 1500); // 1000 당 1초
+        }
 
         function searchUser(){
             var userId = $("#userId").val();
@@ -70,32 +109,41 @@
         <div class="my-4 row g-2">
             <div class="col-6 col-md-5 col-lg-2 ms-lg-auto">
                 <div class="form-floating">
-                    <input type="text" class="form-control" id="userId" th:value="${searchUserId}" onkeyup="if(window.event.keyCode==13){searchUser()}">
+                    <input type="text" class="form-control" id="userId" th:value="${searchUserId}" oninput="SearchDebounce()" onkeyup="if(window.event.keyCode==13){searchUser()}">
                     <label for="userId">ID</label>
                 </div>
             </div>
             <div class="col-6 col-md-5 col-lg-2">
                 <div class="form-floating">
-                    <input type="text" class="form-control" id="userName" th:value="${searchUserName}" onkeyup="if(window.event.keyCode==13){searchUser()}">
+                    <input type="text" class="form-control" id="userName" th:value="${searchUserName}" oninput="SearchDebounce()" onkeyup="if(window.event.keyCode==13){searchUser()}">
                     <label for="userName">이름</label>
                 </div>
             </div>
-            <div class="col-12 ms-auto col-md-2 col-lg-1 ms-lg-0">
-                <button type="button" class="w-100 h-100 btn btn-success" id="btn-search" onclick="searchUser()">Search</button>
+            <div class="d-flex">
+                <div >
+                    <button class="btn btn-warning " id="btnSelectRow" onclick="BtnSelectRow()">선택 삭제</button>
+                </div>
+                <div >
+                    <button class="btn btn-danger" id="btnDelete" onclick="BtnDelete()">삭제 하기</button>
+                </div>
+                <div class=" bi bi-x-lg" id="btnDelCancel" onclick="BtnDelCancel()" style="cursor:pointer;">
+                </div>
             </div>
         </div>
         <!-- 테이블 영역 -->
         <div style="overflow: auto;" class="mb-5">
             <table class="table table-striped" style="min-width:800px; table-layout:fixed;">
                 <colgroup>
-                    <col width="20%" />
-                    <col width="30%" />
-                    <col width="30%" />
+                    <col width="1%" />
+                    <col width="10%" />
+                    <col width="10%" />
+                    <col width="10%" />
                     <col width="10%" />
                     <col width="10%" />
                 </colgroup>
                 <thead>
                     <tr>
+                        <th></th>
                         <th>User ID</th>
                         <th>User Name</th>
                         <th>User Password</th>
@@ -106,15 +154,16 @@
                 <tbody>
                     <div th:each="list : ${userList}">
                         <tr class="text-wrap">
+                            <td class="text-center"><input type="checkbox" name="checkDelete" th:id="${list.userId}" th:disabled="${list.authority} == 'A' ? 'true'"></td>
                             <td th:text="${list.userId}" th:id="|userId-${listStat.count}|" class="text-truncate"></td>
-                            <td><input type="text" th:id="|userName-${listStat.count}|" class="form-control" th:value='${list.userName}'></td>
-                            <td><input type="text" th:id="|userPw-${listStat.count}|" class="form-control"></td>
-                            <td class="text-center"><input type="checkbox" th:id="|authority-${listStat.count}|" class="form-check-input" th:checked="${list.authority} == 'M' or ${list.authority} == 'A'? 'true'" th:disabled="${list.authority} == 'A' ? 'true'"></td>
-                            <td><button type="button" th:id="'btnEdit-'+${listStat.count}" class="btn btn-warning" th:onclick="|EditMembers(${listStat.count})|">수정</button></td>
+                            <td><input type="text" th:id="|userName-${listStat.count}|" th:oninput="|ChangedInput(${listStat.count})|"  class="form-control" th:value='${list.userName}'></td>
+                            <td><input type="text" th:id="|userPw-${listStat.count}|" th:oninput="|ChangedInput(${listStat.count})|"  class="form-control"></td>
+                            <td class="text-center"><input type="checkbox" th:id="|authority-${listStat.count}|" th:oninput="|ChangedInput(${listStat.count})|"  class="form-check-input" th:checked="${list.authority} == 'M' or ${list.authority} == 'A'? 'true'" th:disabled="${list.authority} == 'A' ? 'true'"></td>
+                            <td><button type="button" th:id="'btnEdit-'+${listStat.count}" name="btnEdit" class="btn btn-warning" th:onclick="|EditMembers(${listStat.count})|">수정</button></td>
                         </tr>
                     </div>
                     <tr th:unless="${#lists.size(userList)} > 0">
-                        <td colspan="5" class="text-center"><h3>검색 결과가 없습니다.</h3></td>
+                        <td colspan="6" class="text-center"><h3>검색 결과가 없습니다.</h3></td>
                     </tr>
                 </tbody>
             </table>

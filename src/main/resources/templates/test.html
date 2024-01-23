@@ -10,13 +10,34 @@
 </head>
 <body th:attr="class=${viewMode} == 'dark' ? 'dark'">
     <div class="container col-md-4 mx-auto my-auto">
-        <div class="text-center dlh-headstyle">
+        <div class="text-center dlh-headstyle mb-5">
             <label for=""><h2 class="dlh-headfont1 ">Test Page</h2></label>
         </div>
-        <!-- 테스트 영역 -->
+        <!---------- 테스트 영역 ------------>
         <div>
-
+            <form id="myForm">
+                <input type="checkbox" name="checkbox1" id="checkbox1" checked>
+                <label for="checkbox1">체크박스 1</label>
+            
+                <input type="checkbox" name="checkbox2" id="checkbox2">
+                <label for="checkbox2">체크박스 2</label>
+            
+                <input type="checkbox" name="checkbox3" id="checkbox3" checked>
+                <label for="checkbox3">체크박스 3</label>
+              </form>
+              <button type="button" class="btn btn-primary" onclick="findCheckedCheckboxes()">aaaaaa</button>
         </div>
+        <script>
+            // 체크된 체크박스 찾기
+            function findCheckedCheckboxes() {
+                var checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+                var list= "";
+                checkboxes.forEach(function(checkbox) {
+                    list += checkbox.id + ", "
+                });
+                alert("체크된 체크박스 : " + list );
+            }
+          </script>
     </div>
     
 </body>

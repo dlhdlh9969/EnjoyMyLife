@@ -145,7 +145,7 @@ public class MembersController {
 		if(getUserName.isEmpty()) {
 			return "userIdEmpty";
 		}
-		if(getUserPw.isEmpty()) {
+		if(!getUserPw.isEmpty()) {
 			getUserPw = dworldService.PasswordSHA256(getUserPw);
 			membersParam.setUserPw(getUserPw);
 		}

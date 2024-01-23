@@ -10,6 +10,7 @@
 			FROM Members
 			WHERE user_id = #{userId} 
 				AND user_pw = #{userPw}
+				AND deleted_yn = "N"
 		]]>
 	</select>
 	<!-- 회원가입-->
@@ -60,15 +61,6 @@
 			WHERE m1.user_id = #{userId};
 		]]>
 	</update >
-	<!-- 회원개인설정 등록-->
-	<insert id="InsertPersetMember" parameterType="com.dlhdlh.dto.PersetMemberDto">
-		<![CDATA[ 
-			INSERT INTO PersetMember (user_id
-									, view_mode)
-			VALUES (#{userId}
-				, #{viewMode})
-		]]>
-	</insert>
 	<!-- 회원개인설정 조회-->
 	<select id="GetPersetMember" parameterType="String" resultType="com.dlhdlh.dto.PersetMemberDto">
 		<![CDATA[ 
@@ -77,7 +69,7 @@
 			WHERE user_id = #{userId}
 		]]>
 	</select>
-	<!-- 회원개인설정 인서트-->
+	<!-- 회원개인설정 등록-->
 	<insert id="SetPersetMember" parameterType="String">
 		<![CDATA[ 
 			INSERT INTO	PersetMember (user_id)
