@@ -40,6 +40,7 @@
                 modeSwitch.addEventListener("click", ()=>{
                     body.classList.toggle("dark");
                     var viewMode;
+                    
                     if(body.classList.contains("dark")){
                         modeText.innerText = "Light Mode"
                         viewMode = "dark"
@@ -48,17 +49,16 @@
                         viewMode = "light"
                     }
 
-                    var datas = {viewMode};
                     $.ajax({
                         url: "/dworld/viewmode",
                         type: "post",
-                        data: datas,
+                        data: {viewMode},
                         success: function(data) {
                             // if(data == "OK"){
                             //     Swal.fire("","통신 성공", "success")
                             // }
                         }, error: function() {
-                            Swal.fire("","ajax 통신 오류 발생", "error");
+                            Swal.fire("Error","ajax 통신 오류 발생", "error");
                         }
                     });
 

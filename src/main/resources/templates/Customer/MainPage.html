@@ -12,11 +12,11 @@
         // searchCustNm Inputbox 자동 검색
         function SearchCustNmdebounce() {
             clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => searchCust(), 1500); // 1000 당 1초
+            debounceTimer = setTimeout(() => SearchCust(), 1500); // 1000 당 1초
         }
 
         //회사명 검색
-        function searchCust(){
+        function SearchCust(){
             clearTimeout(debounceTimer);
             var searchCustNm = document.getElementById('searchCustNm').value;
             var maxrow = $("#maxrow").val();
@@ -25,7 +25,7 @@
         };
 
         // 업체 즐겨찾기 ajax
-        function custFavor(custCd){
+        function CustFavor(custCd){
             var datas = {custCd};
 
             $.ajax({
@@ -33,7 +33,7 @@
                 type: "put",
                 data: datas,
                 success: function(data) {
-                    searchCust();
+                    SearchCust();
                 }, error: function() {
                     Swal.fire("Error", "ajax 통신 오류 발생", "error");
                 }
@@ -100,7 +100,7 @@
                                                     location.reload();}
                                             });
                                     }else{
-                                        Swal.fire("Error", "접근이 잘못되었습니다.", "error");}
+                                        Swal.fire("Error Callback", "접근이 잘못되었습니다.", "warning");}
                                 }
                             }, error: function() {
                                 Swal.fire("Error", "ajax 통신 오류 발생", "error");}
@@ -160,7 +160,7 @@
                                         });
                                     
                                 }else{
-                                    Swal.fire("Error", "접근이 잘못되었습니다.", "error");
+                                    Swal.fire("Warning", "접근이 잘못되었습니다.", "error");
                                 }
                             }, error: function() {
                                 Swal.fire("Error", "ajax 통신 오류 발생", "error");
@@ -232,25 +232,25 @@
                             Swal.fire("","회사명이 비어선 안됩니다.", "warning");
                         } else{
                             if(data == "OK"){
-                                Swal.fire("","등록 되었습니다.", "success")
+                                Swal.fire("Success","등록 되었습니다.", "success")
                                     .then((result)=>{
                                         if(result){
                                             location.href="/dworld/customer";
                                         }
                                     });
                             }else{
-                                Swal.fire("","접근이 잘못되었습니다.", "error");
+                                Swal.fire("Error Callback","접근이 잘못되었습니다.", "warning");
                             } 
                         }
                     }, error: function() {
-                        Swal.fire("","ajax 통신 오류 발생", "error");
+                        Swal.fire("Error","ajax 통신 오류 발생", "error");
                     }
                 });
             });
 
             //maxrow 5줄씩 보기 컨트롤
             $("#maxrow").change(function(){
-                searchCust();
+                SearchCust();
             });
         });
     </script>
@@ -266,11 +266,11 @@
                 <div class="row m-0 p-0 gy-2">
                     <!-- 검색 버튼 삭제함 2024.01.20 김동환
                     <div class="col-6 col-md-2 col-lg-auto order-2 order-lg-1 offset-lg-3">
-                        <button type="button" class="col-12 btn btn-dark border-info text-nowrap" onclick="searchCust()">Search</button>
+                        <button type="button" class="col-12 btn btn-dark border-info text-nowrap" onclick="SearchCust()">Search</button>
                     </div> -->
                     <div class="col-12 p-0">
                         <div class="col-12 col-md-8 col-lg-4 mx-auto form-floating ">
-                            <input type="text" class="form-control" list="custNmList" id="searchCustNm" name="searchCustNm" th:value="${searchCustNm}" oninput="SearchCustNmdebounce()" onkeyup="if(window.event.keyCode==13){searchCust()}">
+                            <input type="text" class="form-control" list="custNmList" id="searchCustNm" name="searchCustNm" th:value="${searchCustNm}" oninput="SearchCustNmdebounce()" onkeyup="if(window.event.keyCode==13){SearchCust()}">
                             <label>회사명 검색</label>
                         </div>
                     </div>
@@ -310,7 +310,7 @@
                             <tr th:each="list : ${custList.getList()}" class="text-wrap">
                                 <td th:text='${list.rowNum}'></td>
                                 <td class="ps-3">
-                                    <button type="button" style="border:none; background: none;" th:onclick="|custFavor(${list.custCd})|">
+                                    <button type="button" style="border:none; background: none;" th:onclick="|CustFavor(${list.custCd})|">
                                         <i class="bx custFavorIcon" th:classappend="${list.custFavor == '1' ? 'bxs-star' : 'bx-star'}"></i>
                                     </button>
                                 </td>

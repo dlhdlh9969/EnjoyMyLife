@@ -38,14 +38,14 @@ public class CustomerController {
 			, PersetCustDto persetCustParam) throws Exception{
 		ModelAndView mv = new ModelAndView("Customer/mainPage");		
 		String requestId = servletRequest.getSession().getAttribute("userId").toString();
-		PersetMemberDto getPersetMember = membersService.GetPersetMember(requestId);
-		mv.addObject("viewMode", getPersetMember.getViewMode());
+		PersetMemberDto persetMember = membersService.GetPersetMember(requestId);
+		mv.addObject("viewMode", persetMember.getViewMode());
 		persetCustParam.setUserId(requestId);
-		PersetCustDto getPersetCust = customerService.GetPersetCust(requestId);
+		PersetCustDto persetCust = customerService.GetPersetCust(requestId);
 		
-		if(getPersetCust == null) {
+		if(persetCust == null) {
 			customerService.SetNewMember(requestId);
-			getPersetCust = customerService.GetPersetCust(requestId);
+			persetCust = customerService.GetPersetCust(requestId);
 		}
 		
 		if(persetCustParam.getMaxrow() != 0) {
@@ -53,7 +53,7 @@ public class CustomerController {
 		}
 		
 		int maxPaging = 5;//페이징 최대 갯수
-		int getMaxRow = getPersetCust.getMaxrow(); //페이지당 최대 로우 갯수
+		int getMaxRow = persetCust.getMaxrow(); //페이지당 최대 로우 갯수
 		
 		//업체명 검색 input이 null로 왔을 경우 where절에 like를 할 수 없으므로 빈값을 넣어줌!
 		if(customerParam.getSearchCustNm() == null) {
@@ -62,28 +62,28 @@ public class CustomerController {
 		
 		//업체 리스트 조회(검색 기능 포함)
 		customerParam.setUserId(requestId);
-		PageInfo<CustomerDto> getCustList = new PageInfo<>(customerService.GetCustList(pageNum, getMaxRow, customerParam), maxPaging);
+		PageInfo<CustomerDto> custList = new PageInfo<>(customerService.GetCustList(pageNum, getMaxRow, customerParam), maxPaging);
 		
 		//선택한 업체 정보를 분리하여 디테일 영역에 뿌려줄 데이터
-		CustomerDto getSelectCustInfo = new CustomerDto();
-		if(getCustList.getSize() != 0) {	
+		CustomerDto selectCustInfo = new CustomerDto();
+		if(custList.getSize() != 0) {	
 			if(selectRowNum != 0){
 				int i = 0;
-				getSelectCustInfo = getCustList.getList().get(i);
+				selectCustInfo = custList.getList().get(i);
 				
-				for(i = 0; selectRowNum < getCustList.getList().get(i).getRowNum(); i++) {
-					getSelectCustInfo = getCustList.getList().get(i+1);
+				for(i = 0; selectRowNum < custList.getList().get(i).getRowNum(); i++) {
+					selectCustInfo = custList.getList().get(i+1);
 				}
 			}else {
-				getSelectCustInfo = getCustList.getList().get(0);
+				selectCustInfo = custList.getList().get(0);
 			}
 		}
-		getSelectCustInfo.setSearchCustNm(customerParam.getSearchCustNm());
+		selectCustInfo.setSearchCustNm(customerParam.getSearchCustNm());
 		
-		mv.addObject("persetCust", getPersetCust);
-		mv.addObject("custList", getCustList);
+		mv.addObject("persetCust", custList);
+		mv.addObject("custList", custList);
 		mv.addObject("searchCustNm", customerParam.getSearchCustNm());
-		mv.addObject("selectCust", getSelectCustInfo);
+		mv.addObject("selectCust", selectCustInfo);
 		return mv;
 	}
 	
@@ -91,9 +91,9 @@ public class CustomerController {
 	@ResponseBody
 	@RequestMapping(value="/dworld/customer/control", method = RequestMethod.PUT)
 	public String CustomerUpdate(CustomerDto customerParam, HttpServletRequest servletRequest) throws Exception {
-		String getCustNm = customerParam.getCustNm().trim();
-		customerParam.setCustNm(getCustNm);
-		if(getCustNm.isEmpty()) {
+		String custNm = customerParam.getCustNm().trim();
+		customerParam.setCustNm(custNm);
+		if(custNm.isEmpty()) {
 			return "custNmEmpty";
 		}else {
 			try {
@@ -112,7 +112,7 @@ public class CustomerController {
 	@ResponseBody
 	@RequestMapping(value="/dworld/customer/control", method = RequestMethod.DELETE)
 	public String CustomerDelete(CustomerDto customerDto, HttpServletRequest servletRequest) throws Exception{
-		String requestId = (String) servletRequest.getSession().getAttribute("userId");	
+		String requestId = servletRequest.getSession().getAttribute("userId").toString();	
 		
 		try {
 			customerDto.setDeleteUser(requestId);
@@ -129,15 +129,15 @@ public class CustomerController {
 	@RequestMapping(value="/dworld/customer/control", method = RequestMethod.POST)
 	public String CustomerInsert(CustomerDto customerParam, HttpServletRequest servletRequest) throws Exception{
 		String requestId = (String) servletRequest.getSession().getAttribute("userId");
-		String getCustNm = customerParam.getCustNm().trim();
-		customerParam.setCustNm(getCustNm);
+		String custNm = customerParam.getCustNm().trim();
+		customerParam.setCustNm(custNm);
 		
-		if(getCustNm.isEmpty()) {
+		if(custNm.isEmpty()) {
 			return "custNmEmpty";
 		} else{
 			try {
 				customerParam.setInsertUser(requestId);
-				customerParam.setCustNm(getCustNm);
+				customerParam.setCustNm(custNm);
 				customerService.CustomerInsert(customerParam);
 				return "OK";
 			} catch (Exception e) {
@@ -168,8 +168,8 @@ public class CustomerController {
 		String requestId = servletRequest.getSession().getAttribute("userId").toString();
 		customerParam.setUserId(requestId);
 		
-		List<CustomerDto> getModalCustList = customerService.GetModalCustList(customerParam);
-		return getModalCustList;
+		List<CustomerDto> modalCustList = customerService.GetModalCustList(customerParam);
+		return modalCustList;
 	}
 }
 
