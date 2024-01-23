@@ -157,6 +157,7 @@ public class MembersController {
 		try {
 			String getUserAuth = membersService.GetUserAuth(requestId);
 			if(getUserAuth.equals("A") || getUserAuth.equals("M")) {
+				System.out.println(membersParam);
 				resultCount += membersService.UpdateMembers(membersParam);
 				if(resultCount > 0) {
 					return "OK";				
