@@ -256,11 +256,16 @@ header .image-text .header-text{
   font-weight: bold;
 }
 /* 헤더 스타일 */
-.dlh-headstyle label:first-letter{
-  color: var(--primary-color);
+
+.title-style{
   font-size: 3rem;
-  font-weight: bold;
   font-family: 'Oswald', sans-serif;
+}
+
+.title-style > label:first-letter{
+  color: var(--primary-color);
+  font-size: 4rem;
+  font-weight: bold;
 }
 
 /* <body> 및 기본 설정 */

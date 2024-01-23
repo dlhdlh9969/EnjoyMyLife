@@ -329,8 +329,8 @@
 <body>
     <div class="container">
         <div class="row p-0 m-0 gy-2">
-            <div class="text-center webfont1 dlh-headstyle">
-                <label><h1 th:text="${MODE == 'new' ? 'Write New WorkLog' : 'WorkLog Detail'}"></h1></label>
+            <div class="text-center webfont1 title-style">
+                <label th:text="${MODE == 'new' ? 'Write New WorkLog' : 'WorkLog Detail'}"></label>
             </div>
             <div class="row g-2 col-md-6 ms-md-auto col-lg-3">
                 <div th:if="${MODE} == 'new'" class="col">
