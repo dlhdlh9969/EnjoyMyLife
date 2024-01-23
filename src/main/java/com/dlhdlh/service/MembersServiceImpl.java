@@ -33,8 +33,8 @@ public class MembersServiceImpl implements MembersService {
 	}
 
 	@Override
-	public void UpdateMembers(MembersDto membersDto) throws Exception {
-		membersMapper.UpdateMembers(membersDto);
+	public int UpdateMembers(MembersDto membersDto) throws Exception {
+		return membersMapper.UpdateMembers(membersDto);
 	}
 
 	@Override
@@ -63,5 +63,11 @@ public class MembersServiceImpl implements MembersService {
 	public String GetUserAuth(String requestId) throws Exception {
 		// TODO Auto-generated method stub
 		return membersMapper.GetUserAuth(requestId);
+	}
+
+	@Override
+	public int DeleteMember(String userId) throws Exception {
+		// TODO Auto-generated method stub
+		return membersMapper.DeleteMember(userId);
 	}
 }

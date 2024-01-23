@@ -26,33 +26,37 @@
                 if(result.isConfirmed){
                     var checkboxes = document.querySelectorAll('input[name="checkDelete"]:checked');
                     var userIdValues = [];
-
+                    
                     checkboxes.forEach(function(checkbox) {
                         userIdValues.push(checkbox.id);
                     });
 
-                    var datas = {userIds : userIdValues};
-
-                    $.ajax({
-                        url: "/dworld/auth/memberscontrol",
-                        type: "DELETE",
-                        data: datas,
-                        dataType: "json",
-                        success: function(data) {
-                            if(data == "OK"){
-                                Swal.fire("Success","삭제 되었습니다.", "success")
-                                    .then((result)=>{
-                                        if(result){
-                                            location.href="/dworld/auth/memberscontrol";
-                                        }
-                                    });
-                            }else{
-                                Swal.fire("Error", "접근이 잘못되었습니다.", "error");
+                    if(userIdValues.length == 0){
+                        Swal.fire("Not Selected", "선택을 하지 않았습니다.", "question");
+                    }else{
+                        var datas = {userIds : userIdValues};
+                        $.ajax({
+                            url: "/dworld/auth/memberscontrol",
+                            type: "DELETE",
+                            data: datas,
+                            success: function(data) {
+                                if(data > 0){
+                                    Swal.fire("Success",data+"명이 삭제 되었습니다.", "success")
+                                        .then((result)=>{
+                                            if(result){
+                                                location.href="/dworld/auth/memberscontrol";
+                                            }
+                                        });
+                                }else{
+                                    Swal.fire("Error", "접근이 잘못되었습니다.", "error");
+                                }
+                            }, error: function() {
+                                Swal.fire("Error", "ajax 통신 오류 발생", "error");
                             }
-                        }, error: function() {
-                            Swal.fire("Error", "ajax 통신 오류 발생", "error");
-                        }
-                    });
+                        });
+                    }
+
+                    
                 }
             });
         }
@@ -91,16 +95,13 @@
         }
 
         function EditMembers(num){
-            var userIdObj = "userId-"+num;
-            var userId = document.getElementById(userIdObj).innerText;
-            var userNameObj = "userName-"+num;
-            var userName = document.getElementById(userNameObj).value;
-            var userPwObj = "userPw-"+num;
-            var userPw = document.getElementById(userPwObj).value;
-            var authorityObj = "authority-"+num;
-            var authority = document.getElementById(authorityObj).checked;
+            var userId = document.getElementById("userId-"+num).innerText;
+            var userName = document.getElementById("userName-"+num).value;
+            var userPw = document.getElementById("userPw-"+num).value;
+            var authority = document.getElementById("authority-"+num).checked;
+            var deletedYn = document.getElementById("deletedYn-"+num).value;
 
-            datas = {userId, userName, userPw, authority};
+            datas = {userId, userName, userPw, authority, deletedYn};
 
             Swal.fire({
                 title : ""
@@ -176,6 +177,7 @@
                     <col width="10%" />
                     <col width="10%" />
                     <col width="10%" />
+                    <col width="10%" />
                 </colgroup>
                 <thead>
                     <tr>
@@ -184,6 +186,7 @@
                         <th>User Name</th>
                         <th>User Password</th>
                         <th class="text-center">Authority</th>
+                        <th>삭제여부</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -191,11 +194,17 @@
                     <div th:each="list : ${userList}">
                         <tr class="text-wrap">
                             <td class="text-center"><input type="checkbox" name="checkDelete" th:id="${list.userId}" th:disabled="${list.authority} == 'A' ? 'true'"></td>
-                            <td th:text="${list.userId}" th:id="|userId-${listStat.count}|" class="text-truncate"></td>
+                            <td th:text="${list.userId}" th:id="|userId-${listStat.count}|" class="text-truncate " th:classappend="${list.deletedYn == 'Y'} ? 'text-danger'"></td>
                             <td><input type="text" th:id="|userName-${listStat.count}|" th:oninput="|ChangedInput(${listStat.count})|"  class="form-control" th:value='${list.userName}'></td>
                             <td><input type="text" th:id="|userPw-${listStat.count}|" th:oninput="|ChangedInput(${listStat.count})|"  class="form-control"></td>
-                            <td class="text-center"><input type="checkbox" th:id="|authority-${listStat.count}|" th:oninput="|ChangedInput(${listStat.count})|"  class="form-check-input" th:checked="${list.authority} == 'M' or ${list.authority} == 'A'? 'true'" th:disabled="${list.authority} == 'A' ? 'true'"></td>
-                            <td><button type="button" th:id="'btnEdit-'+${listStat.count}" name="btnEdit" class="btn btn-warning" th:onclick="|EditMembers(${listStat.count})|">수정</button></td>
+                            <td class="text-center"><input type="checkbox" th:id="|authority-${listStat.count}|" th:oninput="|ChangedInput(${listStat.count})|"  class="form-check-input" th:checked="${list.authority} == 'M' or ${list.authority} == 'A'? 'true'" ></td>
+                            <td>
+                                <select class="form-select" style="width: 4rem;" th:id="|deletedYn-${listStat.count}|" th:onchange="|ChangedInput(${listStat.count})|" th:disabled="${list.authority} == 'A' ? 'true'">
+                                    <option value="N" th:attr="selected=${list.deletedYn == 'N'}? 'selected'">N</option>
+                                    <option value="Y" th:attr="selected=${list.deletedYn == 'Y'}? 'selected'">Y</option>
+                                </select>
+                            </td>
+                            <td><button type="button" th:id="|btnEdit-${listStat.count}|" name="btnEdit" class="btn btn-warning" th:onclick="|EditMembers(${listStat.count})|">수정</button></td>
                         </tr>
                     </div>
                     <tr th:unless="${#lists.size(userList)} > 0">

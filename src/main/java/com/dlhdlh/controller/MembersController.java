@@ -152,11 +152,17 @@ public class MembersController {
 			getUserPw = dworldService.PasswordSHA256(getUserPw);
 			membersParam.setUserPw(getUserPw);
 		}
+		
+		int resultCount = 0;
 		try {
 			String getUserAuth = membersService.GetUserAuth(requestId);
 			if(getUserAuth.equals("A") || getUserAuth.equals("M")) {
-				membersService.UpdateMembers(membersParam);
-				return "OK";
+				resultCount += membersService.UpdateMembers(membersParam);
+				if(resultCount > 0) {
+					return "OK";				
+				}else {
+					return "notOK";
+				}
 			}else {
 				return "notOK";
 			}
@@ -168,12 +174,15 @@ public class MembersController {
 	}
 	
 	
-	
+	// 계정관리 다중삭제 기능 ajax
 	@ResponseBody
 	@RequestMapping(value = "/dworld/auth/memberscontrol", method = RequestMethod.DELETE)
-	public String DeleteMembers(HttpServletRequest servletRequest,@RequestParam(value ="userIds[]" ) List<String> userIds ) throws Exception {
-		
-		System.out.println("params:"+ userIds);
-		return "OK";
+	public int DeleteMembers(HttpServletRequest servletRequest,@RequestParam(value ="userIds[]" ) List<String> userIds ) throws Exception {
+		int resultCount = 0;
+		for( int i = 0 ; i< userIds.size() ; i++ ) {
+			String userId = userIds.get(i);
+			resultCount += membersService.DeleteMember(userId); 
+		}
+		return resultCount;
 	}
 }

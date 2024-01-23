@@ -41,6 +41,7 @@
 				, user_name
 				, authority
 				, join_dt
+				, deleted_yn
 			FROM Members 
 			WHERE user_id like concat('%', #{userId}, '%')
 			  AND user_name like concat('%', #{userName}, '%')
@@ -57,6 +58,7 @@
 			SET m1.user_name = #{userName},
 				m1.user_pw = if(#{userPw} = '', m2.user_pw, #{userPw}),
 			    m1.authority = IF(m2.authority = 'A', 'A', #{authority})
+				m1.deleted_yn = #{deletedYn};
 			WHERE m1.user_id = #{userId};
 		]]>
 	</update >
@@ -80,6 +82,15 @@
 		<![CDATA[ 
 			UPDATE PersetMember
 			SET view_mode = #{viewMode}
+			WHERE user_id = #{userId}
+		]]>
+	</update>
+
+	<!-- 회원 삭제 -->
+	<update id="DeleteMember" parameterType="String">
+		<![CDATA[ 
+			UPDATE Members
+			SET deleted_yn = "Y"
 			WHERE user_id = #{userId}
 		]]>
 	</update>

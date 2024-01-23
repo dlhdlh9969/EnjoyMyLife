@@ -15,7 +15,7 @@ public interface MembersService {
 
 	List<MembersDto> UserList(MembersDto membersDto) throws Exception;
 
-	void UpdateMembers(MembersDto membersDto) throws Exception;
+	int UpdateMembers(MembersDto membersDto) throws Exception;
 
 	void InsertPersetMember(PersetMemberDto persetMemberParam) throws Exception;
 
@@ -24,4 +24,6 @@ public interface MembersService {
 	PersetMemberDto GetPersetMember(String requestId) throws Exception;
 
 	String GetUserAuth(String requestId) throws Exception;
+
+	int DeleteMember(String userId) throws Exception;
 }
