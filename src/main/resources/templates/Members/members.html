@@ -26,16 +26,18 @@
                 if(result.isConfirmed){
                     var checkboxes = document.querySelectorAll('input[name="checkDelete"]:checked');
                     var userIdValues = [];
+
                     checkboxes.forEach(function(checkbox) {
                         userIdValues.push(checkbox.id);
                     });
 
-                    var datas = {param : userIdValues}
+                    var val = "김동환1";
+
+
                     $.ajax({
                         url: "/dworld/auth/memberscontrol",
                         type: "DELETE",
-                        data: datas,
-                        dataType: "json",
+                        data: {val : val},
                         success: function(data) {
                             if(data == "OK"){
                                 Swal.fire("Success","삭제 되었습니다.", "success")
