@@ -190,7 +190,7 @@
             custListAjax();
             checkCust();
             
-            //업체 선택하지 않은 업무일지response 데이터 리턴시 대응
+            //업체 선택하지 않은 업무일지 response 데이터 리턴시 대응
             if($("#cust-cd").val()==0){
                 $("#cust-cd").val("");
             };
@@ -304,7 +304,7 @@
                 }
             });
 
-            // 문서 구분 회의록은 일자 관리가 의미가 없으므로 visable
+            // 문서 구분 회의록은 visable
             // 문서 코드 A:개인업무 / B:팀 협업 / C:회의록 / D:CS / Z:기타
             $("#documentType").on("change", function () {
                 if($("#documentType").val() == 'C'){
@@ -312,19 +312,16 @@
                     $("#receipt-dt").val("");
                     $("#due-dt").prop("disabled", true);
                     $("#due-dt").val("");
-                    $("#compl-dt").prop("disabled", true);
-                    $("#compl-dt").val("");
                 }else{
                     $("#receipt-dt").prop("disabled", false);
                     $("#due-dt").prop("disabled", false);
-                    $("#compl-dt").prop("disabled", false);
                 }
             });
 
+            // 로딩시 회의록일때 visable
             if($("#documentType").val() == 'C'){
                 $("#receipt-dt").prop("disabled", true);
                 $("#due-dt").prop("disabled", true);
-                $("#compl-dt").prop("disabled", true);
             }
         });
     </script>
@@ -433,7 +430,7 @@
                 </div>
                 <div class="col-6 col-lg-3 form-floating">
                     <select class="form-select" id="documentType" name="documentType">
-                        <option th:if="${MODE == 'new'}" value="">선택 해주세요</option>
+                        <option th:if="${MODE == 'new'}">선택 해주세요</option>
                         <div th:each="docList : ${documentType}">
                             <option th:value="${docList.value}" th:text="${docList.text}" th:attr="selected=${MODE == 'detail' && docList.value == workLogDetail.documentType}? 'selected'"></option>
                         </div>
