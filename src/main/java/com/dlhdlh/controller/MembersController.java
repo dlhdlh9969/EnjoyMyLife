@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -40,7 +41,7 @@ public class MembersController {
 	
 	// 로그인 submit 프로세스
 	@ResponseBody 
-	@RequestMapping(value = "members/loginAjax", method = RequestMethod.POST)
+	@RequestMapping(value = "/members/loginAjax", method = RequestMethod.POST)
 	public String LoginProcessAjax(MembersDto membersParam, HttpServletRequest servletRequest) throws Exception{
 		String convertUserPw = dworldService.PasswordSHA256(membersParam.getUserPw());
 		membersParam.setUserPw(convertUserPw);
@@ -61,7 +62,7 @@ public class MembersController {
 	}
 	
 	// 로그아웃
-	@RequestMapping(value="members/logout") 
+	@RequestMapping(value="/members/logout") 
 	public String logout(HttpServletRequest servletRequest)throws Exception{
 		servletRequest.getSession().invalidate();
 		return "redirect:/";
@@ -69,7 +70,7 @@ public class MembersController {
 
 	// 회원가입 submit ajax통신
 	@ResponseBody 
-	@RequestMapping(value = "member/joinAjax", method = RequestMethod.POST)
+	@RequestMapping(value = "/member/joinAjax", method = RequestMethod.POST)
 	public String JoinProcess(MembersDto membersParam, HttpServletRequest servletRequest) throws Exception{
 		String getUserId = membersParam.getUserId().trim();
 		String getUserPw = membersParam.getUserPw().trim();
@@ -96,7 +97,7 @@ public class MembersController {
 	}
 	
 	// 회원관리 페이지
-	@RequestMapping(value = "dworld/auth/memberscontrol")
+	@RequestMapping(value = "/dworld/auth/memberscontrol")
 	public ModelAndView MembersControl(HttpServletRequest servletRequest, MembersDto membersParam) throws Exception {
 		ModelAndView mv = new ModelAndView("Members/members");
 		
@@ -124,13 +125,15 @@ public class MembersController {
 		mv.addObject("searchUserId", getSearchUserId);
 		mv.addObject("searchUserName", getSearchUserName);
 		mv.addObject("userList", getUserList);
+
 		return mv;
 	}
 	
 	//회원정보 수정
 	@ResponseBody
-	@RequestMapping(value = "dworld/auth/editMembers", method = RequestMethod.PUT)
-	public String EditMembers(MembersDto membersParam) throws Exception{
+	@RequestMapping(value = "/dworld/auth/memberscontrol", method = RequestMethod.PUT)
+	public String EditMembers(MembersDto membersParam, HttpServletRequest servletRequest) throws Exception{
+		String requestId = servletRequest.getSession().getAttribute("userId").toString();
 		if(membersParam.getAuthority().equals("true")) {
 			membersParam.setAuthority("M");
 		}else {
@@ -150,11 +153,25 @@ public class MembersController {
 			membersParam.setUserPw(getUserPw);
 		}
 		try {
-			membersService.UpdateMembers(membersParam);
-			return "OK";
+			String getUserAuth = membersService.GetUserAuth(requestId);
+			if(getUserAuth.equals("A") || getUserAuth.equals("M")) {
+				membersService.UpdateMembers(membersParam);
+				return "OK";
+			}else {
+				return "notOK";
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "notOK";
 		}
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/dworld/auth/memberscontrol", method = RequestMethod.DELETE)
+	public String DeleteMembers(HttpServletRequest servletRequest, @RequestParam(value = "params") List<String> params ) throws Exception {
+		
+		System.out.println("params:"+ params);
+		return "OK";
 	}
 }

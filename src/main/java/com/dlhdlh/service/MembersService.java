@@ -13,8 +13,6 @@ public interface MembersService {
 	//회원가입 프로세스
 	void InsertMember(MembersDto membersDto) throws Exception;
 
-	MembersDto ManagerCheck(String userId) throws Exception;
-
 	List<MembersDto> UserList(MembersDto membersDto) throws Exception;
 
 	void UpdateMembers(MembersDto membersDto) throws Exception;
@@ -25,4 +23,5 @@ public interface MembersService {
 
 	PersetMemberDto GetPersetMember(String requestId) throws Exception;
 
+	String GetUserAuth(String requestId) throws Exception;
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dlhdlh.mapper.MembersMapper">
-	<!-- 멤버 정보 조회-->
+	<!-- 로그인 조회-->
 	<select id="LoginMemberInfo" parameterType="com.dlhdlh.dto.MembersDto" resultType="com.dlhdlh.dto.MembersDto">
 		<![CDATA[ 
 			SELECT user_id
@@ -27,10 +27,9 @@
 		]]>
 	</insert>
 	<!-- 권한 체크 -->
-	<select id="ManagerCheck" resultType="com.dlhdlh.dto.MembersDto" parameterType="String">
+	<select id="GetUserAuth" resultType="String" parameterType="String">
 		<![CDATA[ 
-			SELECT user_id
-				, authority 
+			SELECT authority 
 			FROM Members 
 			WHERE user_id = #{userId}
 		]]>

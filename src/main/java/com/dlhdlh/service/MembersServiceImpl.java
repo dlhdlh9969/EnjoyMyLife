@@ -28,11 +28,6 @@ public class MembersServiceImpl implements MembersService {
 	}
 
 	@Override
-	public MembersDto ManagerCheck(String userId) throws Exception {
-		return membersMapper.ManagerCheck(userId);
-	}
-
-	@Override
 	public List<MembersDto> UserList(MembersDto membersDto) throws Exception {
 		return membersMapper.UserList(membersDto);
 	}
@@ -63,5 +58,10 @@ public class MembersServiceImpl implements MembersService {
 			return getPersetMember;
 		}
 	}
-	
+
+	@Override
+	public String GetUserAuth(String requestId) throws Exception {
+		// TODO Auto-generated method stub
+		return membersMapper.GetUserAuth(requestId);
+	}
 }

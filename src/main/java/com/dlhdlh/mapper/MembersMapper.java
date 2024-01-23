@@ -14,8 +14,6 @@ public interface MembersMapper {
 
 	public void InsertMember(MembersDto membersDto) throws Exception;
 
-	public MembersDto ManagerCheck(String userId) throws Exception;
-
 	public List<MembersDto> UserList(MembersDto membersDto) throws Exception;
 
 	public void UpdateMembers(MembersDto membersDto) throws Exception;
@@ -27,5 +25,7 @@ public interface MembersMapper {
 	public PersetMemberDto GetPersetMember(String requestId) throws Exception;
 
 	public void SetPersetMember(String requestId) throws Exception;
+
+	public String GetUserAuth(String requestId) throws Exception;
 
 }

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.dlhdlh.dto.MembersDto;
 import com.dlhdlh.service.MembersService;
 
 @Component
@@ -19,15 +18,14 @@ public class AuthorityInterceptor implements HandlerInterceptor {
 	
 	@Override
 	public boolean preHandle(HttpServletRequest servletRequest, HttpServletResponse response, Object handler) throws Exception { 
-		String userId = (String) servletRequest.getSession().getAttribute("userId");
+		String requestId = (String) servletRequest.getSession().getAttribute("userId");
 		
 		// 관리자 여부 체크
-		MembersDto managerCheck = membersService.ManagerCheck(userId);
-		String auth = managerCheck.getAuthority();
+		String checkUserAuth = membersService.GetUserAuth(requestId);
 		
-		if(auth.equals("A")) {
+		if(checkUserAuth.equals("A")) {
 			return true;
-		}else if(auth.equals("M")){
+		}else if(checkUserAuth.equals("M")){
 			return true;
 		}
 		
