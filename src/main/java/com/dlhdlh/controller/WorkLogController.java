@@ -114,45 +114,45 @@ public class WorkLogController {
 		}
 		
 		// 개인별 게시판 설정값 조회
-		PersetWorkLogDto gwtPersetWorkLog = worklogService.GetPersetWorkLog(requestId);
-		if(gwtPersetWorkLog == null) {
+		PersetWorkLogDto persetWorkLog = worklogService.GetPersetWorkLog(requestId);
+		if(persetWorkLog == null) {
 			worklogService.SetNewMember(requestId);
-			gwtPersetWorkLog = worklogService.GetPersetWorkLog(requestId);
+			persetWorkLog = worklogService.GetPersetWorkLog(requestId);
 		}
 		
 		// 개인별 게시판 설정값 업데이트 여부
 		if(entrance == 1) {
-			worklogParam.setTitle(gwtPersetWorkLog.getTitle());
-			worklogParam.setContent(gwtPersetWorkLog.getContent());
-			worklogParam.setDocumentType(gwtPersetWorkLog.getDocumentType());
-			worklogParam.setCustNm(gwtPersetWorkLog.getCustNm());
-			worklogParam.setStartDt(gwtPersetWorkLog.getStartDt());
-			worklogParam.setEndDt(gwtPersetWorkLog.getEndDt());
-			worklogParam.setOrder1(gwtPersetWorkLog.getOrder1());
-			worklogParam.setOrder2(gwtPersetWorkLog.getOrder2());
-			worklogParam.setOrderby1(gwtPersetWorkLog.getOrderby1());
-			worklogParam.setComplYn(gwtPersetWorkLog.getComplYn());
+			worklogParam.setTitle(persetWorkLog.getTitle());
+			worklogParam.setContent(persetWorkLog.getContent());
+			worklogParam.setDocumentType(persetWorkLog.getDocumentType());
+			worklogParam.setCustNm(persetWorkLog.getCustNm());
+			worklogParam.setStartDt(persetWorkLog.getStartDt());
+			worklogParam.setEndDt(persetWorkLog.getEndDt());
+			worklogParam.setOrder1(persetWorkLog.getOrder1());
+			worklogParam.setOrder2(persetWorkLog.getOrder2());
+			worklogParam.setOrderby1(persetWorkLog.getOrderby1());
+			worklogParam.setComplYn(persetWorkLog.getComplYn());
 			}else {
-				gwtPersetWorkLog.setTitle(worklogParam.getTitle());
-				gwtPersetWorkLog.setContent(worklogParam.getContent());
-				gwtPersetWorkLog.setDocumentType(worklogParam.getDocumentType());
-				gwtPersetWorkLog.setCustNm(worklogParam.getCustNm());
-				gwtPersetWorkLog.setStartDt(worklogParam.getStartDt());
-				gwtPersetWorkLog.setEndDt(worklogParam.getEndDt());
-				gwtPersetWorkLog.setOrder1(worklogParam.getOrder1());
-				gwtPersetWorkLog.setOrder2(worklogParam.getOrder2());
-				gwtPersetWorkLog.setOrderby1(worklogParam.getOrderby1());
-				gwtPersetWorkLog.setComplYn(worklogParam.getComplYn());
-				gwtPersetWorkLog.setMaxrow(worklogParam.getMaxrow());
-				worklogService.UpdatePersetWorkLog(gwtPersetWorkLog);
+				persetWorkLog.setTitle(worklogParam.getTitle());
+				persetWorkLog.setContent(worklogParam.getContent());
+				persetWorkLog.setDocumentType(worklogParam.getDocumentType());
+				persetWorkLog.setCustNm(worklogParam.getCustNm());
+				persetWorkLog.setStartDt(worklogParam.getStartDt());
+				persetWorkLog.setEndDt(worklogParam.getEndDt());
+				persetWorkLog.setOrder1(worklogParam.getOrder1());
+				persetWorkLog.setOrder2(worklogParam.getOrder2());
+				persetWorkLog.setOrderby1(worklogParam.getOrderby1());
+				persetWorkLog.setComplYn(worklogParam.getComplYn());
+				persetWorkLog.setMaxrow(worklogParam.getMaxrow());
+				worklogService.UpdatePersetWorkLog(persetWorkLog);
 			}
 
 		// 업무일지 리스트 
 		int maxPaging = 5;//페이징 최대 갯수
-		int maxRow = gwtPersetWorkLog.getMaxrow(); //페이지당 최대 로우 갯수
+		int maxRow = persetWorkLog.getMaxrow(); //페이지당 최대 로우 갯수
 		worklogParam.setUserId(requestId);
 		
-		// gwtPersetWorkLog 저장되고나서 DB에 보낼 값으로 변환
+		// persetWorkLog 저장되고나서 DB에 보낼 값으로 변환
 		if(worklogParam.getComplYn().equals("A")) {
 			worklogParam.setComplYn("");
 		}
@@ -165,28 +165,28 @@ public class WorkLogController {
 			worklogParam.setEndDt(endDt.toString());
 		}
 		
-		PageInfo<WorkLogDto> getWorkLogList = new PageInfo<>(worklogService.GetWorkLogList(pageNum, maxRow, worklogParam), maxPaging);
+		PageInfo<WorkLogDto> workLogList = new PageInfo<>(worklogService.GetWorkLogList(pageNum, maxRow, worklogParam), maxPaging);
 		
 		// 업무일지 문서 종류 구분값
-		List<DworldValuesDto> getDocumentType = dworldService.ListDworldValues("documentType");
+		List<DworldValuesDto> documentType = dworldService.ListDworldValues("documentType");
 		
 		// 현재 페이지 주소 저장
 		dworldService.SetPrevPage(servletRequest);
 		
 		// Dday 안전일 기준값
-		List<DworldValuesDto> getDdayValues = dworldService.ListDworldValues("Dday");
+		List<DworldValuesDto> dDayValues = dworldService.ListDworldValues("Dday");
 		
-		HashMap<String, Integer> dDayValues= new HashMap<String, Integer>();
-		dDayValues.put("danger", Integer.parseInt(getDdayValues.get(0).getValue())); //위험
-		dDayValues.put("safe", Integer.parseInt(getDdayValues.get(1).getValue())); //주의
+		HashMap<String, Integer> convertDday= new HashMap<String, Integer>();
+		convertDday.put("danger", Integer.parseInt(dDayValues.get(0).getValue())); //위험
+		convertDday.put("safe", Integer.parseInt(dDayValues.get(1).getValue())); //주의
 		
 				
 // prevPage 저장 방식을 session으로 변경함 2024.01.21 김동환
 //		dworldController.SetPrevPage(servletRequest, "WorkLog");
-		mv.addObject("persetWorkLog", gwtPersetWorkLog);
-		mv.addObject("documentType", getDocumentType);
-		mv.addObject("dDayValues", dDayValues);
-		mv.addObject("workLogList", getWorkLogList);
+		mv.addObject("persetWorkLog", persetWorkLog);
+		mv.addObject("documentType", documentType);
+		mv.addObject("dDayValues", convertDday);
+		mv.addObject("workLogList", workLogList);
 		return mv;		
 	}
 	
@@ -195,34 +195,34 @@ public class WorkLogController {
 	public ModelAndView WorkLogWrite(HttpServletRequest servletRequest, WorkLogDto worklogParam) throws Exception{
 		ModelAndView mv = new ModelAndView("WorkLog/detailPage");
 		String requestId = servletRequest.getSession().getAttribute("userId").toString();
-		PersetMemberDto getPersetMember = membersService.GetPersetMember(requestId);
-		mv.addObject("viewMode", getPersetMember.getViewMode());
+		PersetMemberDto persetMember = membersService.GetPersetMember(requestId);
+		mv.addObject("viewMode", persetMember.getViewMode());
 		
 		worklogParam.setUserId(requestId);
-		WorkLogDto getWorklogDetail= worklogService.GetWorkLogDetail(worklogParam);
+		WorkLogDto worklogDetail= worklogService.GetWorkLogDetail(worklogParam);
 		
 		//신규 등록과 기존 디테일과 구분
-		if(getWorklogDetail == null) {
+		if(worklogDetail == null) {
 			mv.addObject("MODE", "new");
 		}else {
 			mv.addObject("MODE", "detail");	
 		}
 		
 		// 업무일지 문서 종류 구분값
-		List<DworldValuesDto> getDocumentType = dworldService.ListDworldValues("documentType");
+		List<DworldValuesDto> documentType = dworldService.ListDworldValues("documentType");
 		// Dday 안전일 기준값
-		List<DworldValuesDto> getDdayValues = dworldService.ListDworldValues("Dday");
-		HashMap<String, Integer> dDayValues= new HashMap<String, Integer>();
-		dDayValues.put("1", Integer.parseInt(getDdayValues.get(0).getValue())); 
-		dDayValues.put("2", Integer.parseInt(getDdayValues.get(1).getValue())); 
+		List<DworldValuesDto> dDayValues = dworldService.ListDworldValues("Dday");
+		HashMap<String, Integer> convertDday= new HashMap<String, Integer>();
+		convertDday.put("1", Integer.parseInt(dDayValues.get(0).getValue())); 
+		convertDday.put("2", Integer.parseInt(dDayValues.get(1).getValue())); 
 		
 		//이전페이지 주소 조회
-		String getPrevPage = servletRequest.getSession().getAttribute("prevPage").toString();
+		String prevPage = servletRequest.getSession().getAttribute("prevPage").toString();
 		
-		mv.addObject("workLogDetail",getWorklogDetail);
-		mv.addObject("documentType", getDocumentType);
-		mv.addObject("dDayValues", dDayValues);
-		mv.addObject("prevPage", getPrevPage);	
+		mv.addObject("workLogDetail",worklogDetail);
+		mv.addObject("documentType", documentType);
+		mv.addObject("dDayValues", convertDday);
+		mv.addObject("prevPage", prevPage);	
 		return mv;
 	}
 	
@@ -231,20 +231,20 @@ public class WorkLogController {
 	@RequestMapping(value="/dworld/worklog/control", method = RequestMethod.POST)
 	public String InsertWorkLog(HttpServletRequest servletRequest, WorkLogDto worklogParam) throws Exception {
 
-		String requestUserId = (String) servletRequest.getSession().getAttribute("userId");
-		worklogParam.setUserId(requestUserId);
+		String requestId = (String) servletRequest.getSession().getAttribute("userId");
+		worklogParam.setUserId(requestId);
 		
-		String getReceiptDt = worklogParam.getReceiptDt();
-		String getDueDt = worklogParam.getDueDt();
-		String getComplDt = worklogParam.getComplDt();
+		String receiptDt = worklogParam.getReceiptDt();
+		String dueDt = worklogParam.getDueDt();
+		String complDt = worklogParam.getComplDt();
 
-		if(getReceiptDt.equals("")) {
+		if(receiptDt.equals("")) {
 			worklogParam.setReceiptDt(null);
 		}
-		if(getDueDt.equals("")) {
+		if(dueDt.equals("")) {
 			worklogParam.setDueDt(null);
 		} 
-		if(getComplDt.equals("")) {
+		if(complDt.equals("")) {
 			worklogParam.setComplDt(null);
 		}
 		try {
@@ -259,8 +259,8 @@ public class WorkLogController {
 	@RequestMapping(value = "/dworld/worklog/control", method = RequestMethod.DELETE)
 	public String DeleteWorkLog(HttpServletRequest servletRequest, WorkLogDto worklogParam) throws Exception {
 
-		String requestUserId = (String) servletRequest.getSession().getAttribute("userId");
-		worklogParam.setUserId(requestUserId);
+		String requestId = (String) servletRequest.getSession().getAttribute("userId");
+		worklogParam.setUserId(requestId);
 		try {
 			worklogService.DeleteWorkLog(worklogParam);
 			return "OK";
@@ -273,8 +273,8 @@ public class WorkLogController {
 	@RequestMapping(value = "/dworld/worklog/control", method = RequestMethod.PUT)
 	public String UpdateWorkLog(HttpServletRequest servletRequest, WorkLogDto worklogParam) throws Exception {
 		
-		String requestUserId = (String) servletRequest.getSession().getAttribute("userId");
-		worklogParam.setUserId(requestUserId);
+		String requestId = (String) servletRequest.getSession().getAttribute("userId");
+		worklogParam.setUserId(requestId);
 
 		if(worklogParam.getReceiptDt().equals("")) {
 			worklogParam.setReceiptDt(null);

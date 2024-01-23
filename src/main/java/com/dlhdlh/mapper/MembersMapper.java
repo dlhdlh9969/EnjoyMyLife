@@ -10,7 +10,7 @@ import com.dlhdlh.dto.PersetMemberDto;
 @Mapper
 public interface MembersMapper {
 
-	public MembersDto LoginMemberInfo(MembersDto membersDto) throws Exception;
+	public MembersDto GetLoginMemberInfo(MembersDto membersDto) throws Exception;
 
 	public void InsertMember(MembersDto membersDto) throws Exception;
 

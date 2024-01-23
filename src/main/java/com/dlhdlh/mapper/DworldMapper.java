@@ -9,7 +9,7 @@ import com.dlhdlh.dto.DworldValuesDto;
 @Mapper
 public interface DworldMapper {
 
-	DworldValuesDto DworldValues(String varName) throws Exception;
+	DworldValuesDto GetDworldValues(String varName) throws Exception;
 
 	List<DworldValuesDto> ListDworldValues(String varName) throws Exception;
 	

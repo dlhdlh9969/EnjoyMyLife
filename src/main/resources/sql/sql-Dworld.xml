@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dlhdlh.mapper.DworldMapper">
 
-	<select id="DworldValues" parameterType="String" resultType="com.dlhdlh.dto.DworldValuesDto">
+	<select id="GetDworldValues" parameterType="String" resultType="com.dlhdlh.dto.DworldValuesDto">
 		<![CDATA[ 
 			SELECT * 
 			FROM DworldValues

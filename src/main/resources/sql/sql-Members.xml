@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dlhdlh.mapper.MembersMapper">
 	<!-- 로그인 조회-->
-	<select id="LoginMemberInfo" parameterType="com.dlhdlh.dto.MembersDto" resultType="com.dlhdlh.dto.MembersDto">
+	<select id="GetLoginMemberInfo" parameterType="com.dlhdlh.dto.MembersDto" resultType="com.dlhdlh.dto.MembersDto">
 		<![CDATA[ 
 			SELECT user_id
 				, user_name 

@@ -17,8 +17,8 @@ public class MembersServiceImpl implements MembersService {
 
 	//접속자 정보
 	@Override
-	public MembersDto LoginMemberInfo(MembersDto membersDto) throws Exception {
-		return membersMapper.LoginMemberInfo(membersDto);
+	public MembersDto GetLoginMemberInfo(MembersDto membersDto) throws Exception {
+		return membersMapper.GetLoginMemberInfo(membersDto);
 	}
 	
 	//회원가입

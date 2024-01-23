@@ -8,7 +8,7 @@ import com.dlhdlh.dto.PersetMemberDto;
 public interface MembersService {
 
 	//접속자 정보
-	MembersDto LoginMemberInfo(MembersDto membersDto) throws Exception;
+	MembersDto GetLoginMemberInfo(MembersDto membersDto) throws Exception;
 
 	//회원가입 프로세스
 	void InsertMember(MembersDto membersDto) throws Exception;

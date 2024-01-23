@@ -45,15 +45,15 @@ public class MembersController {
 	public String LoginProcessAjax(MembersDto membersParam, HttpServletRequest servletRequest) throws Exception{
 		String convertUserPw = dworldService.PasswordSHA256(membersParam.getUserPw());
 		membersParam.setUserPw(convertUserPw);
-		MembersDto getLoginUser = membersService.LoginMemberInfo(membersParam);
+		MembersDto loginUserInfo = membersService.GetLoginMemberInfo(membersParam);
 		
-		DworldValuesDto dworldValues =  dworldService.DworldValues("SessionInterval");
+		DworldValuesDto dworldValues =  dworldService.GetDworldValues("SessionInterval");
 		String sessionInterval = dworldValues.getValue();
-		if(getLoginUser != null) {
+		if(loginUserInfo != null) {
 			HttpSession session = servletRequest.getSession();
-			session.setAttribute("userId", getLoginUser.getUserId());
-			session.setAttribute("userName", getLoginUser.getUserName());
-			session.setAttribute("auth", getLoginUser.getAuthority());
+			session.setAttribute("userId", loginUserInfo.getUserId());
+			session.setAttribute("userName", loginUserInfo.getUserName());
+			session.setAttribute("auth", loginUserInfo.getAuthority());
 			session.setMaxInactiveInterval(Integer.parseInt(sessionInterval)); //초 단위 10분=600초
 			return "OK";
 		}else {
@@ -72,22 +72,22 @@ public class MembersController {
 	@ResponseBody 
 	@RequestMapping(value = "/member/joinAjax", method = RequestMethod.POST)
 	public String JoinProcess(MembersDto membersParam, HttpServletRequest servletRequest) throws Exception{
-		String getUserId = membersParam.getUserId().trim();
-		String getUserPw = membersParam.getUserPw().trim();
-		String getUserName = membersParam.getUserName().trim();		
+		String userId = membersParam.getUserId().trim();
+		String userPw = membersParam.getUserPw().trim();
+		String userName = membersParam.getUserName().trim();		
 		
-		if(getUserId.isEmpty()) {
+		if(userId.isEmpty()) {
 			return "userIdEmpty";
 		}
-		if(getUserPw.isEmpty()) {
+		if(userPw.isEmpty()) {
 			return "userPwEmpty";
 		}
-		if(getUserName.isEmpty()) {
+		if(userName.isEmpty()) {
 			return "userNameEmpty";
 		}
 		try {
-			getUserPw = dworldService.PasswordSHA256(getUserPw);
-			membersParam.setUserPw(getUserPw);
+			userPw = dworldService.PasswordSHA256(userPw);
+			membersParam.setUserPw(userPw);
 			membersService.InsertMember(membersParam);
 			return "OK"; 
 		} catch (Exception e) {
@@ -111,8 +111,8 @@ public class MembersController {
 			mv.addObject("viewMode", "light");
 		}
 		
-		String getSearchUserId = membersParam.getUserId();
-		String getSearchUserName = membersParam.getUserName();
+		String searchUserId = membersParam.getUserId();
+		String searchUserName = membersParam.getUserName();
 		
 		if(membersParam.getUserId() == null) {
 			membersParam.setUserId("");
@@ -120,11 +120,11 @@ public class MembersController {
 		if(membersParam.getUserName() == null) {
 			membersParam.setUserName("");
 		}
-		List<MembersDto> getUserList = membersService.UserList(membersParam);
+		List<MembersDto> userList = membersService.UserList(membersParam);
 		
-		mv.addObject("searchUserId", getSearchUserId);
-		mv.addObject("searchUserName", getSearchUserName);
-		mv.addObject("userList", getUserList);
+		mv.addObject("searchUserId", searchUserId);
+		mv.addObject("searchUserName", searchUserName);
+		mv.addObject("userList", userList);
 
 		return mv;
 	}
@@ -140,23 +140,23 @@ public class MembersController {
 			membersParam.setAuthority("G");
 		}
 		
-		String getUserName = membersParam.getUserName().trim();
-		String getUserPw = membersParam.getUserPw().trim();
-		membersParam.setUserName(getUserName);
-		membersParam.setUserPw(getUserPw);
+		String userName = membersParam.getUserName().trim();
+		String userPw = membersParam.getUserPw().trim();
+		membersParam.setUserName(userName);
+		membersParam.setUserPw(userPw);
 		
-		if(getUserName.isEmpty()) {
+		if(userName.isEmpty()) {
 			return "userIdEmpty";
 		}
-		if(!getUserPw.isEmpty()) {
-			getUserPw = dworldService.PasswordSHA256(getUserPw);
-			membersParam.setUserPw(getUserPw);
+		if(!userPw.isEmpty()) {
+			userPw = dworldService.PasswordSHA256(userPw);
+			membersParam.setUserPw(userPw);
 		}
 		
 		int resultCount = 0;
 		try {
-			String getUserAuth = membersService.GetUserAuth(requestId);
-			if(getUserAuth.equals("A") || getUserAuth.equals("M")) {
+			String userAuth = membersService.GetUserAuth(requestId);
+			if(userAuth.equals("A") || userAuth.equals("M")) {
 				System.out.println(membersParam);
 				resultCount += membersService.UpdateMembers(membersParam);
 				if(resultCount > 0) {

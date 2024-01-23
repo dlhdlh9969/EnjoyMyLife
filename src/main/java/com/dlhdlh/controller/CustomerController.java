@@ -80,7 +80,7 @@ public class CustomerController {
 		}
 		selectCustInfo.setSearchCustNm(customerParam.getSearchCustNm());
 		
-		mv.addObject("persetCust", custList);
+		mv.addObject("persetCust", persetCust);
 		mv.addObject("custList", custList);
 		mv.addObject("searchCustNm", customerParam.getSearchCustNm());
 		mv.addObject("selectCust", selectCustInfo);

@@ -18,7 +18,7 @@
         //회사명 검색
         function SearchCust(){
             clearTimeout(debounceTimer);
-            var searchCustNm = document.getElementById('searchCustNm').value;
+            var searchCustNm = document.getElementById('input-searchCustNm').value;
             var maxrow = $("#maxrow").val();
             window.location.href= "/dworld/customer?searchCustNm=" + encodeURIComponent(searchCustNm) 
                                 + "&maxrow=" + encodeURIComponent(maxrow);
@@ -270,7 +270,7 @@
                     </div> -->
                     <div class="col-12 p-0">
                         <div class="col-12 col-md-8 col-lg-4 mx-auto form-floating ">
-                            <input type="text" class="form-control" list="custNmList" id="searchCustNm" name="searchCustNm" th:value="${searchCustNm}" oninput="SearchCustNmdebounce()" onkeyup="if(window.event.keyCode==13){SearchCust()}">
+                            <input type="text" class="form-control" list="custNmList" id="input-searchCustNm" name="input-searchCustNm" th:value="${searchCustNm}" oninput="SearchCustNmdebounce()" onkeyup="if(window.event.keyCode==13){SearchCust()}">
                             <label>회사명 검색</label>
                         </div>
                     </div>

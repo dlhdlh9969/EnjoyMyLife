@@ -7,10 +7,10 @@
     <title>D-world/회원가입</title>
     <script>
         function JoinAjax(){
-            var userId = $("#userId").val();
-            var userPw = $("#userPw").val();
-            var checkUserPw = $("#checkUserPw").val();
-            var userName = $("#userName").val();
+            var userId = $("#input-userId").val();
+            var userPw = $("#input-userPw1").val();
+            var checkUserPw = $("#input-userPw2").val();
+            var userName = $("#input-userName").val();
             var datas = { userId: userId, userPw: userPw, userName: userName };
 
             if(userPw != checkUserPw){
@@ -67,25 +67,25 @@
             </div>
             <div>
                 <div class="form-floating">
-                    <input type="text" id="userId" name="userId" class="form-control" onkeyup="if(window.event.keyCode==13){JoinAjax()}">
+                    <input type="text" id="input-userId" name="input-userId" class="form-control" onkeyup="if(window.event.keyCode==13){JoinAjax()}">
                     <label>ID</label>
                 </div>
             </div>
             <div>
                 <div class="form-floating">
-                    <input type="password" id="userPw" name="userPw" class="form-control" onkeyup="if(window.event.keyCode==13){JoinAjax()}">
+                    <input type="password" id="input-userPw1" name="input-userPw1" class="form-control" onkeyup="if(window.event.keyCode==13){JoinAjax()}">
                     <label>비밀번호</label>
                 </div>
             </div>
             <div>
                 <div class="form-floating">
-                    <input type="password" id="checkUserPw" name="checkUserPw" class="form-control" onkeyup="if(window.event.keyCode==13){JoinAjax()}">
+                    <input type="password" id="input-userPw2" name="input-userPw2" class="form-control" onkeyup="if(window.event.keyCode==13){JoinAjax()}">
                     <label>비밀번호 확인</label>
                 </div>
             </div>
             <div>
                 <div class="form-floating">
-                    <input type="text" id="userName" name="userName" class="form-control" onkeyup="if(window.event.keyCode==13){JoinAjax()}">
+                    <input type="text" id="input-userName" name="input-userName" class="form-control" onkeyup="if(window.event.keyCode==13){JoinAjax()}">
                     <label>이름</label>
                 </div>
             </div>

@@ -32,8 +32,8 @@ public class DworldController {
 	public ModelAndView IndexPage(HttpServletRequest servletRequest)throws Exception{
 		ModelAndView mv = new ModelAndView("index");
 		String requestId = servletRequest.getSession().getAttribute("userId").toString();
-		PersetMemberDto getPersetMember = membersService.GetPersetMember(requestId);
-		mv.addObject("viewMode", getPersetMember.getViewMode());
+		PersetMemberDto persetMember = membersService.GetPersetMember(requestId);
+		mv.addObject("viewMode", persetMember.getViewMode());
 		return mv;
 	}
 	
@@ -42,8 +42,8 @@ public class DworldController {
 	public ModelAndView TestPage(HttpServletRequest servletRequest) throws Exception {
 		ModelAndView mv = new ModelAndView("test");
 		String requestId = servletRequest.getSession().getAttribute("userId").toString();
-		PersetMemberDto getPersetMember = membersService.GetPersetMember(requestId);
-		mv.addObject("viewMode", getPersetMember.getViewMode());
+		PersetMemberDto persetMember = membersService.GetPersetMember(requestId);
+		mv.addObject("viewMode", persetMember.getViewMode());
 		return mv;
 	}
 	
@@ -69,11 +69,11 @@ public class DworldController {
 	public void ViewModeUpdate(HttpServletRequest servletRequest
 							, @RequestParam(required=false) String viewMode) throws Exception{
 		String requestId = servletRequest.getSession().getAttribute("userId").toString();
-		PersetMemberDto persetMemberValues = new PersetMemberDto();
-		persetMemberValues.setUserId(requestId);
-		persetMemberValues.setViewMode(viewMode);
+		PersetMemberDto persetMember = new PersetMemberDto();
+		persetMember.setUserId(requestId);
+		persetMember.setViewMode(viewMode);
 		if(requestId != null) {
-			membersService.UpdatePersetMember(persetMemberValues);
+			membersService.UpdatePersetMember(persetMember);
 		}
 	}
 }

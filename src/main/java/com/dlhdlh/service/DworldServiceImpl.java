@@ -19,8 +19,8 @@ public class DworldServiceImpl implements DworldService {
 	DworldMapper dworldMapper;
 	
 	@Override
-	public DworldValuesDto DworldValues(String varName) throws Exception {
-		return dworldMapper.DworldValues(varName);
+	public DworldValuesDto GetDworldValues(String varName) throws Exception {
+		return dworldMapper.GetDworldValues(varName);
 	}
 	// prevPage 저장 방식을 session으로 변경함 2024.01.21 김동환
 //	@Override
