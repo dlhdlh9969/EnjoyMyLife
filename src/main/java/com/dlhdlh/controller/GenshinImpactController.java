@@ -22,6 +22,7 @@ public class GenshinImpactController {
 		String requestId = servletRequest.getSession().getAttribute("userId").toString();
 		PersetMemberDto persetMember = membersService.GetPersetMember(requestId);
 		mv.addObject("viewMode", persetMember.getViewMode());
+
 		return mv;
 	}
 }
