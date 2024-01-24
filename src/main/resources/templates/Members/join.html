@@ -2,62 +2,62 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <header th:include="header :: header"></header>    
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>D-world/회원가입</title>
-    <script>
-        function JoinAjax(){
-            var userId = $("#input-userId").val();
-            var userPw = $("#input-userPw1").val();
-            var checkUserPw = $("#input-userPw2").val();
-            var userName = $("#input-userName").val();
-            var datas = { userId: userId, userPw: userPw, userName: userName };
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>D-world/회원가입</title>
+<script>
+    function JoinAjax(){
+        var userId = $("#input-userId").val();
+        var userPw = $("#input-userPw1").val();
+        var checkUserPw = $("#input-userPw2").val();
+        var userName = $("#input-userName").val();
+        var datas = { userId: userId, userPw: userPw, userName: userName };
 
-            if(userPw != checkUserPw){
-                Swal.fire("Check Your Password","비밀번호가 일치 하지 않습니다.", "warning");
-            }else{
-                $.ajax({
-                url: "/member/joinAjax",
-                type: "post",
-                data: datas,
-                success: function(data) {
-                    if(data == "userIdEmpty"){
-                        Swal.fire("ID Empty","ID를 입력해주세요.", "warning");
+        if(userPw != checkUserPw){
+            Swal.fire("Check Your Password","비밀번호가 일치 하지 않습니다.", "warning");
+        }else{
+            $.ajax({
+            url: "/member/joinAjax",
+            type: "post",
+            data: datas,
+            success: function(data) {
+                if(data == "userIdEmpty"){
+                    Swal.fire("ID Empty","ID를 입력해주세요.", "warning");
+                }else{
+                    if(data == "userPwEmpty"){
+                        Swal.fire("Password Empty","비밀번호를 입력해주세요.", "warning");
                     }else{
-                        if(data == "userPwEmpty"){
-                            Swal.fire("Password Empty","비밀번호를 입력해주세요.", "warning");
+                        if(data == "userNameEmpty"){
+                            Swal.fire("Your Name Empty","이름을 입력해주세요.", "warning");
                         }else{
-                            if(data == "userNameEmpty"){
-                                Swal.fire("Your Name Empty","이름을 입력해주세요.", "warning");
+                            if(data == "OK"){
+                                Swal.fire("Success","회원가입이 되었습니다.", "success")
+                                    .then((result=>{ if(result){
+                                        location.href="/";
+                                    }})
+                                );
                             }else{
-                                if(data == "OK"){
-                                    Swal.fire("Success","회원가입이 되었습니다.", "success")
-                                        .then((result=>{ if(result){
-                                            location.href="/";
-                                        }})
-                                    );
-                                }else{
-                                    Swal.fire("Error","이미 존재하는 ID입니다. 다시 입력해 주세요.", "error");
-                                }
+                                Swal.fire("Error","이미 존재하는 ID입니다. 다시 입력해 주세요.", "error");
                             }
                         }
                     }
-                }, error: function() {
-                    alert("ajax 통신 오류 발생");
                 }
-            });
+            }, error: function() {
+                alert("ajax 통신 오류 발생");
             }
-        }
-
-        $(document).ready(function(){
-            $("#btn-cancel").on("click", function(){
-                history.back();
-            })
-            $("#btn-submit").on("click", function() {
-                JoinAjax();
-            });
         });
-    </script>
+        }
+    }
+
+    $(document).ready(function(){
+        $("#btn-cancel").on("click", function(){
+            history.back();
+        })
+        $("#btn-submit").on("click", function() {
+            JoinAjax();
+        });
+    });
+</script>
 </head>
 <body>
     <div class="container ">
