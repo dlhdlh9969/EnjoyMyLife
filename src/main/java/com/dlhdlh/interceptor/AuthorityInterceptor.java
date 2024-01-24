@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,7 +18,7 @@ public class AuthorityInterceptor implements HandlerInterceptor {
 	MembersService membersService; 
 	
 	@Override
-	public boolean preHandle(HttpServletRequest servletRequest, HttpServletResponse response, Object handler) throws Exception { 
+	public boolean preHandle( @NonNull HttpServletRequest servletRequest, @NonNull HttpServletResponse response, @NonNull Object handler) throws Exception { 
 		String requestId = (String) servletRequest.getSession().getAttribute("userId");
 		
 		// 관리자 여부 체크
