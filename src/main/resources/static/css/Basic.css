@@ -8,7 +8,7 @@
 /* 구글 폰트 Poppins */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 /* 구글 폰트 Noto Sans Korean */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap');
 
 /* sidebar */
 * {
@@ -259,13 +259,14 @@ header .image-text .header-text{
 
 .title-style{
   font-size: 3rem;
-  font-family: 'Oswald', sans-serif;
+  font-weight: 500;
 }
 
 .title-style > label:first-letter{
   color: var(--primary-color);
   font-size: 4rem;
   font-weight: bold;
+  font-family: 'Oswald', sans-serif;
 }
 
 /* <body> 및 기본 설정 */
@@ -308,13 +309,6 @@ button{
 
 .form-floating>.form-control:disabled~label::after, .form-floating>:disabled~label::after{
   background-color:var(--primary-color-light);
-}
-
-/* noto sans 폰트 */
-
-input, select, textarea, label{
-  font-family: 'Noto Sans KR', sans-serif;
-  font-weight: 400;
 }
 
 /* 업체 즐겨찾기 아이콘 */
