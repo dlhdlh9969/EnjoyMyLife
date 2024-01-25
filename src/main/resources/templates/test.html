@@ -6,6 +6,16 @@
     <!-- 부트스트랩 기본  -->
 
     <script>
+
+        //보내기 이벤트
+        function Send(){
+            var content = $("#content").html();
+            $("#content2").val(content);
+        }
+
+        $(Document).ready(function(){
+        });
+
     </script>
 </head>
 <body th:attr="class=${viewMode} == 'dark' ? 'dark'">
@@ -14,30 +24,12 @@
             <label for=""><h2 class="dlh-headfont1 ">Test Page</h2></label>
         </div>
         <!---------- 테스트 영역 ------------>
-        <div>
-            <form id="myForm">
-                <input type="checkbox" name="checkbox1" id="checkbox1" checked>
-                <label for="checkbox1">체크박스 1</label>
-            
-                <input type="checkbox" name="checkbox2" id="checkbox2">
-                <label for="checkbox2">체크박스 2</label>
-            
-                <input type="checkbox" name="checkbox3" id="checkbox3" checked>
-                <label for="checkbox3">체크박스 3</label>
-              </form>
-              <button type="button" class="btn btn-primary" onclick="findCheckedCheckboxes()">aaaaaa</button>
-        </div>
-        <script>
-            // 체크된 체크박스 찾기
-            function findCheckedCheckboxes() {
-                var checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
-                var list= "";
-                checkboxes.forEach(function(checkbox) {
-                    list += checkbox.id + ", "
-                });
-                alert("체크된 체크박스 : " + list );
-            }
-          </script>
+        <div class="form-floating">
+            <div contentEditable="true" class="form-control" style="height: 10rem;overflow:auto; white-space: nowrap; resize: vertical  ;" id="content" th:utext="${test}"></div>
+            <label for="content">테스트 입력</label>
+        </div>    
+        <textarea name="" id="content2" cols="30" rows="10"></textarea>
+        <button type="btn-send" class="btn btn-primary" onclick="Send()"> 보내기</button>
     </div>
     
 </body>

@@ -151,7 +151,7 @@
                         complYn = "Y";
                     }
                     var title = $("#title").val();
-                    var content = $("#content").val();
+                    var content = $("#content").html();
                     var documentType = $("#documentType").val();
                     var datas = {custCd, receiptDt, dueDt, complDt, complYn, title, content, documentType, idx};
 
@@ -269,7 +269,7 @@
                 }
                 
                 var title = $("#title").val();
-                var content = $("#content").val();
+                var content = $("#content").html();
                 var documentType = $("#documentType").val();
 
                 var datas = {custCd, receiptDt, dueDt, complDt, complYn, title, content, documentType};
@@ -439,7 +439,10 @@
                 </div>
             </div> 
             <div class="form-floating ps-1 pt-2">
-                <textarea th:text="${MODE == 'detail'} ? ${workLogDetail.content}" type="text" class="form-control" style="height: 500px;" id="content" name="content"></textarea>
+                <div contentEditable="true" th:utext="${MODE == 'detail'} ? ${workLogDetail.content}" 
+                     style="height: 500px;" 
+                    id="content" name="content">
+                </div>
                 <label for="content">내용</label>
             <div>
         </div>

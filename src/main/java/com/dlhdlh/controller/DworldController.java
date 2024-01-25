@@ -37,16 +37,6 @@ public class DworldController {
 		return mv;
 	}
 	
-	// test페이지
-	@RequestMapping("/dworld/test")
-	public ModelAndView TestPage(HttpServletRequest servletRequest) throws Exception {
-		ModelAndView mv = new ModelAndView("test");
-		String requestId = servletRequest.getSession().getAttribute("userId").toString();
-		PersetMemberDto persetMember = membersService.GetPersetMember(requestId);
-		mv.addObject("viewMode", persetMember.getViewMode());
-		return mv;
-	}
-	
 	@RequestMapping("/dworld/error")
 	public String ErrorPage() throws Exception{
 		return "error";
