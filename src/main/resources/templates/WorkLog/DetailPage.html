@@ -438,9 +438,9 @@
                     <label for="documentType">문서 구분</label>
                 </div>
             </div> 
-            <div class="form-floating ps-1 pt-2">
-                <div contentEditable="true" th:utext="${MODE == 'detail'} ? ${workLogDetail.content}" 
-                     style="height: 500px;" 
+            <div class="form-floating ps-1 pt-2 pb-5">
+                <div contentEditable="true" class="form-control overflow-auto" th:utext="${MODE == 'detail'} ? ${workLogDetail.content}" 
+                     style="height: auto ;min-height: 20rem;" 
                     id="content" name="content">
                 </div>
                 <label for="content">내용</label>
