@@ -42,14 +42,14 @@ public class CustomerController {
 		mv.addObject("viewMode", persetMember.getViewMode());
 		persetCustParam.setUserId(requestId);
 		PersetCustDto persetCust = customerService.GetPersetCust(requestId);
-		
+
 		if(persetCust == null) {
 			customerService.SetNewMember(requestId);
-			persetCust = customerService.GetPersetCust(requestId);
 		}
 		
 		if(persetCustParam.getMaxrow() != 0) {
 			customerService.UpdatePersetCust(persetCustParam);
+			persetCust = customerService.GetPersetCust(requestId);
 		}
 		
 		int maxPaging = 5;//페이징 최대 갯수
