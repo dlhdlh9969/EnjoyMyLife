@@ -325,7 +325,16 @@
                 $("#receipt-dt").prop("disabled", true);
                 $("#due-dt").prop("disabled", true);
             }
-        });
+
+            // content 영역 새로운 라인 생성하기
+            $("#btn-linePlus").on("click", function(){
+                // 추가할 새로운 div 요소 생성
+                var newDiv = $(`<div>New Line</div>`);
+                // id가 "content"인 div에 새로운 div 추가
+                $("#content").append(newDiv);
+            });
+        }); // $(document).ready 끝 -------------
+        
     </script>
 </head>
 <body>
@@ -447,6 +456,7 @@
                 </div>
                 <label for="content">내용</label>
             <div>
+            <button type="button" id="btn-linePlus" class="btn border-primary my-2">New Line +</button>
         </div>
     </div>
 </body>

@@ -1,5 +1,14 @@
 @charset "UTF-8";
 
+:root {
+    --text--color : rgb(39, 39, 39)
+}
+
 #content * {
-    color: rgb(39, 39, 39);
+    color: var(--text--color);
+}
+
+.content {
+    color: var(--text--color);
+    background: white;
 }
