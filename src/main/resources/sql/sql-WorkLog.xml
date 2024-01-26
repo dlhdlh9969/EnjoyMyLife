@@ -52,7 +52,7 @@
 				, #{content}
 				, #{documentType}
 				, now()
-				, #{userId}
+				, #{insertUser}
 				, #{custCd}
 				, #{receiptDt}
 				, #{dueDt}

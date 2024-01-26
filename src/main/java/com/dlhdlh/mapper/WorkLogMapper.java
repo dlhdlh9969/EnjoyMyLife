@@ -11,7 +11,7 @@ public interface WorkLogMapper {
 
 	Page<WorkLogDto> GetWorkLogList(WorkLogDto worklogDto) throws Exception;
 
-	void InsertWorkLog(WorkLogDto worklogDto) throws Exception;
+	int InsertWorkLog(WorkLogDto worklogDto) throws Exception;
 
 	WorkLogDto GetWorkLogDetail(WorkLogDto worklogDto) throws Exception;
 

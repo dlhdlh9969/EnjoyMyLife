@@ -8,7 +8,7 @@ public interface WorkLogService {
 
 	Page<WorkLogDto> GetWorkLogList(int pageNum, int maxRow, WorkLogDto worklogDto) throws Exception;
 
-	void InsertWorkLog(WorkLogDto worklogDto) throws Exception;
+	int InsertWorkLog(WorkLogDto worklogDto) throws Exception;
 
 	WorkLogDto GetWorkLogDetail(WorkLogDto worklogDto) throws Exception;
 

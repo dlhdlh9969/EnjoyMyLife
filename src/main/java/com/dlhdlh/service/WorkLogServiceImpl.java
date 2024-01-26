@@ -22,8 +22,8 @@ public class WorkLogServiceImpl implements WorkLogService {
 	}
 
 	@Override
-	public void InsertWorkLog(WorkLogDto worklogDto) throws Exception {
-		worklogMapper.InsertWorkLog(worklogDto);
+	public int InsertWorkLog(WorkLogDto worklogDto) throws Exception {
+		return worklogMapper.InsertWorkLog(worklogDto);
 	}
 
 	@Override

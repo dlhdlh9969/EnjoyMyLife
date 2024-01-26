@@ -181,8 +181,8 @@ public class WorkLogController {
 		convertDday.put("safe", Integer.parseInt(dDayValues.get(1).getValue())); //주의
 		
 				
-// prevPage 저장 방식을 session으로 변경함 2024.01.21 김동환
-//		dworldController.SetPrevPage(servletRequest, "WorkLog");
+		// prevPage 저장 방식을 session으로 변경함 2024.01.21 김동환
+		// dworldController.SetPrevPage(servletRequest, "WorkLog");
 		mv.addObject("persetWorkLog", persetWorkLog);
 		mv.addObject("documentType", documentType);
 		mv.addObject("dDayValues", convertDday);
@@ -232,8 +232,8 @@ public class WorkLogController {
 	public String InsertWorkLog(HttpServletRequest servletRequest, WorkLogDto worklogParam) throws Exception {
 
 		String requestId = (String) servletRequest.getSession().getAttribute("userId");
-		worklogParam.setUserId(requestId);
-		
+		worklogParam.setInsertUser(requestId);
+		System.out.println(worklogParam);
 		String receiptDt = worklogParam.getReceiptDt();
 		String dueDt = worklogParam.getDueDt();
 		String complDt = worklogParam.getComplDt();
@@ -248,7 +248,7 @@ public class WorkLogController {
 			worklogParam.setComplDt(null);
 		}
 		try {
-			worklogService.InsertWorkLog(worklogParam);
+			int result = worklogService.InsertWorkLog(worklogParam);
 			return "OK";
 		} catch (Exception e) {
 			return "notOK";
