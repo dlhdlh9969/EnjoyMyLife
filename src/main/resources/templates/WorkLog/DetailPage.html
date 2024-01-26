@@ -234,11 +234,11 @@
                                 } else{
                                     if(data == "OK"){
                                         Swal.fire("","등록 되었습니다.", "success")
-                                            .then((result)=>{
-                                                if(result){
-                                                    location.reload();
-                                                }
-                                            });
+                                        .then((result)=>{
+                                            if(result){
+                                                location.reload();
+                                            }
+                                        });
                                     }else{
                                         Swal.fire("Error","접근이 잘못되었습니다.", "error");
                                     } 
@@ -276,36 +276,34 @@
 
                 if(!title.trim()){
                     Swal.fire("Title Empty", "'제목'을 써주세요.", "warning");
+                }else if(!content.trim()){
+                    Swal.fire("Content Empty", "'내용'을 써주세요.", "warning");
+                }else if(documentType == "") {
+                    Swal.fire("Document Type Empty","'문서 구분'을 선택해 주세요.", "warning");
                 }else{
-                    if(!content.trim()){
-                        Swal.fire("Content Empty", "'내용'을 써주세요.", "warning");
-                    }else {
-                        if(documentType == ""){
-                            Swal.fire("Document Type Empty","'문서 구분'을 선택해 주세요.", "warning");
-                        }else{
-                            $.ajax({
-                                url: "/dworld/worklog/control",
-                                type: "post",
-                                data: datas,
-                                success: function(data) {
-                                    if(data == "OK"){
-                                        Swal.fire("Success", "등록 되었습니다.", "success")
-                                        .then((result)=>{
-                                            if(result){
-                                                location.href="/dworld/worklog";
-                                            }
-                                        });
-                                        
-                                    }else{
-                                        Swal.fire("Error", "접근이 잘못되었습니다.", "error");
+                    $.ajax({
+                        url: "/dworld/worklog/control",
+                        type: "post",
+                        data: datas,
+                        success: function(data) {
+                            if(data == "OK"){
+                                Swal.fire("Success", "등록 되었습니다.", "success")
+                                .then((result)=>{
+                                    if(result){
+                                        location.href="/dworld/worklog";
                                     }
-                                }, error: function() {
-                                    alert("ajax 통신 오류 발생");
-                                }
-                            });
+                                });
+                                
+                            }else{
+                                Swal.fire("Error", "접근이 잘못되었습니다.", "error");
+                            }
+                        }, error: function() {
+                            alert("ajax 통신 오류 발생");
                         }
-                    }
+                    });
                 }
+
+                
             });
 
             // 문서 구분 회의록은 visable
