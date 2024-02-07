@@ -36,7 +36,7 @@ public class CustomerController {
 			, HttpServletRequest servletRequest
 			, CustomerDto customerParam
 			, PersetCustDto persetCustParam) throws Exception{
-		ModelAndView mv = new ModelAndView("Customer/mainPage");		
+		ModelAndView mv = new ModelAndView("Customer/MainPage");		
 		String requestId = servletRequest.getSession().getAttribute("userId").toString();
 		PersetMemberDto persetMember = membersService.GetPersetMember(requestId);
 		mv.addObject("viewMode", persetMember.getViewMode());

@@ -48,7 +48,7 @@ public class WorkLogController {
 								, HttpServletRequest servletRequest
 								, WorkLogDto worklogParam
 								, @RequestParam(required=false, defaultValue = "0") int entrance) throws Exception {
-		ModelAndView mv = new ModelAndView("WorkLog/mainPage");
+		ModelAndView mv = new ModelAndView("WorkLog/MainPage");
 		String requestId = servletRequest.getSession().getAttribute("userId").toString();
 		PersetMemberDto persetMember = membersService.GetPersetMember(requestId);
 		mv.addObject("viewMode", persetMember.getViewMode());
@@ -193,7 +193,7 @@ public class WorkLogController {
 	//디테일 페이지 컨트롤
 	@RequestMapping(value = "/dworld/worklog/detail")
 	public ModelAndView WorkLogWrite(HttpServletRequest servletRequest, WorkLogDto worklogParam) throws Exception{
-		ModelAndView mv = new ModelAndView("WorkLog/detailPage");
+		ModelAndView mv = new ModelAndView("WorkLog/DetailPage");
 		String requestId = servletRequest.getSession().getAttribute("userId").toString();
 		PersetMemberDto persetMember = membersService.GetPersetMember(requestId);
 		mv.addObject("viewMode", persetMember.getViewMode());
