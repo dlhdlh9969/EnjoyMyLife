@@ -187,6 +187,7 @@
         };
 
         $(document).ready(function(){
+            
             custListAjax();
             checkCust();
             
@@ -210,8 +211,11 @@
             
             // 업체 등록 버튼
             $("#btn-insertCust").on("click", function(){
+                // 업체 선택 모달 닫기
+                $("#selectCustModal").modal('hide'); 
+
                 Swal.fire({
-                    title: "업체 간편 등록"
+                    title: "업체 간편 등록1"
                   , text: "'업체명'을 입력해주세요."
                   , input: "text"
                   , icon: "info"
